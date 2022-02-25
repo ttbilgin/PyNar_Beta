@@ -1,0 +1,71 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <style>
+      .chip {
+        font-family:verdana;
+        display: inline-block;
+        font-size: 16px;
+        line-height: 25px;
+        border-radius: 10px;
+        background-color: #546d79;
+        text-align:justify;
+        color:white;
+        width: 100%;
+      }
+      .chip img {
+        float: left;
+        padding: 10px;
+        height: 100px;
+        width: 100px;
+        cursor: zoom-in;
+      }
+      p{
+          padding: 10px;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+      }
+      textarea{
+          margin-bottom: 10px;
+          margin-top: 10px;
+      }
+    </style>
+</head>
+<body>
+    <div class="chip">
+       <p style=" color:yellow;">!!!</p>
+        images
+       <p>metin</p>
+    </div>
+</body>
+
+<script>
+    var backend = null;
+    new QWebChannel(qt.webChannelTransport, function (channel) {
+        backend = channel.objects.backend;
+    });
+    function func_img0() {
+        backend.value = '0'+document.getElementById("img0").src;
+    }
+    function func_img1() {
+        backend.value = '1'+document.getElementById("img1").src;
+    }
+    function func_img2() {
+        backend.value = '2'+document.getElementById("img2").src;
+    }
+    function func_img3() {
+        backend.value = '3'+document.getElementById("img3").src;
+    }
+    function func_img4() {
+        backend.value = '4'+document.getElementById("img4").src;
+    }
+</script>
+</html>
