@@ -38,7 +38,7 @@ class writeLog():
         self.cmdControl = 0
         parentdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
         try:
-            textpadDir = textPad.filename[:textPad.filename.rfind("/")]
+            textpadDir = os.path.dirname(textPad.filename)
             pyright_exe_path = parentdir + '/Bin'
             pyright_exe_file = os.path.join(pyright_exe_path, self.pyright)
             if self.pyright == 'pyright-linux':
