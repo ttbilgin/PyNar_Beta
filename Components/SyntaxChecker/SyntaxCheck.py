@@ -187,6 +187,8 @@ class writeLog():
 }"""
         typeList = ["str", "int", "float", "complex", "list", "tuple", "range", "dict", "set", "frozenset", "bool",
                     "bytes", "bytearray", "memoryview"]
+        typeStrList = ['"str"', '"int"', '"float"', '"complex"', '"list"', '"tuple"', '"range"', '"dict"', '"set"', '"frozenset"', '"bool"',
+                    '"bytes"', '"bytearray"', '"memoryview"']
         numList = []
         apostropheList = []
         doubleList = []
@@ -194,9 +196,18 @@ class writeLog():
         funcList = []
         try:
             messageParse = message.split("\n")
-            line = messageParse[1].split(",")[1].split(" ")[2]
-            errorValue = messageParse[2].strip()
-            errorMessage = messageParse[3].split(" ")
+            lFind = False
+            lastI = ""
+            for i in messageParse[::-1]:
+                if i.lstrip().startswith("File"):
+                    line = i.split(",")[1].split(" ")[2]
+                    lFind = True
+                if not lFind:
+                    lastI = i
+                else:
+                    errorValue = lastI.strip()
+                    break
+            errorMessage = messageParse[-2].split(" ")
             length = len(errorMessage)
             k = 0
 
@@ -280,45 +291,178 @@ class writeLog():
             cs = db.cursor()
             cs.execute("select message from errorMessage where hash = ?", (hashCode,))
             data = cs.fetchall()
-            data = data[0][0].split(' ')
-            hashErrorMessage = ""
             db.close()
+            if data:
+                data = data[0][0].split(' ')
+                hashErrorMessage = ""
+                db.close()
+                for i in data:
+                    comma = False
+                    semicolon = False
+                    if "," in i:
+                        i = i.replace(",", "")
+                        comma = True
+                    if ";" in i:
+                        i = i.replace(";", "")
+                        semicolon = True
 
-            for i in data:
-                comma = False
-                semicolon = False
-                if "," in i:
-                    i = i.replace(",", "")
-                    comma = True
-                if ";" in i:
-                    i = i.replace(";", "")
-                    semicolon = True
+                    if i == "func()":
+                        hashErrorMessage += funcList[0] + " "
+                        del funcList[0]
+                    elif "##" in i:
+                        index = i.rfind("#")
+                        hashErrorMessage += i[:index] + numList[0] + i[index+1:] + " "
+                    elif "#" in i:
+                        hashErrorMessage += i.replace("#", numList[0]) + " "
+                        del numList[0]
+                    elif i == "<TYPE>":
+                        hashErrorMessage += tyList[0] + " "
+                        del tyList[0]
+                    elif i == "''":
+                        hashErrorMessage += apostropheList[0] + " "
+                        del apostropheList[0]
+                    elif i == '""':
+                        hashErrorMessage += doubleList[0] + " "
+                        del doubleList[0]
+                    else:
+                        hashErrorMessage += i + " "
 
-                if i == "func()":
-                    hashErrorMessage += funcList[0] + " "
-                    del funcList[0]
-                elif "##" in i:
-                    index = i.rfind("#")
-                    hashErrorMessage += i[:index] + numList[0] + i[index+1:] + " "
-                elif "#" in i:
-                    hashErrorMessage += i.replace("#", numList[0]) + " "
-                    del numList[0]
-                elif i == "<TYPE>":
-                    hashErrorMessage += tyList[0] + " "
-                    del tyList[0]
-                elif i == "''":
-                    hashErrorMessage += apostropheList[0] + " "
-                    del apostropheList[0]
-                elif i == '""':
-                    hashErrorMessage += doubleList[0] + " "
-                    del doubleList[0]
-                else:
-                    hashErrorMessage += i + " "
+                    if comma:
+                        hashErrorMessage = hashErrorMessage[:-1] + ", "
+                    if semicolon:
+                        hashErrorMessage += hashErrorMessage[:-1] + "; "
+            else:
+                numList = []
+                apostropheList = []
+                doubleList = []
+                tyList = []
+                funcList = []
+                k = 0
+                hashErrorMessage = ""
+                for i in errorMessage:
+                    k += 1
+                    data = ""
+                    comma = False
+                    semicolon = False
+                    brackets = False
+                    dots = False
+                    square = False
+                    slash = False
+                    lastBrackets = False
 
-                if comma:
-                    hashErrorMessage = hashErrorMessage[:-1] + ", "
-                if semicolon:
-                    hashErrorMessage += hashErrorMessage[:-1] + "; "
+                    if "," in i:
+                        i = i.replace(",", "")
+                        comma = True
+                    if ";" in i:
+                        i = i.replace(";", "")
+                        semicolon = True
+                    if i.startswith("("):
+                        i = i[1:]
+                        brackets = True
+                    if i.endswith("]"):
+                        i = i[:-1]
+                        square = True
+                    if ":" in i:
+                        i = i.replace(":", "")
+                        dots = True
+                    if i.endswith("#"):
+                        slash = True
+                    if i.endswith(")"):
+                        i = i[:-1]
+                        lastBrackets = True
+
+
+                    if i[-2:] == "()":
+                        data = "func() "
+                        funcList.append(i)
+                    elif len(i.split("-")) == 2:
+                        digit = True
+                        for k in i.split("-"):
+                            if not k.isdigit:
+                                digit = False
+                                break
+                        if digit:
+                            data = "#-# "
+                            for k in i.split("-"):
+                                numList.append(k)
+                    elif i.isdigit():
+                        data = "#" + " "
+                        numList.append(i)
+                    elif i in typeStrList:
+                        data = '""'
+                        tyList.append(i)
+                    elif i.startswith("'") and i.endswith("'"):
+                        data = "'' "
+                        apostropheList.append(i)
+                    elif i.startswith('"') and i.endswith('"'):
+                        data = '" '
+                        doubleList.append(i)
+                    else:
+                        data = i + " "
+
+                    if comma:
+                        data = data[:-1] + ", "
+                    if semicolon:
+                        data = data[:-1] + "; "
+                    if brackets:
+                        data = "(" + data
+                    if dots:
+                        data = data[:-1] + ": "
+                    if square:
+                        data = data[:-1] + "] "
+                    if slash:
+                        data = "#" + data
+                    if lastBrackets:
+                        data = data + ") "
+
+                    hashErrorMessage += data
+                hashErrorMessage = hashErrorMessage[:-1]
+                hash_object = hashlib.md5(hashErrorMessage.encode())
+                hashCode = hash_object.hexdigest()
+                parentdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))) + "/Config"
+                db = sl.connect(parentdir + "/error_texts.db")
+                cs = db.cursor()
+                cs.execute("select message from errorMessage where hash = ?", (hashCode,))
+                data = cs.fetchall()
+                data = data[0][0].split(' ')
+                hashErrorMessage = ""
+                db.close()
+
+                for i in data:
+                    comma = False
+                    semicolon = False
+                    if "," in i:
+                        i = i.replace(",", "")
+                        comma = True
+                    if ";" in i:
+                        i = i.replace(";", "")
+                        semicolon = True
+
+                    if i == "func()":
+                        hashErrorMessage += funcList[0] + " "
+                        del funcList[0]
+                    elif "##" in i:
+                        index = i.rfind("#")
+                        hashErrorMessage += i[:index] + numList[0] + i[index + 1:] + " "
+                    elif "#" in i:
+                        hashErrorMessage += i.replace("#", numList[0]) + " "
+                        del numList[0]
+                    elif i == '(""':
+                        hashErrorMessage += "(" + tyList[0] + " "
+                        del tyList[0]
+                    elif i == "''":
+                        hashErrorMessage += apostropheList[0] + " "
+                        del apostropheList[0]
+                    elif i == '""':
+                        hashErrorMessage += doubleList[0] + " "
+                        del doubleList[0]
+                    else:
+                        hashErrorMessage += i + " "
+
+                    if comma:
+                        hashErrorMessage = hashErrorMessage[:-1] + ", "
+                    if semicolon:
+                        hashErrorMessage += hashErrorMessage[:-1] + "; "
             hashErrorMessage = hashErrorMessage[:-1]
             hashErrorMessageShow = errorValue + "\n" + hashErrorMessage
             self.parseData = json.loads(cmdError)
