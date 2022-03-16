@@ -30,7 +30,7 @@ from dialog import Dialog
 class PMDialog(Dialog):
     outSignal = pyqtSignal(str)
     okSignal = pyqtSignal(str, bool)
-    _messagesSignal = pyqtSignal(str,str)
+    _messagesSignal = pyqtSignal(int, str)
     _updateSignal = pyqtSignal()
 
     def __init__(self, parent=None, textPad=None):
@@ -339,17 +339,17 @@ class PMDialog(Dialog):
             rc = process.poll()
             if rc == 1:
                 if not update:
-                    self._messagesSignal[str, str].emit("Yükleme Hatası", "İndirme Başarısız !!!")
+                    self._messagesSignal[int, str].emit(1, "Kurulum yapılırken bir hata oluştu.")
                 else:
-                    self._messagesSignal[str, str].emit("Güncelleme Hatası", "Güncelleme Başarısız !!!")
+                    self._messagesSignal[int, str].emit(1, "Güncelleme yapılırken bir hata oluştu.")
                 return rc
             elif rc == 0:
                 self.okSignal[str, bool].emit(text, True)
                 self._updateSignal.emit()
                 if not update:
-                    self._messagesSignal[str, str].emit("Yükleme Tamamlandı", "İndirme Başarılı !!!")
+                    self._messagesSignal[int, str].emit(0, "Kurulum Başarı ile Tamamlandı.")
                 else:
-                    self._messagesSignal[str, str].emit("Güncelleme Tamamlandı", "Güncelleme Başarılı !!!")
+                    self._messagesSignal[int, str].emit(0, "Güncelleme Başarı ile Tamamlandı.")
                 return rc
             elif rc != None:
                 print(rc)
@@ -395,12 +395,12 @@ class PMDialog(Dialog):
                 self.outSignal[str].emit(output.strip().decode() + "\n")
             rc = process.poll()
             if rc == 1:
-                self._messagesSignal[str, str].emit("Kaldırma Hatası", "Kaldırma Başarısız !!!")
+                self._messagesSignal[int, str].emit(1, "Kaldırma işlemi gerçekleştirilirken bir hata oluştu.")
                 break
             elif rc == 0:
                 self.okSignal[str, bool].emit("", False)
                 self.Version_list.clear()
-                self._messagesSignal[str, str].emit("Kaldırma Tamamlandı", "Paket Başarılı Bİr Şekilde Kaldırıldı !!!")
+                self._messagesSignal[int, str].emit(0, "Paket Başarılı Bir Şekilde Kaldırıldı.")
                 break
             elif rc != None:
                 print(rc)
@@ -426,12 +426,15 @@ class PMDialog(Dialog):
         self.Search_line.setEnabled(True)
         self.List_line.setEnabled(True)
 
-    def _messages(self,title,text):
-        CustomizeMessageBox_Ok(text, QMessageBox.Critical)
+    def _messages(self, err, text):
+        ms_Btn = QMessageBox.Information
+        if err == 1:
+            ms_Btn = QMessageBox.Critical
+        CustomizeMessageBox_Ok(text, ms_Btn)
         self.noneBlock()
         return
     def _packageNotFound(self):
-        CustomizeMessageBox_Ok('Paket Bulunamadı!', QMessageBox.Warning)
+        CustomizeMessageBox_Ok('Paket Bulunamadı!', QMessageBox.Critical)
         self.noneBlock()
         return
 
