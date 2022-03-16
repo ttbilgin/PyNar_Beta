@@ -1348,7 +1348,11 @@ class MainWindow(QMainWindow):
             res_json = exams.json()
             self.examList = res_json['result']['data']
 
-
+    def closeEvent(self, event):
+        for i in range(self.notebook.count()):
+            self.notebook.closeTab(0)#Her seferinde bir tab kapandığından sürekli 0. tab alınmalı
+            if self.notebook.count() == 0:
+                break
 # if __name__ == '__main__':
 # app = QApplication(sys.argv)
 # # apply_stylesheet(app, theme='white_pynar_theme.xml', light_secondary=True)
