@@ -515,7 +515,7 @@ class MainWindow(QMainWindow):
         self.label_robot.mousePressEvent = self.closeChatBotView
         self.chatbotview.form.setVisible(False)
         pixmap = QtGui.QPixmap(":/icon/images/robot-rotate.png")
-        pixmap2 = pixmap.scaled(pixmap.width() / 3, pixmap.height() / 3)
+        pixmap2 = pixmap.scaled(pixmap.width() // 3, pixmap.height() // 3)
         self.label_robot.setPixmap(pixmap2)
         self.label_robot.setAlignment(Qt.AlignTop)
         # self.label_robot.setVisible(True)
