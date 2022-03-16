@@ -789,12 +789,12 @@ class LoginWindow(QDialog):
                 self.lbl_img_user.setFont(QFont('Arial', 40))
                 self.lbl_img_user.setAlignment(QtCore.Qt.AlignCenter)
                 self.lbl_img_user.setStyleSheet(
-                    "color : #dddddd; background-color: {}; border: 3px; border-radius: 50px;".format(self.userColor[name[0][0].upper()]))
+                    "color : #dddddd; background-color: {}; border: 3px; border-radius: 50px;".format(self.userColor.get(name[0][0].upper(), "#9400D3")))
                 self.parentImage.setText(name[0][0].upper() + name[1][0].upper())
                 self.parentImage.setFont(QFont('Arial', 20))
                 self.parentImage.setAlignment(QtCore.Qt.AlignCenter)
                 self.parentImage.setStyleSheet(
-                    "color : #dddddd; background-color: {}; border: 3px; border-radius: 27px".format(self.userColor[name[0][0].upper()]))
+                    "color : #dddddd; background-color: {}; border: 3px; border-radius: 27px".format(self.userColor.get(name[0][0].upper(), "#9400D3")))
 
                 self.btn_register.hide()
                 self.loginOk = True
@@ -881,12 +881,12 @@ class LoginWindow(QDialog):
                     self.lbl_img_user.setFont(QFont('Arial', 40))
                     self.lbl_img_user.setAlignment(QtCore.Qt.AlignCenter)
                     self.lbl_img_user.setStyleSheet(
-                        "color : #F9F9F9; background-color: {}; border: 3px; border-radius: 27px;".format(self.userColor[name[0][0].upper()]))
+                        "color : #F9F9F9; background-color: {}; border: 3px; border-radius: 27px;".format(self.userColor.get(name[0][0].upper(), "#9400D3")))
                     self.parentImage.setText(name[0][0].upper() + name[1][0].upper())
                     self.parentImage.setFont(QFont('Arial', 20))
                     self.parentImage.setAlignment(QtCore.Qt.AlignCenter)
                     self.parentImage.setStyleSheet(
-                        "color : #F9F9F9; background-color: {}; border: 3px; border-radius: 27px".format(self.userColor[name[0][0].upper()]))
+                        "color : #F9F9F9; background-color: {}; border: 3px; border-radius: 27px".format(self.userColor.get(name[0][0].upper(), "#9400D3")))
 
                     self.loginOk = True
                     self.btn_register.hide()
