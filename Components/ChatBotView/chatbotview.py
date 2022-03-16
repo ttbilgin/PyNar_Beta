@@ -559,17 +559,19 @@ class UcChatBotView(QWidget):
         if parentHeight is None or parentHeight == 70:
             self.errorButtons = {}
         self.parentHeight = parentHeight
-        self.frame_userButton.setGeometry(QtCore.QRect(0, 0, 317, parentHeight - 70))
+        self.frame_userButton.setGeometry(QtCore.QRect(0, 0, 317, int(parentHeight) - 70))
+
         if self.parentHeight is None:
             self.frame_lineEdit.setFixedHeight(70)
             self.parentHeight = self.frame_lineEdit.geometry().height()
 
         else:
-            self.frame_lineEdit.setFixedHeight(self.parentHeight)
+            self.frame_lineEdit.setFixedHeight(int(self.parentHeight))
 
-        self.lineEdit_sendMessage.setGeometry(5, self.parentHeight - 65, 307, 55)
-        self.pushButton_smile.setGeometry(QtCore.QRect(0, self.parentHeight - 67, 60, 60))
-        self.frame_pushButton_trush.setGeometry(QtCore.QRect(260, self.parentHeight - 56, 60, 60))
+        self.lineEdit_sendMessage.setGeometry(5, int(self.parentHeight - 65), 307, 55)
+        self.pushButton_smile.setGeometry(QtCore.QRect(0, int(self.parentHeight) - 67, 60, 60))
+        self.frame_pushButton_trush.setGeometry(QtCore.QRect(260, int(self.parentHeight) - 56, 60, 60))
+
 
     def resizeEvent(self, event):
         self.textEdit_message.setMinimumSize(QtCore.QSize(300, 200))
