@@ -12,6 +12,7 @@ from configuration import Configuration
 from Components.ErrorConsole.error_outputs_to_db import error_outputs_to_db
 import hashlib
 import sqlite3 as sl
+import re
 from shutil import copyfile, copy
 
 class writeLog():
@@ -33,6 +34,49 @@ class writeLog():
             self.pyright = 'pyright-mac'
         else:
             self.pyright = 'pyright-linux'
+
+        #Hata ayıklama için gerekli parametreleri tanımla ve gerekli listeleri bu parametrelere yükle
+        self.parentdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+        self.runtimeErrorList = []
+        self.errorList = []
+        self.initalizeRuntimeErrorList()
+
+    # Runtime hatalarının templatelerini bulunan dosyayı oku
+    def initalizeRuntimeErrorList(self):
+        with sl.connect(self.parentdir + '/Config/error_texts.db') as conn:
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM errorMessage")
+            runtimeErrorTuple = cur.fetchall()
+            for i in runtimeErrorTuple:
+                self.runtimeErrorList.append(list(i))
+        self.transformRuntimeErrorList()
+
+    def transformRuntimeErrorList(self):
+        for i in range(len(self.runtimeErrorList)):
+            x = ''.join(self.runtimeErrorList[i][0])
+            # if(self.runtimeErrorList[i][3] == "UnsupOperand/"):
+            if(True):
+                x = re.sub('\(.*?\)', '()', x)#Parantezlerin içindeki her karakteri sil
+                x = re.sub('\[.*?\]', '[]', x)#Köşeli parantezlerin içindeki her karakteri sil
+                x = re.sub('\".*?\"', '""', x)#Çift tırnak içindeki her karakteri sil
+                x = re.sub("\'.*?\'", "''", x)#Tek tırnak içindeki her karakteri sil
+
+                x = re.escape(x)#Özel karakterlerin öncesine '\' ekleyerek regex karakterleriyle karıştırılmamasını sağla
+
+
+                x = x.replace('func\(\)', '(\S+)')
+                x = x.replace('\(\)', '(\(.*?\))')
+                x = x.replace('\[\]', '(\[.*?\])')
+                x = x.replace('""', '(".*?")')
+                x = x.replace("''", "('.*?')")
+                x = x.replace('<TYPE>', '(\S+)')
+                x = x.replace('\#\-\#', '(\d+)')
+                x = x.replace('\#\#', '(\d+)')
+                x = x.replace('\-\#', '(\d+)')
+                x = x.replace('\?', '(\S+)')
+                x = x.replace('\#', '(\d+)')
+
+            self.runtimeErrorList[i][0] = x
 
     def parser(self,textPad):
         self.cmdControl = 0
@@ -185,8 +229,6 @@ class writeLog():
       }
    ]
 }"""
-        typeList = ["str", "int", "float", "complex", "list", "tuple", "range", "dict", "set", "frozenset", "bool",
-                    "bytes", "bytearray", "memoryview"]
         typeStrList = ['"str"', '"int"', '"float"', '"complex"', '"list"', '"tuple"', '"range"', '"dict"', '"set"', '"frozenset"', '"bool"',
                     '"bytes"', '"bytearray"', '"memoryview"']
         numList = []
@@ -208,7 +250,6 @@ class writeLog():
                     errorValue = lastI.strip()
                     break
             errorMessage = messageParse[-2].split(" ")
-            length = len(errorMessage)
             k = 0
 
             hashErrorMessage = ""
@@ -222,6 +263,7 @@ class writeLog():
                 dots = False
                 square = False
                 slash = False
+                lastBrackets = False
 
                 if "," in i:
                     i = i.replace(",", "")
@@ -240,6 +282,9 @@ class writeLog():
                     dots = True
                 if i.endswith("#"):
                     slash = True
+                if i.endswith(")"):
+                    i = i[:-1]
+                    lastBrackets = True
 
                 if i[-2:] == "()":
                     data = "func() "
@@ -257,8 +302,8 @@ class writeLog():
                 elif i.isdigit():
                     data = "#" + " "
                     numList.append(i)
-                elif i in typeList and k == length:
-                    data = "<TYPE> "
+                elif i in typeStrList:
+                    data = '""'
                     tyList.append(i)
                 elif i.startswith("'") and i.endswith("'"):
                     data = "'' "
@@ -281,153 +326,68 @@ class writeLog():
                     data = data[:-1] + "] "
                 if slash:
                     data = "#" + data
+                if lastBrackets:
+                    data = data + ") "
 
                 hashErrorMessage += data
-            hashErrorMessage = hashErrorMessage[:-1]
-            hash_object = hashlib.md5(hashErrorMessage.encode())
-            hashCode = hash_object.hexdigest()
-            parentdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))) + "/Config"
-            db = sl.connect(parentdir + "/error_texts.db")
-            cs = db.cursor()
-            cs.execute("select message from errorMessage where hash = ?", (hashCode,))
-            data = cs.fetchall()
-            db.close()
+
+            runtimeErrorList = self.runtimeErrorList
+            engMessageIndex = 0
+            hashIndex = 1
+            turMessageIndex = 2
+            rule = None
+            hashcode = None
+            tr_message = None
+            modified_message = None
+            temp_message = None
+
+            #Başlangıç satır numarasını bul(Sadece ilki için)
+            x = message.splitlines()[1]
+            line = re.search(r"line (\d+)", x).group(1)
+
+            #Bütün hata mesajından sadece gerekli kısmı çıkart
+            temp_message = message.splitlines()[-1]
+            #Bütün listeyi kontrol et ve eşleşen hata kuralını bul.
+            for i in runtimeErrorList:
+                #Regex'i derle ve eşleştirme fonksiyonunu tanımla
+                # '^' = başlangıç, i[engMessageIndex] = kontrol edilen hata mesajı,
+                match_my_regex = re.compile('^' + i[engMessageIndex] + '$', re.DOTALL).match
+
+                #Bazı durumlarda iki string aynı olsa da eşleştirmediğinden == kontrolü de yap
+                if((match_my_regex(temp_message) is not None) or temp_message == i[0]):
+                    #Eşleşme yapılırsa döngüden çık.
+                    hashcode = i[hashIndex]
+                    tr_message = i[turMessageIndex]
+                    modified_message = i[engMessageIndex]
+                    break
+                # print(i[engMessageIndex])
+
+            #Türkçe mesajı gönderme
+            #hashcode == None is hata kodu bulunamadığından türkçe karşılığının bulunmasına gerek kalmaz.
+            if(hashcode != None):
+                #Gerçek mesajı veritabanından çek.
+                dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))) + "\Config\error_texts.db"
+                with sl.connect(dir) as conn:
+                    cur = conn.cursor()
+                    cur.execute("select * from errorMessage where hash = ?", (hashcode,))
+                    original_message = cur.fetchone()[engMessageIndex]
+
+                original_words = original_message.replace("(#-#: )", "(#-#:)")
+                #Veritabanındaki İngilizce ve Türkçe mesajları ve verilen İngilizce hata mesajını parçalara ayır.
+                origin_words = original_words.split()
+                error_words = temp_message.split()
+                tr_words = tr_message.split()
+
+                #Verilen hata ve veritabanındaki orijinal hatanın farklı olduğu her kelime için Türkçe
+                #mesajdaki boş alanı verilen mesajdaki dolu alanla değiştir.
+                for i in range(len(origin_words)):
+                    if(origin_words[i] != error_words[i]):
+                        tr_message = tr_message.replace(origin_words[i], error_words[i], 1)
+
+            data = tr_message.split(' ')
+
             if data:
-                data = data[0][0].split(' ')
                 hashErrorMessage = ""
-                db.close()
-                for i in data:
-                    comma = False
-                    semicolon = False
-                    if "," in i:
-                        i = i.replace(",", "")
-                        comma = True
-                    if ";" in i:
-                        i = i.replace(";", "")
-                        semicolon = True
-
-                    if i == "func()":
-                        hashErrorMessage += funcList[0] + " "
-                        del funcList[0]
-                    elif "##" in i:
-                        index = i.rfind("#")
-                        hashErrorMessage += i[:index] + numList[0] + i[index+1:] + " "
-                    elif "#" in i:
-                        hashErrorMessage += i.replace("#", numList[0]) + " "
-                        del numList[0]
-                    elif i == "<TYPE>":
-                        hashErrorMessage += tyList[0] + " "
-                        del tyList[0]
-                    elif i == "''":
-                        hashErrorMessage += apostropheList[0] + " "
-                        del apostropheList[0]
-                    elif i == '""':
-                        hashErrorMessage += doubleList[0] + " "
-                        del doubleList[0]
-                    else:
-                        hashErrorMessage += i + " "
-
-                    if comma:
-                        hashErrorMessage = hashErrorMessage[:-1] + ", "
-                    if semicolon:
-                        hashErrorMessage += hashErrorMessage[:-1] + "; "
-            else:
-                numList = []
-                apostropheList = []
-                doubleList = []
-                tyList = []
-                funcList = []
-                k = 0
-                hashErrorMessage = ""
-                for i in errorMessage:
-                    k += 1
-                    data = ""
-                    comma = False
-                    semicolon = False
-                    brackets = False
-                    dots = False
-                    square = False
-                    slash = False
-                    lastBrackets = False
-
-                    if "," in i:
-                        i = i.replace(",", "")
-                        comma = True
-                    if ";" in i:
-                        i = i.replace(";", "")
-                        semicolon = True
-                    if i.startswith("("):
-                        i = i[1:]
-                        brackets = True
-                    if i.endswith("]"):
-                        i = i[:-1]
-                        square = True
-                    if ":" in i:
-                        i = i.replace(":", "")
-                        dots = True
-                    if i.endswith("#"):
-                        slash = True
-                    if i.endswith(")"):
-                        i = i[:-1]
-                        lastBrackets = True
-
-
-                    if i[-2:] == "()":
-                        data = "func() "
-                        funcList.append(i)
-                    elif len(i.split("-")) == 2:
-                        digit = True
-                        for k in i.split("-"):
-                            if not k.isdigit:
-                                digit = False
-                                break
-                        if digit:
-                            data = "#-# "
-                            for k in i.split("-"):
-                                numList.append(k)
-                    elif i.isdigit():
-                        data = "#" + " "
-                        numList.append(i)
-                    elif i in typeStrList:
-                        data = '""'
-                        tyList.append(i)
-                    elif i.startswith("'") and i.endswith("'"):
-                        data = "'' "
-                        apostropheList.append(i)
-                    elif i.startswith('"') and i.endswith('"'):
-                        data = '" '
-                        doubleList.append(i)
-                    else:
-                        data = i + " "
-
-                    if comma:
-                        data = data[:-1] + ", "
-                    if semicolon:
-                        data = data[:-1] + "; "
-                    if brackets:
-                        data = "(" + data
-                    if dots:
-                        data = data[:-1] + ": "
-                    if square:
-                        data = data[:-1] + "] "
-                    if slash:
-                        data = "#" + data
-                    if lastBrackets:
-                        data = data + ") "
-
-                    hashErrorMessage += data
-                hashErrorMessage = hashErrorMessage[:-1]
-                hash_object = hashlib.md5(hashErrorMessage.encode())
-                hashCode = hash_object.hexdigest()
-                parentdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))) + "/Config"
-                db = sl.connect(parentdir + "/error_texts.db")
-                cs = db.cursor()
-                cs.execute("select message from errorMessage where hash = ?", (hashCode,))
-                data = cs.fetchall()
-                data = data[0][0].split(' ')
-                hashErrorMessage = ""
-                db.close()
-
                 for i in data:
                     comma = False
                     semicolon = False
