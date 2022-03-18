@@ -1,7 +1,7 @@
     QMessageBox{
         opacity: 0;
-        border: 10px solid #cad7e0;
-        background-color: #ffeaf4;
+        border: 10px solid #acd33b;
+        background-color: #e8f2c6;
 
     }
     QLabel{
