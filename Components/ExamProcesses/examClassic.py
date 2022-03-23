@@ -251,7 +251,7 @@ class UI_Exam(object):
     def resizeEvent(self, event):
         self.timerLabel.setGeometry(QtCore.QRect(self.width() - 300, 3, 260, 70))
         self.textQuestionHtmlView.setGeometry(QtCore.QRect(27, 150, self.geometry().width() - 80, 80))
-        self.textQuestionHtmlView.setFixedHeight(self.height() - 320)
+        self.textQuestionHtmlView.setFixedHeight(self.height() - 220)
 
     def initHtmlExamPath(self):
         return self.c.getHomeDir() + self.c.getHtmlExamPath("html_exam")
@@ -356,7 +356,7 @@ class ExamWindow(UI_Exam, ShadowWindow):
 
             # Alınan Bilgilerin Html'e basılması
             path = self.initHtmlExamPath() + "classicTemplate.html"
-            with open(path, 'r') as f:
+            with open(path, 'r', encoding='utf8') as f:
                 html = f.read()
                 if len(self.images) > 0:
                     img_str = ""
@@ -368,8 +368,6 @@ class ExamWindow(UI_Exam, ShadowWindow):
                     self.html = html.replace('images', img_str)
                 else:
                     self.html = html.replace('images', '')
-                self.html = self.html.replace('!!!',
-                                              '!!!Sınav cevaplarınızı açık olan editöre yapmalısınız. Sınavınızın bitiminde oradaki kodlarınız otomatik olarak gönderilecektir.')
                 self.html = self.html.replace('metin', str("<b style=\"color:red\">Soru: </b>" + exam['question']['question']))
                 self.examPage.setStyleSheet("QWidget#examPage{background-color:#202020;background-image: none;}")
                 self.textQuestionHtmlView.setHtml(self.html)
