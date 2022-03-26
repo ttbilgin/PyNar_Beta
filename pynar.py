@@ -383,9 +383,9 @@ class MainWindow(QMainWindow):
             if self.loginWindow is None:
                 self.loginWindow = LoginWindow(self,self.lbl_img_user)
 
-            self.loginWindow.move(self.x() + (
-                        self.lbl_img_user.width() * (self.width() / self.lbl_img_user.width())) - self.loginWindow.width(),
-                                  self.y() + self.lbl_img_user.height() * 2)
+            self.loginWindow.move(int(self.x() + (
+                        self.lbl_img_user.width() * (self.width() / self.lbl_img_user.width())) - self.loginWindow.width()),
+                                  int(self.y() + self.lbl_img_user.height() * 2))
             self.loginWindow.show()
 
     def initUI(self, MainWindow):
