@@ -160,6 +160,12 @@ class CodeEditor(CodeEditor):
         if (
                 modifiers and modifiers & MOD_MASK == modifiers and event.key() > 0 and event.key() != Qt.Key_Shift and event.key() != Qt.Key_Alt and event.key() != Qt.Key_Control and event.key() != Qt.Key_Meta):
             key_pressed = QKeySequence(modifiers + event.key()).toString()
+
+        if "Ctrl" in key_pressed or "CTRL" in key_pressed or event.key() == 16777273:
+            self.parent.tab_widget.PynarTabs.setCurrentIndex(0)
+            if event.key() == 16777273:
+                self.parent.interpreter()
+
         # Tus kombinasyonlarinda modifier tusu logda gozukmesin
         if (key_pressed == "Ctrl+V"):
             logfunc("Yapıştır: " + QApplication.clipboard().text(), parent=self.parent)
