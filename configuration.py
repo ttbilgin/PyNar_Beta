@@ -63,6 +63,9 @@ class Configuration():
     def getExamLogFolder(self):
         return self.config['ExamLogging']['ExamLog_folder']
 
+    def getChatbotStatusEnabled(self):
+        return self.config['ChatbotStatus']['chatbotStatus']
+
     def getCodeFont(self):
         return self.config['Font']['code_font']
 
@@ -177,6 +180,9 @@ class Configuration():
         config['ExamLogging'] = {}
         config['ExamLogging']['examLogging'] = 'True'
         config['ExamLogging']['log_folder'] = 'Log'
+
+        config['ChatbotStatus'] = {}
+        config['ChatbotStatus']['chatbotStatus'] = 'True'
 
         config['Font']['code_font'] = 'Consolas'
         config['Font']['editor_font'] = 'Segoe UI'

@@ -1139,7 +1139,7 @@ class MainWindow(QMainWindow):
             self.timer.start(1)
         if not self.styntaxError:
             self.currentErrorsChange()
-        if self.errorConsole.message is not None and self.activeErrorCount > 0:
+        if self.errorConsole.message is not None and self.activeErrorCount > 0 and self.c.getChatbotStatusEnabled() == "True":
             self.chatbotAddErrorMessage(self.errorConsole.message)
             self.timer.stop()
         else:

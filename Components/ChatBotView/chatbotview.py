@@ -69,6 +69,7 @@ class UcChatBotView(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent = parent
+        self.c = Configuration()
         self.setupUi(self)
 
 
@@ -579,7 +580,7 @@ class UcChatBotView(QWidget):
         self.textEdit_message.moveCursor(QtGui.QTextCursor.End)
 
     def RunErrorMessage(self, runErrors, text):
-        if(len(runErrors)>0):
+        if(len(runErrors)>0 and self.c.getChatbotStatusEnabled() == "True"):
             self.runErrors = runErrors.copy()
             self.text = text
             self.line = runErrors[0]['range']['start']['line']
