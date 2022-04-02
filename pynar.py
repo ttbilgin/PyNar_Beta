@@ -1143,7 +1143,8 @@ class MainWindow(QMainWindow):
             self.chatbotAddErrorMessage(self.errorConsole.message)
             self.timer.stop()
         else:
-            self.chatbotErrorButtonsClear()
+            if self.chatbotview.answerButton is None:
+                self.chatbotErrorButtonsClear()
             if self.logAndInd.cmdControl == 2 and self.falseDataBase == "":
                 self.falseDataBase = self.addCodeData()
     def currentErrorsChange(self):
@@ -1220,6 +1221,7 @@ class MainWindow(QMainWindow):
         if isVisible:
             self.label_robot.setVisible(False)
         self.chatbotview.textEdit_message.append("\n")
+
     def chatbotErrorButtonsClear(self):
         self.chatbotview.ErrorButtonsClear()
 
