@@ -206,7 +206,7 @@ class UcChatBotView(QWidget):
         if self.form.isVisible():
             self.form.setVisible(False)
             pixmap = QtGui.QPixmap(":/icon/images/robot-rotate.png")
-            pixmap2 = pixmap.scaled(pixmap.width() / 3, pixmap.height() / 3)
+            pixmap2 = pixmap.scaled(pixmap.width() // 3, pixmap.height() // 3) #python3.10 da burada float gelirse çöküyor.
             self.parent.label_robot.setPixmap(pixmap2)
             self.parent.label_robot.setAlignment(Qt.AlignTop)
             self.parent.label_robot.setVisible(True)
