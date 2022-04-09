@@ -22,6 +22,7 @@ class FindReplaceDialog(QDialog):
         self.mainWindow.setObjectName("findAndReplaceWidget")
         self.setFixedSize(577, 360)
         self.setWindowTitle('Bul ve Değiştir')
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setStyleSheet("background-color: #CAD7E0;")
         self.setWindowIcon(QIcon(':/icon/images/headerLogo1.png'))
         self.initUI()
