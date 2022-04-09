@@ -35,17 +35,23 @@ class PMDialog(Dialog):
 
     def __init__(self, parent=None, textPad=None):
         super().__init__(parent, textPad)
-        self.parent = parent
-        self.textPad = textPad
         self.c = Configuration()
-        self.setWindowTitle('Paket Yöneticisi')
-        self.setWindowIcon(QIcon(':/icon/images/package.png'))
-        self.setStyleSheet("background-color: #CAD7E0;")
-        self.setMinimumSize(QSize(620, 393))
-        self.setMaximumSize(QSize(620, 393))
-        self.baseUrl = 'https://pypi.org/pypi/'
-        self.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0'}
-        self.initUI()
+        try:
+            subprocess.check_output(["ver", "-V"], shell=self.c.getShell())
+            CustomizeMessageBox_Ok("\nBilgisayarınızda Anaconda dağıtımından gelen bir python sürümü bulunmaktadır. Anaconda kendi paket yöneticisini kullanmaktadır. PyNar Paket Yöneticisi Anaconda dağıtımıyla uyumlu değildir, eğer PyNar paket yöneticisini kullanmak istiyorsanız Anaconda yazılımını bilgisayarınızdan kaldırınız.",QMessageBox.Critical)
+        except:
+            self.parent = parent
+            self.textPad = textPad
+            self.setWindowTitle('Paket Yöneticisi')
+            self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
+            self.setWindowIcon(QIcon(':/icon/images/package.png'))
+            self.setStyleSheet("background-color: #CAD7E0;")
+            self.setMinimumSize(QSize(620, 393))
+            self.setMaximumSize(QSize(620, 393))
+            self.baseUrl = 'https://pypi.org/pypi/'
+            self.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0'}
+            self.initUI()
+            self.exec_()
 
     def initUI(self):
         font = QFont()
