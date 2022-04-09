@@ -33,6 +33,7 @@ class SettingsDialog(Dialog):
         self.textPad = textPad
         self.c = Configuration()
         self.setWindowTitle('Editör Ayarları')
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setWindowIcon(QIcon(':/icon/images/settings_i.png'))
         self.setStyleSheet("background-color: #CAD7E0;")
         self.setMinimumSize(QSize(600, 363))
