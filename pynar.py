@@ -945,8 +945,9 @@ class MainWindow(QMainWindow):
 
     def showPackage(self):
         try:
-            dialog = PMDialog(self, self.textPad)
-            dialog.exec_()
+            PMDialog(self, self.textPad)
+            #dialog = PMDialog(self, self.textPad)
+            #dialog.exec_()
         except Exception as err:
             print("error show package: {0}".format(err))
 
