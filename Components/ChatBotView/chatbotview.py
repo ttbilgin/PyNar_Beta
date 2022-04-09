@@ -454,7 +454,7 @@ class UcChatBotView(QWidget):
         for buttonText in buttonTextList:
             if (len(buttonText) > lineLetterCapacity or activeLineButtonCount > 3 or buttonText == self.fixedBtnTxt) and (buttonText != self.noFixedBtnTxt and activeLineButtonCount > 1):
                 lineLetterCapacity = 37
-                activeLineButtonCount = 0
+                activeLineButtonCount = 1
                 self.sagmenuHBox = QtWidgets.QHBoxLayout()
                 self.sagmenuHBox.setContentsMargins(0, 0, 0, 0)
                 activeLine = self.sagmenuHBox
