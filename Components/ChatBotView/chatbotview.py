@@ -63,8 +63,8 @@ class ChatbotAnswer:
 class UcChatBotView(QWidget):
     chatButtons = {}
     errorButtons = {}
-    fixedBtnTxt = 'Hatalı Satırı Düzelt'
-    noFixedBtnTxt = 'Hatalı Satırı Düzeltme'
+    fixedBtnTxt = 'Düzelt'
+    noFixedBtnTxt = 'Düzeltme'
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -544,7 +544,7 @@ class UcChatBotView(QWidget):
             codeText[self.line] = codeText[self.line].replace(temp, self.trueData)
             self.parent.textPad.setText('\n'.join(codeText))
             message = replaceToEmoji('Hatalı satır düzeltildi kodları tekrar çalıştırmayı deneyebilirsin 😊')
-        if len(self.runErrors) > 0 and (buttonText.lower() == 'Evet'.lower() or buttonText.lower() == self.noFixedBtnTxt.lower()):
+        if len(self.runErrors) > 0 and (buttonText.lower() == 'Evet'.lower()):
                 self.errorButtons[0].setEnabled(False)
                 self.errorButtons[1].setEnabled(False)
                 QtCore.QTimer.singleShot(1, self.robotProcess)
@@ -585,7 +585,7 @@ class UcChatBotView(QWidget):
             self.text = text
             self.line = runErrors[0]['range']['start']['line']
             self.errorNo=1
-            message = 'Yazdığınız kodlarda {0} adet hata bulunmuştur. Hata(ları)nızı öğrenmek ve yardım almak ister misiniz?'.format(len(runErrors))
+            message = 'Yazdığınız kodlarda hata bulunmuştur. Hatanızı öğrenmek ve yardım almak ister misiniz?'.format(len(runErrors))
 
 
             isVisible = False
@@ -651,28 +651,18 @@ class UcChatBotView(QWidget):
         descErrorMessage = self.runErrors[0]['message']
         controlData = self.control(self.trueData)
         self.runErrors.pop(0)
-        if len(self.runErrors) > 0:
-            message = '{0}. Hata <br /><br />{1}.<br/><p style="color:green">Bu hatayı düzeltmek için önerimiz şöyle:</p>&#9989;&nbsp; {2} <br/>'.format(
-                self.errorNo, descErrorMessage, controlData)
-            message += '<p style="color:red">Önerimiz yardımcı olmadıysa doğru yazılmış şu örnekleri inceleyebilirsiniz</p>'
-            for i in knnList:
-                message += ('&#9989;&nbsp;' + self.control(i) + '<br/>')
-            message += '<br/>Diğer Hata(ları)nızı da görmek ister misiniz?'
-            self.textEdit_message.append(self.robotBalloonMessage(message=message))
-            if controlData:
-                self.AddUserHelpButton(['Evet', 'Hayır', self.fixedBtnTxt, self.noFixedBtnTxt], True)
-            else:
-                self.AddUserHelpButton(['Evet', 'Hayır'], True)
-        else:
-            message = '{0}. Hata <br /><br />{1}.<br/><p style="color:green">Bu hatayı düzeltmek için önerimiz şöyle:</p>&#9989;&nbsp; {2} <br/>'.format(
-                self.errorNo, descErrorMessage, controlData)
-            message += '<p style="color:red">Önerimiz yardımcı olmadıysa doğru yazılmış şu örnekleri inceleyebilirsiniz</p>'
-            for i in knnList:
-                message += ('&#9989;&nbsp;' + self.control(i) + '<br/>')
-            message += '<br/>'
-            self.textEdit_message.append(self.robotBalloonMessage(message=message))
-            if controlData:
-                self.AddUserHelpButton([self.fixedBtnTxt, self.noFixedBtnTxt], True)
+
+
+        message = '{0}. Hata <br /><br />{1}.<br/><p style="color:green">Bu hatayı düzeltmek için önerimiz şöyle:</p>&#9989;&nbsp; {2} <br/>'.format(
+            self.errorNo, descErrorMessage, controlData)
+        message += '<p style="color:red">Önerimiz yardımcı olmadıysa doğru yazılmış şu örnekleri inceleyebilirsiniz</p>'
+        for i in knnList:
+            message += ('&#9989;&nbsp;' + self.control(i) + '<br/>')
+        message += '<br/> Bu hatayı düzeltmek istermisiniz?'
+        self.textEdit_message.append(self.robotBalloonMessage(message=message))
+        if controlData:
+            self.AddUserHelpButton([self.fixedBtnTxt, self.noFixedBtnTxt], True)
+
         log_mesaj_ekle("", self.robot_message)
         self.errorNo += 1
 
