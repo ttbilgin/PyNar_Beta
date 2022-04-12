@@ -1,6 +1,6 @@
 {
         "Bolum13.html#hata-yakalama Hata Yakalama": {
-                "Hata Yakalama İşlemi": "yari_cap = int(input(\"Yarıçapı girin :\"))\npi=3.14\nif yari_cap <= 0:\n    print(\"Yarıçap sıfır ve sıfırdan küçük bir değer olamaz\")\nelse:\n    sonuc =pi*(yari_cap**2)\n    print(\"Yarıçap :{}'dir\".format(sonuc))"
+                "Hata Yakalama İşlemi": "yari_cap = int(input(\"Yarıçapı girin :\"))\npi=3.14\nif yari_cap <= 0:\n    print(\"Yarıçap sıfır ve sıfırdan küçük bir değer olamaz\")\nelse:\n    sonuc =pi*(yari_cap**2)\n    print(\"Alan = {}\".format(sonuc))"
          },
         "Bolum13.html#hata-türleri Hata Türleri": {
                 "SyntaxError": "yaslar = {\n    'Ahmet': 55,\n    'Ezgi': 24\n    'Mehmet': 17\n}\nprint(f'Mehmet {yaslar[\"Mehmet\"]} yaşındadır.')",
