@@ -66,8 +66,6 @@ import random
 file_to_write = ""
 main_pointer = None
 
-DURATION_INT = 180
-
 def generate_system_id():
     mac_address = uuid.getnode()
     system_id = (mac_address & 0xffffffffff)
@@ -350,7 +348,7 @@ class MainWindow(QMainWindow):
         self.loginWindow.readToken()
         self.setExamImage()
 
-        self.time_left_int = DURATION_INT
+        self.time_left_int = int(self.c.getDurationExamsRefresh())
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.timerTimeout)
         self.timer.start(1000)
@@ -359,7 +357,7 @@ class MainWindow(QMainWindow):
         self.time_left_int -= 1
         if self.time_left_int == 0:
             self.setExamImage()
-            self.time_left_int = DURATION_INT
+            self.time_left_int = int(self.c.getDurationExamsRefresh())
 
 
     def setExamImage(self):
@@ -1351,9 +1349,10 @@ class MainWindow(QMainWindow):
             CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
 
     def fetchExams(self):
+        serverAdd = self.c.getServerAddress()
         if self.token != None:
             headers = {'Authorization': 'Bearer ' + self.token}
-            exams = requests.post("http://pynar.org/api/v1/user/student/exams", headers=headers)
+            exams = requests.post(serverAdd + "/api/v1/user/student/exams", headers=headers)
             res_json = exams.json()
             self.examList = res_json['result']['data']
 

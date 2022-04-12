@@ -285,6 +285,8 @@ class ExamWindow(UI_Exam, ShadowWindow):
         self.IsExamStarted = False
         self.title_label.setText(self.lesson)
         self.sendExam = None
+        self.c = Configuration()
+        self.serverAddress = self.c.getServerAddress()
 
     def inicializao(self):
         self.startExamBtn.clicked.connect(self.startExamClick)
@@ -403,7 +405,7 @@ class ExamWindow(UI_Exam, ShadowWindow):
         id = self.questionInfo["exam_id"]
         myobj = {'start_exam_id': id}
         headers = {'Authorization': 'Bearer ' + self.token}
-        exams = requests.post("http://pynar.org/api/v1/user/student/exams", headers=headers, data=myobj)
+        exams = requests.post(self.serverAddress + "/api/v1/user/student/exams", headers=headers, data=myobj)
         res_json = exams.json()
         if res_json['ok']:
             return res_json['result']['data']
@@ -414,7 +416,7 @@ class ExamWindow(UI_Exam, ShadowWindow):
         examId = self.questionInfo["exam_id"]
         myobj = {'exam_id': examId, 'question_id': questionId}
         headers = {'Authorization': 'Bearer ' + self.token}
-        exams = requests.post("http://pynar.org/api/v1/user/student/media/" + media, headers=headers, data=myobj)
+        exams = requests.post(self.serverAddress + "/api/v1/user/student/media/" + media, headers=headers, data=myobj)
         return exams.content
 
     def closeEvent(self, event):
@@ -432,6 +434,7 @@ class SendWindow(QMainWindow):
         self.timerTimeout = timerTimeout
         self.parent = parent
         self.c = Configuration()
+        self.serverAddress = self.c.getServerAddress()
 
         if time_left_int > 0:
             mess = "Sınavınızı tamamlamak istediğinize emin misiniz?<br/>Bu işlem <b>geri alınamaz.</b> <br/>Şuan <b>sınav sürenizin</b> gittiğini unutmayınız"
@@ -505,7 +508,7 @@ class SendWindow(QMainWindow):
 
 
         id = self.parent.questionInfo["exam_id"]
-        server_update_url = 'http://pynar.org/api/v1/user/student/exams'
+        server_update_url = self.serverAddress + '/api/v1/user/student/exams'
         headers = {'Authorization': 'Bearer ' + self.parent.token}
 
         logFile = str(self.parent.file_to_write.as_posix())

@@ -41,6 +41,7 @@ class fileUploadWindow(QDialog):
         self.setMaximumSize(QSize(360, 160))
 
         self.c = Configuration()
+        self.serverAddress = self.c.getServerAddress()
 
         font = QFont()
         font.setFamily(self.c.getEditorFont())
@@ -155,7 +156,7 @@ class fileUploadWindow(QDialog):
 
 
     def sendTeacherButton(self):
-        info_url = 'http://pynar.org/api/v1/user/institution/student/info'
+        info_url = self.serverAddress + '/api/v1/user/institution/student/info'
         headers = {'Authorization': 'Bearer ' + self.token}
         x = requests.post(info_url, headers=headers)
         res_json = x.json()
@@ -174,7 +175,7 @@ class fileUploadWindow(QDialog):
                 self.done(1)
                 return -1
 
-        server_update_url = 'http://pynar.org/api/v1/user/student/assignments'
+        server_update_url = self.serverAddress + '/api/v1/user/student/assignments'
 
         with open(self.textpad.filename, "rb") as a_file:
             file_dict = {
@@ -251,7 +252,7 @@ class fileUploadWindow(QDialog):
             except Exception as e:
                 CustomizeMessageBox_Ok(str(e), QMessageBox.Critical)
 
-        server_update_url = 'http://pynar.org/api/v1/user/file/upload'
+        server_update_url = self.serverAddress + '/api/v1/user/file/upload'
 
         if os.path.exists(self.log):
             logFile = str(self.log.as_posix())
@@ -294,7 +295,7 @@ class FilesWindow(QDialog):
         self.setMaximumSize(QSize(460, 250))
 
         self.c = Configuration()
-
+        self.serverAddress = self.c.getServerAddress()
         font = QFont()
         font.setFamily(self.c.getEditorFont())
         font.setPointSize(self.c.getEditorFontSize())
@@ -357,7 +358,7 @@ class FilesWindow(QDialog):
         filename = self.list.item(row).text()
         headers = {'Authorization': 'Bearer ' + self.authToken}
         myobj = {'mac_address': hex(uuid.getnode())}
-        url = "http://pynar.org/api/v1/user/file/remove/" + urllib.parse.quote_plus(filename)
+        url = self.serverAddress + "/api/v1/user/file/remove/" + urllib.parse.quote_plus(filename)
         res = requests.post(url, headers=headers, data=myobj)
         res_json = res.json()
         if res_json['ok'] == True:
@@ -378,7 +379,7 @@ class FilesWindow(QDialog):
             filename = self.list.item(row).text()
             headers = {'Authorization': 'Bearer ' + self.authToken}
             myobj = {'mac_address': hex(uuid.getnode())}
-            url = "http://pynar.org/api/v1/user/file/download/" + urllib.parse.quote_plus(filename)
+            url = self.serverAddress + "/api/v1/user/file/download/" + urllib.parse.quote_plus(filename)
             self.res = requests.post(url, data=myobj, headers=headers)
 
             plt = platform.system()
@@ -448,6 +449,7 @@ class Login(QDialog):
         super(Login, self).__init__()
         self.parent = parent
         self.c = Configuration()
+        self.serverAddress = self.c.getServerAddress()
         self.setWindowTitle('Giriş Yap')
         self.setWindowIcon(QIcon(':/icon/images/headerLogo1.png'))
         self.setStyleSheet("background-color: #CAD7E0;")
@@ -522,7 +524,7 @@ class Login(QDialog):
         try:
             log_email = str(self.input_email.text())
             log_sifre = str(self.input_sifre.text())
-            login_url = 'http://pynar.org/api/v1/user/login'
+            login_url = self.serverAddress + '/api/v1/user/login'
             if (len(log_email and log_sifre) != 0):
                 myobj = {}
                 myobj['email'] = log_email
@@ -561,6 +563,7 @@ class Register(QDialog):
     def __init__(self):
         super(Register, self).__init__()
         self.c = Configuration()
+        self.serverAddress = self.c.getServerAddress()
         self.setWindowTitle("Kayıt Ol")
         self.setWindowIcon(QIcon(':/icon/images/headerLogo1.png'))
         self.setStyleSheet("background-color: #CAD7E0;")
@@ -659,7 +662,7 @@ class Register(QDialog):
             reg_email = str(self.input_email.text())
             reg_sifre = str(self.input_sifre.text())
             reg_sifre_r = str(self.input_sifre_r.text())
-            register_url = 'http://pynar.org/api/v1/user/signup'
+            register_url = self.serverAddress + '/api/v1/user/signup'
             if (len(reg_ad and reg_soyad and reg_email and reg_sifre and reg_sifre_r) != 0):
                 if (reg_sifre != reg_sifre_r):
                     raise Exception("Şifreler birbirinin aynısı değil.")
@@ -735,7 +738,7 @@ class LoginWindow(QDialog):
 
         self.parentImage = parentImage
         self.c = Configuration()
-        
+        self.serverAddress = self.c.getServerAddress()
         self.returnValue = False
         self.loginOk = False
         self.btn_signIn = QPushButton("Oturum Aç")
@@ -865,7 +868,7 @@ class LoginWindow(QDialog):
 
                 headers = {'Authorization': 'Bearer ' + token}
                 myobj = {'mac_address': hex(uuid.getnode())}
-                res = requests.post("http://pynar.org/api/v1/user/info", headers=headers, data=myobj)
+                res = requests.post(self.serverAddress + "/api/v1/user/info", headers=headers, data=myobj)
                 res_json = res.json()
                 if res_json['ok'] == True:
                     self.SW = Login(self.parent)
@@ -932,7 +935,7 @@ class LoginWindow(QDialog):
             if self.loginOk:
                 headers = {'Authorization': 'Bearer ' + self.SW.token}
                 myobj = {'mac_address': hex(uuid.getnode())}
-                res = requests.post("http://pynar.org/api/v1/user/file/uploadedFiles", headers=headers, data=myobj)
+                res = requests.post(self.serverAddress + "/api/v1/user/file/uploadedFiles", headers=headers, data=myobj)
                 res_json = res.json()
 
                 if res_json['ok'] != True:

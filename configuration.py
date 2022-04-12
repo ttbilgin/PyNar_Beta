@@ -89,6 +89,13 @@ class Configuration():
 
     def getDataDirPath(self, param):
         return self.config['Data'][param]
+
+    def getServerAddress(self):
+        return self.config['ServerAddress']['server_address']
+
+    def getDurationExamsRefresh(self):
+        return self.config['DurationExamsRefresh']['duration_exams_refresh']
+
     #
     def setSystem(self, system):
         self.config['System']['system'] = system
