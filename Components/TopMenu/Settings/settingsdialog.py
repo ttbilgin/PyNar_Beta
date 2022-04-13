@@ -43,16 +43,16 @@ class SettingsDialog(Dialog):
 
     def resize(self):
         if self.logicalDpiX() == 120:
-            self.size = int(self.c.getEditorFontSize())-2
+            self.fontSize = int(self.c.getEditorFontSize())-2
         else:
-            self.size = int(self.c.getEditorFontSize())
+            self.fontSize = int(self.c.getEditorFontSize())
 
 
     def initUI(self):
         font = QFont()
         font.setFamily(self.c.getEditorFont())
         self.resize()
-        font.setPointSize(self.size)
+        font.setPointSize(self.fontSize)
 
         self.codeFontDialog = QFontDialog()
 
@@ -244,7 +244,7 @@ class SettingsDialog(Dialog):
     def changeCodeFont(self):
         font = QFont()
         font.setFamily(self.c.getCodeFont())
-        font.setPointSize(self.size)
+        font.setPointSize(int(self.c.getFontSize()))
 
         font, ok = self.codeFontDialog.getFont(font, fontDialog(), "Font Ayarları", QFontDialog.MonospacedFonts)
         if ok:
@@ -258,7 +258,7 @@ class SettingsDialog(Dialog):
         try:
             font = QFont()
             font.setFamily(self.c.getEditorFont())
-            font.setPointSize(self.size)
+            font.setPointSize(self.fontSize)
 
             font, ok = self.editorFontDialog.getFont(font, fontDialog(), "Font Ayarları", QFontDialog.ProportionalFonts)
             if ok:
