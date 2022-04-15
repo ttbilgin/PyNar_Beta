@@ -416,6 +416,7 @@ class MainWindow(QMainWindow):
         self.lbl_img_logo.setScaledContents(True)
         self.lbl_img_logo.setFixedWidth(85)
         self.lbl_img_logo.mouseReleaseEvent = lambda event: self.LogoClick()
+        self.lbl_img_logo.setToolTip("Sürüm Bilgisi")
         self.lbl_img_logo.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.hBoxLayout.addWidget(self.lbl_img_logo)
 
@@ -557,7 +558,7 @@ class MainWindow(QMainWindow):
         self.errorToDb = error_outputs_to_db()
 
     def LogoClick(self):
-        self.showHelp()
+        self.showReleaseInfo()
 
     def closeChatBotView(self, event):
         isVisible = self.chatbotview.closeForm()
@@ -1361,6 +1362,13 @@ class MainWindow(QMainWindow):
             self.notebook.closeTab(0)#Her seferinde bir tab kapandığından sürekli 0. tab alınmalı
             if self.notebook.count() == 0:
                 break
+
+    def showReleaseInfo(self):
+        try:
+            CustomizeMessageBox_Ok("Pynar Editör Sürüm: " + self.c.getReleaseInfo(), QMessageBox.Information)
+
+        except Exception as err:
+            print("error show releaseInfo: {0}".format(err))
 # if __name__ == '__main__':
 # app = QApplication(sys.argv)
 # # apply_stylesheet(app, theme='white_pynar_theme.xml', light_secondary=True)

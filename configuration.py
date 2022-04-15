@@ -96,6 +96,9 @@ class Configuration():
     def getDurationExamsRefresh(self):
         return self.config['DurationExamsRefresh']['duration_exams_refresh']
 
+    def getReleaseInfo(self):
+        return self.config['releaseInfo']['release']
+
     #
     def setSystem(self, system):
         self.config['System']['system'] = system
