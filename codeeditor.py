@@ -17,11 +17,15 @@ from configuration import Configuration
 
 import random
 import time
+import itertools
 
 #Html dosyalarını açmak için gerekli mödülleri ve anahtar listesi için gerekli json modülünü yükle
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from Components.TopMenu.Help.glplicense import GPLDialog
 import json
+
+#Parantez vb. listesini tutmak için stack
+from collections import deque
 
 #Loglama için QsciAPI sınıfını tekrar tanımla
 class QsciAPIs(QsciAPIs):
@@ -225,9 +229,9 @@ class CodeEditor(QsciScintilla):
     #Linke tıklandığı zaman tıklanan pozisyonu kelimeler listesindeki pozisyonlarla karşılaştır
     def onIndicatorReleased(self, line, index, keys):
         position = self.positionFromLineIndex(line, index)
-        value = self.SendScintilla(self.SCI_INDICATORVALUEAT, 0, position)
-        for key, value in reversed(self.wordDict.items()):
-            if(key <= position):
+        
+        for key, value in reversed(self.wordDict.items()):#Key kelimenin pozisyonunu veriyor(int), value ise kelimenin kendisini(string)
+            if(key <= position and value in self.valueList):#valuelist'te olmayan kelimelere tıklayınca bir şey yapma
                 c = Configuration()
                 view = QWebEngineView()
                 dosyaPath = c.getHomeDir() + c.getHtmlHelpPath("html_help_path")
@@ -236,8 +240,6 @@ class CodeEditor(QsciScintilla):
                 
                 dialog = GPLDialog(self.parent, view)
                 dialog.exec_()
-                # import webbrowser
-                # webbrowser.open(dosyaPath)
                 break
 
     def onTextChanged(self):
@@ -268,6 +270,7 @@ class CodeEditor(QsciScintilla):
                 fname = os.path.basename(textPad.filename)
                 fname += '*'
                 notebook.setTabText(index, fname)
+                
         #Indicator fonksiyonunu çalıştır
         self.indicatorFill()
 
@@ -276,27 +279,85 @@ class CodeEditor(QsciScintilla):
         self.indicatorFill()
 
     def indicatorFill(self):
+        mainText = self.text().encode("utf-8")
+    
         self.indicatorDefine(self.RoundBoxIndicator, 0)
-        self.setIndicatorForegroundColor(QColor("#acd33b"))
-        self.setIndicatorHoverForegroundColor(QColor("#00acea"))
+        self.setIndicatorForegroundColor(QColor("#acd33b"), 0)
+        self.setIndicatorHoverForegroundColor(QColor("#00acea"), 0)
         self.setIndicatorDrawUnder(True)
         self.SendScintilla(self.SCI_SETINDICATORCURRENT, 0)
-        mainText = self.text().encode("utf-8")
         self.SendScintilla(self.SCI_INDICATORCLEARRANGE, 0, len(mainText))
-        
-
         
         for key in self.valueList:
             keyU = key.encode("utf-8")
             pos = mainText.find(keyU)
             while(pos != -1 and pos < len(mainText)):
                 self.wordDict[pos] = key
-                value = self.SendScintilla(self.SCI_INDICATORVALUEAT, 0, pos)
+                self.SendScintilla(self.SCI_INDICATORVALUEAT, 0, pos)
                 self.SendScintilla(self.SCI_INDICATORFILLRANGE, pos, len(keyU))
                 pos += len(keyU)
                 pos = mainText.find(keyU, pos)
                 pos = int(pos)
-        #Test end
+
+        #Kapanmayan parantez vb. karakterlerin altını çiz
+        paranthOpen, paranthClose = self.findUnmatched("(", ")")
+        bracketOpen, bracketClose = self.findUnmatched("[", "]")
+        squaredbOpen, squaredbClose = self.findUnmatched("{", "}")
+
+        resText = self.OpenBracketsMessage(paranthOpen, bracketOpen, squaredbOpen)
+        resText += self.CloseBracketsMessage(paranthClose, bracketClose, squaredbClose)
+
+        
+        self.SendScintilla(self.SCI_SETINDICATORCURRENT, 2)
+        self.SendScintilla(self.SCI_INDICATORCLEARRANGE, 0, len(mainText))
+        self.indicatorDefine(self.SquiggleIndicator, 2)
+        self.setIndicatorForegroundColor(QColor("#ff0000"), 2)
+        self.setIndicatorHoverForegroundColor(QColor("#ff0000"), 2)
+        self.setIndicatorDrawUnder(True)
+        self.mainWindow.statusBar.setStyleSheet("")
+        self.mainWindow.statusBar.showMessage('', 1)
+        for i in itertools.chain(paranthOpen, paranthClose, bracketOpen, bracketClose, squaredbClose, squaredbOpen):
+            self.SendScintilla(self.SCI_INDICATORFILLRANGE, i, 1)
+            self.mainWindow.statusBar.setStyleSheet("QStatusBar{padding-left:8px;background:rgba(255,0,0,255);color:white;font-weight:bold;}")
+            self.mainWindow.statusBar.showMessage(resText, 3000)
+        mainText = self.text()
+		#tek tırnaklar kapatılmış mı hesapla
+        singleQuotaIndex=[i for i in range(len(mainText)) if mainText.startswith("'", i)]
+        singleQuotaIndexEscaped=[i+1 for i in range(len(mainText)) if mainText.startswith("\\'", i)] # \ işaretinin posizyonunu verdiği için +1 ekledik
+        doubleQuotaIndex=[i for i in range(len(mainText)) if mainText.startswith('"', i)]
+        doubleQuotaIndexEscaped=[i+1 for i in range(len(mainText)) if mainText.startswith('\\"', i)] # \ işaretinin posizyonunu verdiği için +1 ekledik
+
+        singleQuotaIndex=list(set(singleQuotaIndex)-set(singleQuotaIndexEscaped)) #escape edilmiş ' işaretini listeden çıkar
+        doubleQuotaIndex=list(set(doubleQuotaIndex)-set(doubleQuotaIndexEscaped)) #escape edilmiş " işaretini listeden çıkar
+
+		
+        #eğer QuotaIndex tek sayıda elemandan oluşuyorsa listedeki en son indisli elemanın altını çizsin.
+        if(len(singleQuotaIndex) % 2 == 1):
+            self.SendScintilla(self.SCI_INDICATORFILLRANGE, singleQuotaIndex[-1], 1)
+            self.mainWindow.statusBar.setStyleSheet("QStatusBar{padding-left:8px;background:rgba(255,0,0,255);color:white;font-weight:bold;}")
+            self.mainWindow.statusBar.showMessage('Tek Tırnak kapatılmadı!', 3000)
+        if(len(doubleQuotaIndex) % 2 == 1):
+            self.SendScintilla(self.SCI_INDICATORFILLRANGE, doubleQuotaIndex[-1], 1)
+            self.mainWindow.statusBar.setStyleSheet("QStatusBar{padding-left:8px;background:rgba(255,0,0,255);color:white;font-weight:bold;}")
+            self.mainWindow.statusBar.showMessage('Çift Tırnak kapatılmadı!', 3000)
+    
+    def findUnmatched(self, openChar, closeChar):
+
+        mainText = self.text().encode("utf-8")
+        openParanthList = deque()
+        closeParanthList = deque()
+        
+        for i, val in enumerate(mainText):
+            char = chr(val)
+            if(char == openChar):
+                openParanthList.append(i)
+            elif(char == closeChar):
+                if(len(openParanthList) == 0):
+                    closeParanthList.append(i)
+                else:
+                    openParanthList.pop()
+        
+        return (openParanthList, closeParanthList)
 
     def onMarginClicked(self, margin, line, modifiers):
 
@@ -844,3 +905,32 @@ class CodeEditor(QsciScintilla):
             return line.replace(self.comment_string, "", 1)
         else:
             return line
+
+    def OpenBracketsMessage(self, paranthO, bracketO, squaredbO):
+        charlist = []
+        text = ""
+        for i in itertools.chain(paranthO, bracketO, squaredbO):
+            charlist.append(self.text()[i])
+        charlist = list(set(charlist))
+
+        if len(charlist) != 0 and charlist is not None:
+            if len(charlist) > 1:
+                text = ", ".join(charlist) +" Parantezlerini kapatınız. "
+            else:
+                text = charlist[0] + " Parantezini kapatınız. "
+        return text
+
+    def CloseBracketsMessage(self, paranthC, bracketC,  squaredbC):
+        charlist = []
+        text = ""
+        for i in itertools.chain(paranthC, bracketC, squaredbC):
+            charlist.append(self.text()[i])
+        charlist = list(set(charlist))
+
+        if len(charlist) != 0 and charlist is not None:
+            if len(charlist) > 1:
+                text = ", ".join(charlist) + " Parantezlerinin açma parantezlerini ekleyiniz. "
+            else:
+                text = charlist[0] +" Parantezinin açma parantezini ekleyiniz. "
+
+        return text
