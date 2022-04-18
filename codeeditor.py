@@ -659,8 +659,8 @@ class CodeEditor(QsciScintilla):
             # debugging ...
             #print(secondList)
             
-            for item in firstList:
-                self.autocomplete.add(item + '?1')
+            #for item in firstList: #autocomplete listede hata oluşturuyor.
+                #self.autocomplete.add(item + '?1')
                 
             for item in secondList:
                 self.autocomplete.add(item + '?1')
