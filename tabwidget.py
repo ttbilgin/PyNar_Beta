@@ -5,7 +5,7 @@ from PyQt5.QtCore import QRect
 from PyQt5.QtWidgets import (QTabWidget, QMessageBox, QWidget, QLabel,)
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QFont
-
+from PyQt5 import QtCore
 from Components.MessageBox.CustomizeMessageBox import CustomizeMessageBox_Yes_No_Cancel
 from configuration import Configuration
 from codeeditor import CodeEditor
@@ -36,8 +36,14 @@ class TabWidget(QTabWidget):
         self.currentChanged.connect(self.changeTab)
         self.textPad = None
         self.codeView = None
+        self.installEventFilter(self)
 
         # self.starterPage = None
+    def eventFilter(self, obj, event):
+        if event.type() == QtCore.QEvent.MouseButtonPress:
+            if event.button() == QtCore.Qt.MiddleButton:
+                self.closeTab(obj.currentIndex())
+        return QtCore.QObject.event(obj, event)
 
     def newTab(self, editor=None, codeView=None):
 
