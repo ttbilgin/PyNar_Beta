@@ -172,6 +172,14 @@ class CodeEditor(CodeEditor):
             t = "Basılan Tuş: " + key_pressed
             logfunc(t, parent=self.parent)
 
+    def keyReleaseEvent(self, event):
+        self.redoUndosetEnabled()
+
+    def redoUndosetEnabled(self):
+        self.parent.toolbar.redoAction.setEnabled(self.parent.textPad.isRedoAvailable())
+        self.parent.toolbar.undoAction.setEnabled(self.parent.textPad.isUndoAvailable())
+
+
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat("text/plain"):
             if self.menus.forceNewPage and len(self.text())>0:
@@ -817,9 +825,11 @@ class MainWindow(QMainWindow):
 
     def undo(self):
         self.textPad.undo()
+        self.textPad.redoUndosetEnabled()
 
     def redo(self):
         self.textPad.redo()
+        self.textPad.redoUndosetEnabled()
 
     def zoomIn(self):
         self.textPad.zoomIn()
