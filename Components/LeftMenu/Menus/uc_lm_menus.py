@@ -58,6 +58,7 @@ class UcLMMenus(QWidget):
         self.font.setPointSize(self.c.getEditorFontSize())
         self.parent = parent
         self.setupUi(self)
+        self.upButton.setVisible(False)
 
     # Slide Menu hide -show method
     def hideTreeView(self, control=False):
@@ -151,6 +152,9 @@ class UcLMMenus(QWidget):
                 "background-color: #6b899f; color: white; font: 10pt; padding-top:10px;")
             self.MenuActionClick(self.jsonFiles[self.activeMenu - 1][0], self.activeMenu, self.jsonFiles[self.activeMenu - 1][1])
             self.hideTreeView(True)
+            self.downButton.setVisible(True)
+        if self.activeMenu <= 1:
+            self.upButton.setVisible(False)
 
     @QtCore.pyqtSlot()
     def moveDown(self):
@@ -164,6 +168,9 @@ class UcLMMenus(QWidget):
             self.listWidget.setCurrentRow(self.activeMenu - 1)
             self.MenuActionClick(self.jsonFiles[self.activeMenu - 1][0], self.activeMenu,self.jsonFiles[self.activeMenu - 1][1])
             self.hideTreeView(True)
+            self.upButton.setVisible(True)
+        if self.menuItemCount <= self.activeMenu:
+            self.downButton.setVisible(False)
 
     def FillMenuCategories(self):
         dosya = 'menus.json'
