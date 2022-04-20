@@ -118,15 +118,16 @@ class CodeEditor(QsciScintilla):
         # Margin 0 is used for line numbers
         fontmetrics = QFontMetrics(self.font)
         self.setMarginsFont(self.font)
-        self.setMarginWidth(0, fontmetrics.width("00000")-self.tabWidth)
+        self.setMarginWidth(0, fontmetrics.width("0000")-self.tabWidth)
         self.setMarginLineNumbers(0, True)
         self.setMarginsBackgroundColor(QColor("#CAD7E0"))
         self.setMarginsForegroundColor(QColor("#6b899f"))
         #
         # Margin 1 for breakpoints
         self.setMarginSensitivity(1, True)
+        self.setMarginWidth(1, fontmetrics.width("00"))
         self.markerDefine(QsciScintilla.RightArrow, 8)
-        self.setMarkerBackgroundColor(QColor('#ffffff'), 8)
+        self.setMarkerBackgroundColor(QColor('#ff0000'), 8)
 
         # variable for breakpoint
         self.breakpoint = False
@@ -747,7 +748,7 @@ class CodeEditor(QsciScintilla):
         # Margin 0 is used for line numbers
         fontmetrics = QFontMetrics(self.font)
         self.setMarginsFont(self.font)
-        self.setMarginWidth(0, fontmetrics.width("00000") + 5)
+        self.setMarginWidth(0, fontmetrics.width("0000") + 5)
         self.setMarginLineNumbers(0, True)
         self.setMarginsBackgroundColor(QColor("#000000"))
         self.setMarginsForegroundColor(QColor("#FFFFFF"))
