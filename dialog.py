@@ -170,8 +170,8 @@ class FindDeadCodeDialog(QDialog):
         # palette.setColor(role, QColor('#2c2c2c'))
         self.setGeometry(self.codeView.x() + 300, self.codeView.y() + 400, 400, 300)
         self.setPalette(palette)
-
-        self.setWindowTitle('Ölü Kod Listesi')
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
+        self.setWindowTitle('Hata Ayıklayıcı')
         self.initUI()
 
     def initUI(self):
