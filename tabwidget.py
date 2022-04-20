@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (QTabWidget, QMessageBox, QWidget, QLabel,)
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QFont
 
-from Components.MessageBox.CustomizeMessageBox import CustomizeMessageBox_Yes_No
+from Components.MessageBox.CustomizeMessageBox import CustomizeMessageBox_Yes_No_Cancel
 from configuration import Configuration
 from codeeditor import CodeEditor
 from widgets import MessageBox
@@ -62,7 +62,13 @@ class TabWidget(QTabWidget):
         
         if '*' in tabText:
             self.index = index
-            CustomizeMessageBox_Yes_No('Dosya Kaydedilmedi<br><br>Şimdi Kaydet ?', clickAccept=self.saveYesClick, clickCancel=self.saveNoClick)
+            msgBox = CustomizeMessageBox_Yes_No_Cancel('Dosya Kaydedilmedi<br><br>Şimdi Kaydet ?')
+            reply = msgBox.exec()
+            if reply == QMessageBox.Yes:
+                self.saveYesClick()
+            elif reply == QMessageBox.No:
+                self.saveNoClick()
+
         else:
             self.removeTab(index)
         

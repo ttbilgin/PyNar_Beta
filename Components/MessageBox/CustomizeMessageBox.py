@@ -52,3 +52,27 @@ def CustomizeMessageBox_Ok(message, icon):
     msgBox.exec()
 
 
+def CustomizeMessageBox_Yes_No_Cancel(message):
+    c = Configuration()
+    msgBox = QMessageBox()
+    msgBox.setIcon(QMessageBox.Question)
+    msgBox.setWindowTitle('Pynar Mesaj Kutusu')
+    msgBox.setWindowIcon(QIcon(':/icon/images/headerLogo1.png'))
+    msgBox.setText(message)
+    msgBox.setWindowFlags(msgBox.windowFlags() | Qt.FramelessWindowHint | Qt.WindowSystemMenuHint)
+    msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+    font = QFont()
+    font.setFamily(c.getEditorFont())
+    font.setPointSize(c.getHistoryMenuFontSize() + 6)
+    msgBox.setFont(font)
+    msgBox.setStyleSheet(open(c.getHomeDir() + "qssfiles/qmessagebox.qss", "r").read())
+    BtnOk = msgBox.button(QMessageBox.Yes)
+    msgBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+    BtnOk.setText('Evet')
+    BtnCancel = msgBox.button(QMessageBox.No)
+    BtnCancel.setText('Hayır')
+
+    BtnClose = msgBox.button(QMessageBox.Cancel)
+    BtnClose.setText('Vazgeç')
+    return msgBox
+
