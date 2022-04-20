@@ -1,6 +1,7 @@
 import sys, stat
 import os
 from PyQt5 import Qt
+from PyQt5 import QtCore
 from PyQt5.QtCore import QSize, QRect, pyqtSignal
 from PyQt5.QtWidgets import (QApplication, QWidget, QDialog, QHBoxLayout,
                              QVBoxLayout, QGridLayout, QLabel, QLineEdit,
@@ -272,8 +273,12 @@ class SettingsDialog(Dialog):
 
 
     def _okButton(self):
-        CustomizeMessageBox_Ok("Bu ayarlarda yaptığınız değişiklikler Pynar Editörünü tekrar başlattığınızda geçerli olacaktır.", QMessageBox.Warning)
+        CustomizeMessageBox_Yes_No("Bu ayarlarda yaptığınız değişiklikler Pynar Editörünü tekrar başlattığınızda geçerli olacaktır. Şimdi yeniden başlatmak ister misiniz?", clickAccept=self.restart)
         self.close()
+
+    def restart(self):
+        QtCore.QCoreApplication.quit()
+        status = QtCore.QProcess.startDetached(sys.executable, sys.argv)
 
     def deleteAllLogFolder(self):
         try:
