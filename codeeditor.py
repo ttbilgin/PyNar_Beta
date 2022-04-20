@@ -162,8 +162,8 @@ class CodeEditor(QsciScintilla):
 
         # Current line visible with special background color or not :)
         # self.setCaretLineVisible(False)
-        # self.setCaretLineVisible(True)
-        # self.setCaretLineBackgroundColor(QColor("#020202"))
+        self.setCaretLineVisible(True)
+        self.setCaretLineBackgroundColor(QColor("#e8e8ff"))#imleç satırını renklendir.
         self.setMinimumSize(300, 300)
 
         # get style
@@ -466,7 +466,7 @@ class CodeEditor(QsciScintilla):
         # set Lexer
         self.setLexer(self.lexer)
 
-        self.setCaretLineBackgroundColor(QColor('black'))
+        #self.setCaretLineBackgroundColor(QColor('black'))
         self.lexer.setDefaultPaper(QColor('white'))
         self.lexer.setDefaultColor(QColor('black'))
         self.lexer.setColor(QColor('black'), 0) # default
@@ -578,11 +578,11 @@ class CodeEditor(QsciScintilla):
         self.keywords.append('__repr__')
         
         #Autocomplete resmini yükle ve 1 no'lu referansa ata.
-        img = QPixmap(":/icon/images/redball.png")
-        self.registerImage(1, img)
+        #img = QPixmap(":/icon/images/redball.png") #bundan vazgeçiyoruz düzgün çalışmıyor 19.04.2022
+        #self.registerImage(1, img) #bundan vazgeçiyoruz düzgün çalışmıyor 19.04.2022
 
         for word in self.keywords:
-            self.autocomplete.add(word + '?1')
+            self.autocomplete.add(word) #redball gösterme
 
         if not text:
 
@@ -660,10 +660,10 @@ class CodeEditor(QsciScintilla):
             #print(secondList)
             
             #for item in firstList: #autocomplete listede hata oluşturuyor.
-                #self.autocomplete.add(item + '?1')
+                #self.autocomplete.add(item) #redball gösterme
                 
             for item in secondList:
-                self.autocomplete.add(item + '?1')
+                self.autocomplete.add(item) #redball gösterme
             
             self.autocomplete.prepare()
 
@@ -682,7 +682,7 @@ class CodeEditor(QsciScintilla):
         # set Lexer
         self.setLexer(self.lexer)
 
-        self.setCaretLineBackgroundColor(QColor('black'))
+        #self.setCaretLineBackgroundColor(QColor('black'))
         self.lexer.setDefaultPaper(QColor('white'))
         self.lexer.setDefaultColor(QColor('black'))
         self.lexer.setColor(QColor('black'), 0)  # default
