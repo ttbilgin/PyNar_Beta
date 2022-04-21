@@ -37,6 +37,7 @@ class TabWidget(QTabWidget):
         self.textPad = None
         self.codeView = None
         self.installEventFilter(self)
+        self.cancelButton = False
 
         # self.starterPage = None
     def eventFilter(self, obj, event):
@@ -65,7 +66,7 @@ class TabWidget(QTabWidget):
             self.setCurrentIndex(index)
         
         tabText = self.tabText(index)
-        
+        self.cancelButton = False
         if '*' in tabText:
             self.index = index
             msgBox = CustomizeMessageBox_Yes_No_Cancel('Dosya Kaydedilmedi<br><br>Şimdi Kaydet ?')
@@ -74,6 +75,8 @@ class TabWidget(QTabWidget):
                 self.saveYesClick()
             elif reply == QMessageBox.No:
                 self.saveNoClick()
+            elif reply == QMessageBox.Cancel:
+                self.cancelButton = True
 
         else:
             self.removeTab(index)

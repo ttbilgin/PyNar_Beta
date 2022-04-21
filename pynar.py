@@ -1369,6 +1369,10 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         for i in range(self.notebook.count()):
+            if self.notebook.cancelButton:
+                event.ignore()
+                self.notebook.cancelButton = False
+                break
             self.notebook.closeTab(0)#Her seferinde bir tab kapandığından sürekli 0. tab alınmalı
             if self.notebook.count() == 0:
                 break
