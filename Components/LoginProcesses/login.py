@@ -803,6 +803,9 @@ class LoginWindow(QDialog):
                 self.loginOk = True
                 self.btn_signIn.setText("Çıkış Yap")
 
+                mess = "Pynar Portal'a başarıyla giriş yaptınız. Sağ üst köşede Adınız ve Soyadınızın baş harflerinin bulunduğu butondan <b>ÇIKIŞ YAP</b> butonuyla çıkış yapmadığınız sürece bundan sonraki başlatmanızda oturum açık olarak başlayacaktır."
+                CustomizeMessageBox_Ok(mess, QMessageBox.Information)
+
     def UserRegisterClick(self):
         self.SW = Register()
         self.SW.exec_()
