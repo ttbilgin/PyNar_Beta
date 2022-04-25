@@ -242,8 +242,9 @@ class writeLog():
             lastI = ""
             for i in messageParse[::-1]:
                 if i.lstrip().startswith("File"):
-                    line = i.split(",")[1].split(" ")[2]
-                    lFind = True
+                    if len(i.split(",")) > 1 and len(i.split(",")[1].split(" "))>2:
+                        line = i.split(",")[1].split(" ")[2]
+                        lFind = True
                 if not lFind:
                     lastI = i
                 else:
