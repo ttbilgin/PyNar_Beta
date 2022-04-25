@@ -2,7 +2,8 @@ from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtCore import QSize
 from PyQt5.Qt import Qt
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import QPushButton, QLabel, QVBoxLayout, QWidget, QDialog, QLineEdit, QMessageBox, QDesktopWidget, QListWidget, QHBoxLayout, QFileDialog
+from PyQt5.QtWidgets import QPushButton, QLabel, QVBoxLayout, QWidget, QDialog, QLineEdit, QMessageBox, QDesktopWidget, \
+    QListWidget, QHBoxLayout, QFileDialog, QCheckBox
 from PyQt5.uic.properties import QtGui
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QSize, QRect
@@ -495,8 +496,13 @@ class Login(QDialog):
             self.input_sifre.setEchoMode(QLineEdit.Password)
             self.input_sifre.setFont(font)
 
+            self.chb = QCheckBox(groupBox)
+            self.chb.stateChanged.connect(self.checkboxControl)
+            self.chb.setText("Şifreyi Göster")
+            self.chb.move(95, 85)
+
             self.button = QPushButton(groupBox)
-            self.button.move(210, 100)
+            self.button.move(210, 110)
             self.button.resize(78, 40)
             self.button.setText("Giriş Yap")
             self.button.clicked.connect(self.login)
@@ -508,7 +514,7 @@ class Login(QDialog):
         if self.passReset:
             self.buttonChangePass.move(167, 70)
         else:
-            self.buttonChangePass.move(90, 100)
+            self.buttonChangePass.move(90, 110)
         self.buttonChangePass.resize(120, 40)
         self.buttonChangePass.setText("Şifremi Unuttum")
         self.buttonChangePass.clicked.connect(self.changePassClick)
@@ -521,6 +527,12 @@ class Login(QDialog):
         self.setLayout(layout)
 
         self.center()
+
+    def checkboxControl(self):
+        if self.chb.isChecked():
+            self.input_sifre.setEchoMode(QLineEdit.Normal)
+        else:
+            self.input_sifre.setEchoMode(QLineEdit.Password)
 
     def storeToken(self, token):
         basename = self.c.checkPath(os.path.dirname(parentdir))
