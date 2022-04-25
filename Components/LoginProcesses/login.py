@@ -14,6 +14,8 @@ import json
 import urllib
 import locale
 import platform
+from urllib.parse import urljoin
+import requests
 
 from PyQt5 import QtCore, QtGui
 
@@ -445,16 +447,21 @@ class FilesWindow(QDialog):
         self.accept()
 
 class Login(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, passReset=False):
         super(Login, self).__init__()
         self.parent = parent
+        self.passReset = passReset
         self.c = Configuration()
         self.serverAddress = self.c.getServerAddress()
-        self.setWindowTitle('Giriş Yap')
+        if self.passReset:
+            self.setWindowTitle('Şifremi Değiştir')
+            self.setFixedSize(QSize(330, 130))
+        else:
+            self.setWindowTitle('Giriş Yap')
+            self.setFixedSize(QSize(330, 200))
         self.setWindowIcon(QIcon(':/icon/images/headerLogo1.png'))
         self.setStyleSheet("background-color: #CAD7E0;")
-        self.setMinimumSize(QSize(330, 200))
-        self.setMaximumSize(QSize(330, 200))
+
         self.setUI()
 
     def setUI(self):
@@ -474,28 +481,41 @@ class Login(QDialog):
 
         self.input_email = QLineEdit(groupBox)
         self.input_email.move(95, 30)
-        self.input_email.resize(170, 25)
+        self.input_email.resize(190, 25)
         self.input_email.setFont(font)
+        if not self.passReset:
+            self.sifre = QLabel(groupBox)
+            self.sifre.move(30, 60)
+            self.sifre.setText("Şifre: ")
+            self.sifre.setFont(font)
 
-        self.sifre = QLabel(groupBox)
-        self.sifre.move(30, 60)
-        self.sifre.setText("Şifre: ")
-        self.sifre.setFont(font)
+            self.input_sifre = QLineEdit(groupBox)
+            self.input_sifre.move(95, 60)
+            self.input_sifre.resize(190, 25)
+            self.input_sifre.setEchoMode(QLineEdit.Password)
+            self.input_sifre.setFont(font)
 
-        self.input_sifre = QLineEdit(groupBox)
-        self.input_sifre.move(95, 60)
-        self.input_sifre.resize(170, 25)
-        self.input_sifre.setEchoMode(QLineEdit.Password)
-        self.input_sifre.setFont(font)
+            self.button = QPushButton(groupBox)
+            self.button.move(210, 100)
+            self.button.resize(78, 40)
+            self.button.setText("Giriş Yap")
+            self.button.clicked.connect(self.login)
+            self.button.setFont(font)
+            self.button.setStyleSheet("QPushButton { color: white;padding: 5px;margin: 4px 2px;border-radius: 4px; background-color: rgb(0, 170, 255);} " \
+                          "QPushButton::hover{background-color:rgb(4, 124, 184)}")
 
-        self.button = QPushButton(groupBox)
-        self.button.move(90, 100)
-        self.button.resize(100, 40)
-        self.button.setText("Giriş Yap")
-        self.button.clicked.connect(self.login)
-        self.button.setFont(font)
-        self.button.setStyleSheet("QPushButton { color: white;padding: 5px;margin: 4px 2px;border-radius: 4px; background-color: rgb(0, 170, 255);} " \
-                      "QPushButton::hover{background-color:rgb(4, 124, 184)}")
+        self.buttonChangePass = QPushButton(groupBox)
+        if self.passReset:
+            self.buttonChangePass.move(167, 70)
+        else:
+            self.buttonChangePass.move(90, 100)
+        self.buttonChangePass.resize(120, 40)
+        self.buttonChangePass.setText("Şifremi Unuttum")
+        self.buttonChangePass.clicked.connect(self.changePassClick)
+        self.buttonChangePass.setFont(font)
+        self.buttonChangePass.setStyleSheet("QPushButton { color: white;padding: 5px;margin: 4px 2px;border-radius: 4px; background-color: #dba502;} " \
+                      "QPushButton::hover{background-color:#ba8d06;}")
+
         layout = QVBoxLayout()
         layout.addWidget(groupBox)
         self.setLayout(layout)
@@ -558,6 +578,34 @@ class Login(QDialog):
         screen = QDesktopWidget().screenGeometry()
         size = self.geometry()
         self.move((screen.width() - size.width()) // 2, (screen.height() - size.height()) // 2)
+
+    def changePassClick(self):
+        email = str(self.input_email.text())
+        if email is not None and email != '':
+            res = self.sendResetRequest(email)
+            if res:
+                self.close()
+                CustomizeMessageBox_Ok("İşlem Başarılı! E-postanıza gönderilen linke tıklayarak şifre yenileme işleminizi tamamlayabilirsiniz.", QMessageBox.Information)
+        else:
+            CustomizeMessageBox_Ok("İşleme devam edilebilmesi için uygun formatta bir e-mail giriniz.", QMessageBox.Warning)
+
+    def sendResetRequest(self, email):
+        URL = 'https://pynar.org'
+        PREFIX = 'api/v1'
+        res = requests.post(urljoin(URL, PREFIX + '/user/resetpassword'), data={
+            'email': email,
+            'logging': False
+        })
+
+        if res.status_code == 200:
+            res = res.json()
+            if res['ok']:
+                return True
+        else:
+            res = res.json()
+            CustomizeMessageBox_Ok(str(res.get('description')), QMessageBox.Warning)
+            return False
+
 
 class Register(QDialog):
     def __init__(self):
@@ -755,7 +803,7 @@ class LoginWindow(QDialog):
         # self.setGeometry(geo)
 
         self.btn_signIn.clicked.connect(self.UserSignInClick)
-        self.btn_register.clicked.connect(self.UserRegisterClick)
+        self.btn_register.clicked.connect(self.UserRegisterChangePasswordClick)
 
     def UserSignInClick(self):
         if self.loginOk:
@@ -780,6 +828,7 @@ class LoginWindow(QDialog):
                 os.remove(filename)
             self.parent.token = None
             self.parent.setExamImage()
+            self.btn_register.setText("Kayıt Ol")
         else:
             self.SW = Login(self.parent)
             if self.SW.exec_():
@@ -799,16 +848,21 @@ class LoginWindow(QDialog):
                 self.parentImage.setStyleSheet(
                     "color : #dddddd; background-color: {}; border: 3px; border-radius: 27px".format(self.userColor.get(name[0][0].upper(), "#9400D3")))
 
-                self.btn_register.hide()
+                # self.btn_register.hide()
+                self.btn_register.setText("Şifremi Değiştir")
                 self.loginOk = True
                 self.btn_signIn.setText("Çıkış Yap")
 
                 mess = "Pynar Portal'a başarıyla giriş yaptınız. Sağ üst köşede Adınız ve Soyadınızın baş harflerinin bulunduğu butondan <b>ÇIKIŞ YAP</b> butonuyla çıkış yapmadığınız sürece bundan sonraki başlatmanızda oturum açık olarak başlayacaktır."
                 CustomizeMessageBox_Ok(mess, QMessageBox.Information)
 
-    def UserRegisterClick(self):
-        self.SW = Register()
-        self.SW.exec_()
+    def UserRegisterChangePasswordClick(self):
+        if self.loginOk:
+            self.SW2 = Login(self.parent, passReset=True)
+            self.SW2.exec_()
+        else:
+            self.SW = Register()
+            self.SW.exec_()
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
@@ -895,7 +949,8 @@ class LoginWindow(QDialog):
                         "color : #F9F9F9; background-color: {}; border: 3px; border-radius: 27px".format(self.userColor.get(name[0][0].upper(), "#9400D3")))
 
                     self.loginOk = True
-                    self.btn_register.hide()
+                    # self.btn_register.hide()
+                    self.btn_register.setText("Şifremi Değiştir")
                     self.btn_signIn.setText("Çıkış Yap")
 
                 else:
