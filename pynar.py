@@ -980,8 +980,8 @@ class MainWindow(QMainWindow):
             dosyaPath = c.getHomeDir() + c.getHtmlHelpPath("html_help_path")
             view.load(QtCore.QUrl.fromLocalFile(dosyaPath + 'PyNarKilavuz/index.html'))
 
-            dialog = HelpDialog(self, view)
-            dialog.exec_()
+            self.dialog = HelpDialog(self, view)
+            self.dialog.show()
 
         except Exception as err:
             print("error show license: {0}".format(err))
@@ -1195,8 +1195,8 @@ class MainWindow(QMainWindow):
         self.move((screen.width() - size.width()) // 2, (screen.height() - size.height()) // 2)
 
     def help(self):
-        helpdialog = HelpDialog(self)
-        helpdialog.exec_()
+        self.helpdialog = HelpDialog(self)
+        self.helpdialog.show()
 
     def log_messenger(self, some_info):
         logfunc(some_info, parent=self)

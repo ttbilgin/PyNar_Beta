@@ -33,7 +33,7 @@ class HelpDialog(Dialog):
         self.parent = parent
         self.view = pView
         self.setWindowIcon(QIcon(':/icon/images/help.png'))
-
+        self.setWindowFlags(Qt.WindowMaximizeButtonHint | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
         mainLayout = QVBoxLayout()
 
         self.setObjectName("HelpWidget")
