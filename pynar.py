@@ -7,6 +7,7 @@ import subprocess
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.uic.properties import QtGui
 
+from Components.LeftMenu.Menus.TreeHelpDialog import TreeHelpDialog
 from Components.StartPage.emptyrecent import UcEmptyRecent
 from Components.TopMenu.uc_sp_recentitem import UcSpRecentItem
 from widgets import MessageBox
@@ -563,7 +564,26 @@ class MainWindow(QMainWindow):
         self.statusBar.setObjectName("mainStatusBar")
         self.setStatusBar(self.statusBar)
 
+        statusBtn = QPushButton()
+        statusBtn.move(120, 70)
+        statusBtn.resize(100, 40)
+        statusBtn.setText("Kısayollar")
+        statusBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        statusBtn.clicked.connect(self.statusBtnClick)
+        statusBtn.setStyleSheet("QPushButton{background-color:transparent;color: #fff}")
+        self.statusBar.addPermanentWidget(statusBtn)
+
         self.errorToDb = error_outputs_to_db()
+
+    def statusBtnClick(self):
+        c = Configuration()
+        view = QWebEngineView()
+        dosyaPath = c.getHomeDir() + c.getHtmlHelpPath("html_help_path")
+        url = QtCore.QUrl.fromLocalFile(dosyaPath + 'PyNarKilavuz/Yardim_Bolum2.html')
+        url.setFragment('klavye-kısayolları')
+        view.load(url)
+        self.helpDialog = HelpDialog(self, view)
+        self.helpDialog.show()
 
     def LogoClick(self):
         self.showReleaseInfo()
