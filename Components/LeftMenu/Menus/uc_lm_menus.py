@@ -83,11 +83,11 @@ class UcLMMenus(QWidget):
         if index.column():
             dosyaAdi = self.treeView.model().item(index.row(), 0).text()
             if dosyaAdi in self.descriptions.values():
-                helpDialog = TreeHelpDialog(dosyaAdi)
-                helpDialog.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
-                helpDialog.setMinimumSize(QtCore.QSize(1200, 800))
-                helpDialog.setMaximumSize(QtCore.QSize(16777215, 16777215))
-                helpDialog.exec_()
+                self.helpDialog = TreeHelpDialog(dosyaAdi)
+                self.helpDialog.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
+                self.helpDialog.setMinimumSize(QtCore.QSize(1200, 800))
+                self.helpDialog.setMaximumSize(QtCore.QSize(16777215, 16777215))
+                self.helpDialog.show()
 
     def ReadFromFile(self, dosya):
         dosyaPath = self.c.getHomeDir() + self.c.getTreeMenuPath("tree_menu_path") + dosya
