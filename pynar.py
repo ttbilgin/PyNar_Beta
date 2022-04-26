@@ -576,6 +576,26 @@ class MainWindow(QMainWindow):
         self.errorToDb = error_outputs_to_db()
 
     def statusBtnClick(self):
+        message = 'CTRL <b>+</b> X <b>-></b> Kes <br>' \
+                  'CTRL <b>+</b>  V <b>-></b> Yapıştır <br>' \
+                  'CTRL <b>+</b>  Z <b>-></b> Geri Al <br>' \
+                  'CTRL <b>+</b>  K <b>-></b> Yorum satırı yap<br>' \
+                  'CTRL <b>+</b>  N <b>-></b> Yeni Sekme Oluştur<br>' \
+                  'CTRL <b>+</b>  O <b>-></b> Python Kodu Aç<br>' \
+                  'CTRL <b>+</b>  H <b>-></b> Dosya geçmişi<br>' \
+                  'CTRL <b>+</b>  F <b>-></b> Bul ve Değiştir<br>' \
+                  'CTRL <b>+</b>  W <b>-></b> Sekmeyi Kapat<br>' \
+                  'CTRL <b>+</b>  P <b>-></b>  Yazdır<br>' \
+                  'CTRL <b>+</b>  S <b>-></b> Kaydet<br>' \
+                  'CTRL <b>+</b>  \'+\' <b>-></b> Yakınlaştır<br>' \
+                  'CTRL <b>+</b>  \'-\' <b>-></b> Uzaklaştır<br>' \
+                  'CTRL <b>+</b>  SHİFT + S <b>-></b>  Farklı Kaydet<br>' \
+                  'CTRL <b>+</b>  SHİFT + Z <b>-></b> İleri al<br>'
+
+        CustomizeMessageBox_Yes_No(message, clickCancel=self.detailInfoClick, yes='Tamam', no='Detaylı Bilgi',
+                                           icon=QMessageBox.Information)
+
+    def detailInfoClick(self):
         c = Configuration()
         view = QWebEngineView()
         dosyaPath = c.getHomeDir() + c.getHtmlHelpPath("html_help_path")

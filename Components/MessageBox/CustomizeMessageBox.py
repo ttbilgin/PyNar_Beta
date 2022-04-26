@@ -6,10 +6,10 @@ from PyQt5 import QtCore, QtGui
 from configuration import Configuration
 
 
-def CustomizeMessageBox_Yes_No(message, clickAccept=None, clickCancel=None):
+def CustomizeMessageBox_Yes_No(message, clickAccept=None, clickCancel=None, yes='Evet', no='Hayır', icon=QMessageBox.Question):
     c = Configuration()
     msgBox = QMessageBox()
-    msgBox.setIcon(QMessageBox.Question)
+    msgBox.setIcon(icon)
     msgBox.setWindowTitle('Pynar Mesaj Kutusu')
     msgBox.setWindowIcon(QIcon(':/icon/images/headerLogo1.png'))
     msgBox.setText(message)
@@ -22,13 +22,13 @@ def CustomizeMessageBox_Yes_No(message, clickAccept=None, clickCancel=None):
     msgBox.setStyleSheet(open(c.getHomeDir() + "qssfiles/qmessagebox.qss", "r").read())
     BtnOk = msgBox.button(QMessageBox.Ok)
     msgBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-    BtnOk.setText('Evet')
+    BtnOk.setText(yes)
     if clickAccept:
         msgBox.accepted.connect(clickAccept)
     if clickCancel:
         msgBox.rejected.connect(clickCancel)
     BtnCancel = msgBox.button(QMessageBox.Cancel)
-    BtnCancel.setText('Hayır')
+    BtnCancel.setText(no)
     msgBox.exec()
 
 
