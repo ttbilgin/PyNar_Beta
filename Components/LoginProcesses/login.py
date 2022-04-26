@@ -461,6 +461,7 @@ class Login(QDialog):
             self.setWindowTitle('Giriş Yap')
             self.setFixedSize(QSize(330, 200))
         self.setWindowIcon(QIcon(':/icon/images/headerLogo1.png'))
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setStyleSheet("background-color: #CAD7E0;")
 
         self.setUI()
@@ -629,6 +630,7 @@ class Register(QDialog):
         self.setStyleSheet("background-color: #CAD7E0;")
         self.setMinimumSize(QSize(330, 290))
         self.setMaximumSize(QSize(330, 290))
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)        
         self.setUI()
 
     def setUI(self):
