@@ -1369,18 +1369,17 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         for i in range(self.notebook.count()):
+            self.notebook.closeTab(0)#Her seferinde bir tab kapandığından sürekli 0. tab alınmalı
             if self.notebook.cancelButton:
                 event.ignore()
                 self.notebook.cancelButton = False
                 break
-            self.notebook.closeTab(0)#Her seferinde bir tab kapandığından sürekli 0. tab alınmalı
             if self.notebook.count() == 0:
                 break
 
     def showReleaseInfo(self):
         try:
             CustomizeMessageBox_Ok("Pynar Editör Sürüm: " + self.c.getReleaseInfo(), QMessageBox.Information)
-
         except Exception as err:
             print("error show releaseInfo: {0}".format(err))
 # if __name__ == '__main__':
