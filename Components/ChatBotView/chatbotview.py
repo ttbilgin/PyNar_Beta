@@ -542,7 +542,7 @@ class UcChatBotView(QWidget):
             codeText = copy.copy(self.text)
             temp = codeText[self.line].lstrip()
             codeText[self.line] = codeText[self.line].replace(temp, self.trueData)
-            self.parent.textPad.setText('\n'.join(codeText))
+            self.parent.textPad.SendScintilla(self.parent.textPad.SCI_SETTEXT, bytes('\n'.join(codeText), 'utf-8'))
             message = replaceToEmoji('Hatalı satır düzeltildi kodları tekrar çalıştırmayı deneyebilirsin 😊')
         if len(self.runErrors) > 0 and (buttonText.lower() == 'Evet'.lower()):
                 self.errorButtons[0].setEnabled(False)
