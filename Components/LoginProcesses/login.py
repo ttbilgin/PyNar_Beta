@@ -17,6 +17,9 @@ import locale
 import platform
 from urllib.parse import urljoin
 import requests
+import subprocess
+
+plt = platform.system()
 
 from PyQt5 import QtCore, QtGui
 
@@ -115,7 +118,6 @@ class fileUploadWindow(QDialog):
 
             filename = filename[0] + filename[1]
 
-            plt = platform.system()
             if plt == "Windows":
                 self.directoryPath = self.c.checkPath(os.environ['USERPROFILE']) + "/Documents/PynarKutu/"
                 if not os.path.exists(self.directoryPath):
@@ -216,7 +218,6 @@ class fileUploadWindow(QDialog):
 
             filename = filename[0] + filename[1]
 
-            plt = platform.system()
             if plt == "Windows":
                 self.directoryPath = self.c.checkPath(os.environ['USERPROFILE']) + "/Documents/PynarKutu/"
                 if not os.path.exists(self.directoryPath):
@@ -284,10 +285,11 @@ class fileUploadWindow(QDialog):
         self.done(1)
 
 class FilesWindow(QDialog):
-    def __init__(self, name, files=None, token=None):
+    def __init__(self, parent, name, files=None, token=None):
         super(FilesWindow, self).__init__()
 
         self.name = name
+        self.parent = parent
         self.directoryPath = None
         self.authToken = token
         self.fullpath = None
@@ -381,12 +383,12 @@ class FilesWindow(QDialog):
         try:
             row = self.list.currentRow()
             filename = self.list.item(row).text()
+            self.filename = filename
             headers = {'Authorization': 'Bearer ' + self.authToken}
             myobj = {'mac_address': hex(uuid.getnode())}
             url = self.serverAddress + "/api/v1/user/file/download/" + urllib.parse.quote_plus(filename)
             self.res = requests.post(url, data=myobj, headers=headers)
 
-            plt = platform.system()
             if plt == "Windows":
                 self.directoryPath = self.c.checkPath(os.environ['USERPROFILE']) + "/Documents/PynarKutu/"
                 if not os.path.exists(self.directoryPath):
@@ -412,8 +414,8 @@ class FilesWindow(QDialog):
                 try:
                     open(self.directoryPath + filename, 'wb').write(self.res.content)
                     mess = "<b>İndirme Başarılı<br></b>Buluttan indirilen \"{}\" dosyası PynarKutunuza kaydedildi".format(filename)
-                    CustomizeMessageBox_Ok(mess, QMessageBox.Information)
                     self.fullpath = self.directoryPath + filename
+                    CustomizeMessageBox_Yes_No(mess, clickAccept=self.okBtn, clickCancel=self.saveToDifferentLocation, yes='Tamam', no='Farklı Konuma Kaydet', icon=QMessageBox.Information)
                     self.close()
                 except:
                     CustomizeMessageBox_Ok("İşlem başarısız oldu lütfen daha sonra  tekrar deneyiniz.", QMessageBox.Critical)
@@ -423,6 +425,31 @@ class FilesWindow(QDialog):
         except Exception as e:
             CustomizeMessageBox_Ok("İşlem başarısız oldu lütfen daha sonra  tekrar deneyiniz.", QMessageBox.Critical)
             return -1
+
+    def okBtn(self):
+        if self.fullpath != None:
+            self.parent.open(starter=True, getPath=self.fullpath)
+
+    def saveToDifferentLocation(self):
+
+        dialog = QFileDialog(self)
+        dialog.setViewMode(QFileDialog.List)
+
+        if plt == "Windows":
+            documents_dir = os.path.join(os.environ['USERPROFILE'] + "/Documents/PynarKutu/")
+        elif plt == "Linux":
+            documents_dir = subprocess.check_output(["xdg-user-dir", "DOCUMENTS"], universal_newlines = True).strip() + "/PynarKutu"
+
+        if not os.path.exists(documents_dir):
+            os.makedirs(documents_dir)
+
+
+        filename = dialog.getSaveFileName(self, "Kaydet", documents_dir, "Python scripts (*.py)")
+        open(filename[0], 'wb').write(self.res.content)
+        self.parent.open(starter=True, getPath=filename[0])
+
+        mess = "<b>İndirme Başarılı<br></b>Buluttan indirilen \"{}\" dosyası  \"{}\" kaydedildi".format(self.filename, filename)
+
 
     def downSuccess(self):
         try:
@@ -1017,11 +1044,8 @@ class LoginWindow(QDialog):
                 if res_json['ok'] != True:
                     raise Exception(res_json["description"])
 
-                dialog = FilesWindow("Dosyalar", res_json['result']['files'], self.SW.token)
+                dialog = FilesWindow(self.parent, "Dosyalar", res_json['result']['files'], self.SW.token)
                 dialog.exec()
-                if dialog.fullpath != None:
-                    self.parent.open(starter=True,getPath=dialog.fullpath)
-                    return 1
 
             else:
                 mess = "Dosyalarınızı Görebilmeniz için sisteme giriş yapmış olmanız gerekmektedir."
