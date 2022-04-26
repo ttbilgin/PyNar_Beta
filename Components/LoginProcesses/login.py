@@ -21,6 +21,7 @@ import requests
 from PyQt5 import QtCore, QtGui
 
 from Components.MessageBox.CustomizeMessageBox import CustomizeMessageBox_Yes_No, CustomizeMessageBox_Ok
+from Components.TopMenu.Settings.settingsdialog import clickableLabel
 
 parentdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 # sys.path.append(parentdir) # Bu satır Nuitka'da problem çıkarıyor, silinmesi bir sorun oluşturmadı.
@@ -497,10 +498,13 @@ class Login(QDialog):
             self.input_sifre.setEchoMode(QLineEdit.Password)
             self.input_sifre.setFont(font)
 
-            self.chb = QCheckBox(groupBox)
-            self.chb.stateChanged.connect(self.checkboxControl)
-            self.chb.setText("Şifreyi Göster")
-            self.chb.move(95, 85)
+            self.labelPass = clickableLabel(groupBox)
+            self.labelPass.move(95, 88)
+            self.labelPass.setText("<a href=#>Şifreyi Göster</a>")
+            self.labelPass.setFont(font)
+            self.labelPass.mouseReleaseEvent = lambda event: self.labelPassMouseReleaseEvent()
+            self.labelPass.mousePressEvent = lambda event: self.labelPassMousePressEvent()
+
 
             self.button = QPushButton(groupBox)
             self.button.move(210, 110)
@@ -529,11 +533,11 @@ class Login(QDialog):
 
         self.center()
 
-    def checkboxControl(self):
-        if self.chb.isChecked():
-            self.input_sifre.setEchoMode(QLineEdit.Normal)
-        else:
+    def labelPassMouseReleaseEvent(self):
             self.input_sifre.setEchoMode(QLineEdit.Password)
+
+    def labelPassMousePressEvent(self):
+            self.input_sifre.setEchoMode(QLineEdit.Normal)
 
     def storeToken(self, token):
         basename = self.c.checkPath(os.path.dirname(parentdir))
