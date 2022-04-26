@@ -576,21 +576,23 @@ class MainWindow(QMainWindow):
         self.errorToDb = error_outputs_to_db()
 
     def statusBtnClick(self):
-        message = 'CTRL <b>+</b> X <b>-></b> Kes <br>' \
-                  'CTRL <b>+</b>  V <b>-></b> Yapıştır <br>' \
-                  'CTRL <b>+</b>  Z <b>-></b> Geri Al <br>' \
-                  'CTRL <b>+</b>  K <b>-></b> Yorum satırı yap<br>' \
-                  'CTRL <b>+</b>  N <b>-></b> Yeni Sekme Oluştur<br>' \
-                  'CTRL <b>+</b>  O <b>-></b> Python Kodu Aç<br>' \
-                  'CTRL <b>+</b>  H <b>-></b> Dosya geçmişi<br>' \
-                  'CTRL <b>+</b>  F <b>-></b> Bul ve Değiştir<br>' \
-                  'CTRL <b>+</b>  W <b>-></b> Sekmeyi Kapat<br>' \
-                  'CTRL <b>+</b>  P <b>-></b>  Yazdır<br>' \
-                  'CTRL <b>+</b>  S <b>-></b> Kaydet<br>' \
-                  'CTRL <b>+</b>  \'+\' <b>-></b> Yakınlaştır<br>' \
-                  'CTRL <b>+</b>  \'-\' <b>-></b> Uzaklaştır<br>' \
-                  'CTRL <b>+</b>  SHİFT + S <b>-></b>  Farklı Kaydet<br>' \
-                  'CTRL <b>+</b>  SHİFT + Z <b>-></b> İleri al<br>'
+        message = """<font color=gray><table border=1 bordercolor=\"#acd33b\" cellspacing=\"0\" cellpadding=\"5\">
+                  <tr><th>Tuş Kombinasyonu </th><th> Görevi </th></tr>
+                  <tr><td>CTRL ve X </td><td> Kes </td></tr>
+                  <tr><td>CTRL ve V </td><td> Yapıştır </td></tr>
+                  <tr><td>CTRL ve Z </td><td> Geri Al </td></tr>
+                  <tr><td>CTRL ve K </td><td> Yorum satırı yap</td></tr>
+                  <tr><td>CTRL ve N </td><td> Yeni Sekme Oluştur</td></tr>
+                  <tr><td>CTRL ve O </td><td> Python Kodu Aç</td></tr>
+                  <tr><td>CTRL ve H </td><td> Dosya geçmişi</td></tr>
+                  <tr><td>CTRL ve F </td><td> Bul ve Değiştir</td></tr>
+                  <tr><td>CTRL ve W </td><td> Sekmeyi Kapat</td></tr>
+                  <tr><td>CTRL ve P </td><td>  Yazdır</td></tr>
+                  <tr><td>CTRL ve S </td><td> Kaydet</td></tr>
+                  <tr><td>CTRL ve + </td><td> Yakınlaştır</td></tr>
+                  <tr><td>CTRL ve - </td><td> Uzaklaştır</td></tr>
+                  <tr><td>CTRL ve SHIFT ve S </td><td>  Farklı Kaydet</td></tr>
+                  <tr><td>CTRL ve SHIFT ve Z </td><td> İleri al</td></tr></table></font>"""
 
         CustomizeMessageBox_Yes_No(message, clickCancel=self.detailInfoClick, yes='Tamam', no='Detaylı Bilgi',
                                            icon=QMessageBox.Information)
