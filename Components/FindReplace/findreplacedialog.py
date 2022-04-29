@@ -428,7 +428,7 @@ class FindReplaceDialog(QDialog):
             if not x and not return_begin:
                 return_begin = True
                 x = self.textPad.findFirst(*state_)
-            elif not x and return_begin:
+            elif x and return_begin:
                 #self.textPad.setSelection(line_end, index_end, line_end, index_end)
                 self.findTextChange()
                 break
