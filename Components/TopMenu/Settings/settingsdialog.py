@@ -71,25 +71,21 @@ class SettingsDialog(Dialog):
         labelEditor.setFont(font)
         labelEditor.setObjectName("settingsMenu")
 
+
         self.editorBox = QLineEdit(groupBox)
         self.editorBox.setGeometry(QRect(295, 40, 150, 25))
         self.editorBox.setReadOnly(True)
         self.editorBox.setText(self.c.getEditorFont())
         self.editorBox.setFont(font)
+        self.editorBox.mousePressEvent = lambda event: self.changeEditorFont()
 
-        self.editorSizeBox = QLineEdit(groupBox)
-        self.editorSizeBox.setGeometry(QRect(455, 40, 30, 25))
-        self.editorSizeBox.setReadOnly(True)
-        self.editorSizeBox.setText(str(self.c.getEditorFontSize()))
+
+        self.editorSizeBox = QSpinBox(groupBox)
+        self.editorSizeBox.setGeometry(QRect(455, 40, 40, 25))
+        self.editorSizeBox.setMinimum(6)
+        self.editorSizeBox.setMaximum(72)
+        self.editorSizeBox.setValue(int(self.c.getEditorFontSize()))
         self.editorSizeBox.setFont(font)
-
-
-        labelChangeEditor = clickableLabel(groupBox)
-        labelChangeEditor.setGeometry(QRect(495, 40, 100, 22))
-        labelChangeEditor.setText("[" + "<a href=#>Değiştir</a>" + "]")
-        labelChangeEditor.setFont(font)
-        labelChangeEditor.clicked.connect(self.changeEditorFont)
-        labelChangeEditor.setObjectName("settingsMenu")
 
         labelCode = Label(groupBox)
         labelCode.setGeometry(QRect(30, 68, 255, 25))
@@ -102,19 +98,15 @@ class SettingsDialog(Dialog):
         self.codeBox.setReadOnly(True)
         self.codeBox.setText(self.c.getCodeFont())
         self.codeBox.setFont(font)
+        self.codeBox.mousePressEvent = lambda event: self.changeCodeFont()
 
-        self.codeSizeBox = QLineEdit(groupBox)
-        self.codeSizeBox.setGeometry(QRect(455, 70, 30, 25))
-        self.codeSizeBox.setReadOnly(True)
-        self.codeSizeBox.setText(str(self.c.getFontSize()))
+        self.codeSizeBox = QSpinBox(groupBox)
+        self.codeSizeBox.setGeometry(QRect(455, 70, 40, 25))
+        self.codeSizeBox.setMinimum(6)
+        self.codeSizeBox.setMaximum(72)
+        self.codeSizeBox.setValue(int(self.c.getFontSize()))
         self.codeSizeBox.setFont(font)
 
-        labelChangeCode = clickableLabel(groupBox)
-        labelChangeCode.setGeometry(QRect(495, 70, 100, 22))
-        labelChangeCode.setText("[" + "<a href=#>Değiştir</a>" + "]")
-        labelChangeCode.setFont(font)
-        labelChangeCode.clicked.connect(self.changeCodeFont)
-        labelChangeCode.setObjectName("settingsMenu")
 
         label1 = Label(groupBox)
         label1.setGeometry(QRect(30, 98, 320, 25))
@@ -253,7 +245,7 @@ class SettingsDialog(Dialog):
             self.c.setCodeFont(fontData[0])
             self.c.updateConfig('Size', 'size', str(round(float(fontData[1]))))
             self.codeBox.setText(self.c.getCodeFont())
-            self.codeSizeBox.setText(str(self.c.getFontSize()))
+            self.codeSizeBox.setValue(int(self.c.getFontSize()))
 
     def changeEditorFont(self):
         try:
@@ -296,7 +288,6 @@ class SettingsDialog(Dialog):
             os.remove(os.path.join(logDir, f))
         CustomizeMessageBox_Ok("Tüm Kullanım Verileri Silindi", QMessageBox.Information)
 
-
     def openLogFolder(self):
         try:
             if self.c.getSystem() == "windows":
@@ -329,6 +320,13 @@ class SettingsDialog(Dialog):
     def close(self):
         tab = self.tabWidthBox.value()
         self.c.updateConfig('Tab', 'tab', str(tab))
+
+        editorSize = self.editorSizeBox.value()
+        self.c.updateConfig('Size', 'editorsize', str(editorSize))
+
+        codeSize = self.codeSizeBox.value()
+        self.c.updateConfig('Size', 'size', str(codeSize))
+
         self.done(1)
 
 class clickableLabel(QLabel):
