@@ -1,3 +1,4 @@
+import logging
 import sys, stat
 import os
 from PyQt5 import Qt
@@ -283,7 +284,12 @@ class SettingsDialog(Dialog):
     def yesButton(self):
         logDir = os.path.dirname(
             os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))) + "/Log/"
-        filelist = [f for f in os.listdir(logDir) if f.endswith(".json")]
+
+        logger = logging.getLogger()
+        while logger.hasHandlers():
+            logger.removeHandler(logger.handlers[0])
+
+        filelist = [f for f in os.listdir(logDir)]
         for f in filelist:
             os.remove(os.path.join(logDir, f))
         CustomizeMessageBox_Ok("Tüm Kullanım Verileri Silindi", QMessageBox.Information)
