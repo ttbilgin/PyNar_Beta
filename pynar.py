@@ -183,7 +183,7 @@ class CodeEditor(CodeEditor):
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat("text/plain"):
-            if self.menus.forceNewPage and len(self.text())>0:
+            if isinstance(event.source(),QTreeView) and self.menus.forceNewPage and len(self.text())>0:
                 self.newPageWarningShow()
             else:
                 event.accept()
@@ -1421,13 +1421,7 @@ class MainWindow(QMainWindow):
 
     def showReleaseInfo(self):
         try:
-            from PyQt5.QtCore import QT_VERSION_STR
-            from PyQt5.Qt import PYQT_VERSION_STR
-
-            CustomizeMessageBox_Ok("Pynar Editör Sürüm: " + self.c.getReleaseInfo() +
-                                   "\nPython version: " + str(platform.python_version()) +
-                                   "\nQt version: " + str(QT_VERSION_STR) +
-                                   "\nPyQt version: " + str(PYQT_VERSION_STR), QMessageBox.Information)
+            CustomizeMessageBox_Ok("Pynar Editör Sürüm: " + self.c.getReleaseInfo(), QMessageBox.Information)
         except Exception as err:
             print("error show releaseInfo: {0}".format(err))
 # if __name__ == '__main__':
