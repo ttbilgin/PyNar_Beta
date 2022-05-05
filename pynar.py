@@ -1421,7 +1421,13 @@ class MainWindow(QMainWindow):
 
     def showReleaseInfo(self):
         try:
-            CustomizeMessageBox_Ok("Pynar Editör Sürüm: " + self.c.getReleaseInfo(), QMessageBox.Information)
+            from PyQt5.QtCore import QT_VERSION_STR
+            from PyQt5.Qt import PYQT_VERSION_STR
+
+            CustomizeMessageBox_Ok("Pynar Editör Sürüm: " + self.c.getReleaseInfo() +
+                                   "\nPython version: " + str(platform.python_version()) +
+                                   "\nQt version: " + str(QT_VERSION_STR) +
+                                   "\nPyQt version: " + str(PYQT_VERSION_STR), QMessageBox.Information)
         except Exception as err:
             print("error show releaseInfo: {0}".format(err))
 # if __name__ == '__main__':
