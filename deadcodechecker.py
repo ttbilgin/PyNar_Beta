@@ -29,7 +29,13 @@ class DeadCodeChecker():
             self.vultureObject.report()
             output = buf.getvalue()
 
-
+        output=output\
+		.replace('unused','Kullanılmayan')\
+		.replace('variable','değişken')\
+		.replace('function','fonksiyon')\
+		.replace('confidence','olasılıkla')\
+		.replace('.:',':')
         newOutput = output.replace(':', '').split('\n')
+
         return newOutput
     
