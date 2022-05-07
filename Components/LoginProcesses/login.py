@@ -881,7 +881,7 @@ class LoginWindow(QDialog):
                 self.lbl_user_account.adjustSize()
                 name = self.SW.kullanici.split(" ")
                 self.lbl_user_name_surname.setText("")
-
+                name = [i for i in name if i] #listede '' elemanı kalmışsa temizle.
                 self.lbl_img_user.setText(name[0][0].upper() + name[1][0].upper())
                 self.lbl_img_user.setFont(QFont('Arial', 40))
                 self.lbl_img_user.setAlignment(QtCore.Qt.AlignCenter)
