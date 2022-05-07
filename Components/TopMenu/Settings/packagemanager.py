@@ -37,7 +37,7 @@ class PMDialog(Dialog):
         super().__init__(parent, textPad)
         self.c = Configuration()
         try:
-            subprocess.check_output(["conda", "-V"], shell=self.c.getShell())
+            subprocess.check_output(["conda", "-V"], shell=self.c.getShell(), stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
             CustomizeMessageBox_Ok("\nBilgisayarınızda Anaconda dağıtımından gelen bir python sürümü bulunmaktadır. Anaconda kendi paket yöneticisini kullanmaktadır. PyNar Paket Yöneticisi Anaconda dağıtımıyla uyumlu değildir, eğer PyNar paket yöneticisini kullanmak istiyorsanız Anaconda yazılımını bilgisayarınızdan kaldırınız.",QMessageBox.Critical)
         except:
             self.parent = parent
