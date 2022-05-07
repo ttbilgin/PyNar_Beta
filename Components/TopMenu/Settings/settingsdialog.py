@@ -284,12 +284,8 @@ class SettingsDialog(Dialog):
     def yesButton(self):
         logDir = os.path.dirname(
             os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))) + "/Log/"
-
-        logger = logging.getLogger()
-        while logger.hasHandlers():
-            logger.removeHandler(logger.handlers[0])
-
-        filelist = [f for f in os.listdir(logDir)]
+        open(logDir + '/Chat.log', 'w').close()
+        filelist = [f for f in os.listdir(logDir) if f.endswith(".json")]
         for f in filelist:
             os.remove(os.path.join(logDir, f))
         CustomizeMessageBox_Ok("Tüm Kullanım Verileri Silindi", QMessageBox.Information)
