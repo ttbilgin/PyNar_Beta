@@ -81,12 +81,12 @@ class SettingsDialog(Dialog):
         self.editorBox.mousePressEvent = lambda event: self.changeEditorFont()
 
 
-        self.editorSizeBox = QSpinBox(groupBox)
+        self.editorSizeBox = QLineEdit(groupBox)
         self.editorSizeBox.setGeometry(QRect(455, 40, 40, 25))
-        self.editorSizeBox.setMinimum(6)
-        self.editorSizeBox.setMaximum(72)
-        self.editorSizeBox.setValue(int(self.c.getEditorFontSize()))
+        self.editorSizeBox.setReadOnly(True)
+        self.editorSizeBox.setText(str(self.c.getEditorFontSize()))
         self.editorSizeBox.setFont(font)
+        self.editorSizeBox.mousePressEvent = lambda event: self.changeEditorFont()
 
         labelCode = Label(groupBox)
         labelCode.setGeometry(QRect(30, 68, 255, 25))
@@ -101,12 +101,12 @@ class SettingsDialog(Dialog):
         self.codeBox.setFont(font)
         self.codeBox.mousePressEvent = lambda event: self.changeCodeFont()
 
-        self.codeSizeBox = QSpinBox(groupBox)
+        self.codeSizeBox = QLineEdit(groupBox)
         self.codeSizeBox.setGeometry(QRect(455, 70, 40, 25))
-        self.codeSizeBox.setMinimum(6)
-        self.codeSizeBox.setMaximum(72)
-        self.codeSizeBox.setValue(int(self.c.getFontSize()))
+        self.codeSizeBox.setReadOnly(True)
+        self.codeSizeBox.setText(self.c.getFontSize())
         self.codeSizeBox.setFont(font)
+        self.codeSizeBox.mousePressEvent = lambda event: self.changeCodeFont()
 
 
         label1 = Label(groupBox)
@@ -246,10 +246,11 @@ class SettingsDialog(Dialog):
             self.c.setCodeFont(fontData[0])
             self.c.updateConfig('Size', 'size', str(round(float(fontData[1]))))
             self.codeBox.setText(self.c.getCodeFont())
-            self.codeSizeBox.setValue(int(self.c.getFontSize()))
+            self.codeSizeBox.setText(str(self.c.getFontSize()))
 
     def changeEditorFont(self):
         try:
+            self.resize()
             font = QFont()
             font.setFamily(self.c.getEditorFont())
             font.setPointSize(self.fontSize)
@@ -322,12 +323,6 @@ class SettingsDialog(Dialog):
     def close(self):
         tab = self.tabWidthBox.value()
         self.c.updateConfig('Tab', 'tab', str(tab))
-
-        editorSize = self.editorSizeBox.value()
-        self.c.updateConfig('Size', 'editorsize', str(editorSize))
-
-        codeSize = self.codeSizeBox.value()
-        self.c.updateConfig('Size', 'size', str(codeSize))
 
         self.done(1)
 
