@@ -323,9 +323,9 @@ class CodeEditor(QsciScintilla):
             self.mainWindow.statusBar.showMessage(resText, 3000)
         mainText = self.text()
 		#tek tırnaklar kapatılmış mı hesapla
-        singleQuotaIndex=[i for i in range(len(mainText)) if mainText.startswith("'", i)]
+        singleQuotaIndex=[i for i in range(len(mainText)) if mainText.startswith("'", i) and self.SendScintilla(self.SCI_GETSTYLEAT, i) != 1]
         singleQuotaIndexEscaped=[i+1 for i in range(len(mainText)) if mainText.startswith("\\'", i)] # \ işaretinin posizyonunu verdiği için +1 ekledik
-        doubleQuotaIndex=[i for i in range(len(mainText)) if mainText.startswith('"', i)]
+        doubleQuotaIndex=[i for i in range(len(mainText)) if mainText.startswith('"', i) and self.SendScintilla(self.SCI_GETSTYLEAT, i) != 1]
         doubleQuotaIndexEscaped=[i+1 for i in range(len(mainText)) if mainText.startswith('\\"', i)] # \ işaretinin posizyonunu verdiği için +1 ekledik
 
         singleQuotaIndex=list(set(singleQuotaIndex)-set(singleQuotaIndexEscaped)) #escape edilmiş ' işaretini listeden çıkar
@@ -349,6 +349,9 @@ class CodeEditor(QsciScintilla):
         closeParanthList = deque()
         
         for i, val in enumerate(mainText):
+            x = self.SendScintilla(self.SCI_GETSTYLEAT, i)
+            if(x == 1):#1 -> yorum için kullanılan stil numarası
+                continue
             char = chr(val)
             if(char == openChar):
                 openParanthList.append(i)
