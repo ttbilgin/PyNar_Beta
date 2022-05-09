@@ -17,8 +17,11 @@ from Components.StartPage.recentmanager import RecentManager
 from Components.StartPage.startmenumager import StartMenuManager, StartMenuModel
 from Components.StartPage.emptyrecent import UcEmptyRecent
 from pynar import MainWindow
-
 import webbrowser
+import urllib
+import requests
+import subprocess
+import importlib.util
 
 
 class StartPage(QDialog):
@@ -32,9 +35,9 @@ class StartPage(QDialog):
         self.font_editor.setWeight(75)
 
         self.mainWindow = parent
+        self.checkAppJar()
         self.setupUi(self)
         self.show()
-
         self.center()
 
 
@@ -158,8 +161,6 @@ class StartPage(QDialog):
             self.closePushButton = QPushButton(text="X", parent=panel, clicked=self.accept, objectName='closeButtonStartPage')
         self.closePushButton.setMaximumSize(30, 30)
         self.closePushButton.setMinimumSize(30, 30)
-
-
 
     def rightPanelUI(self, panel):
 
@@ -296,3 +297,58 @@ class StartPage(QDialog):
         size = self.geometry()
         self.move((screen.width() - size.width()) // 2, (screen.height() - size.height()) // 2)
 
+    def checkAppJar(self):
+        try:
+            self.result_install = None
+            self.package_name = 'appJar'
+            spec = importlib.util.find_spec(self.package_name)
+            self.appjarIns = False
+            if spec is None:
+                mess = "Kullandığınız Python sürümünde appJar paketi bulunmuyor, PyNar Editörde Görsel programlama yapabilmeniz için appJar paketi gereklidir. Bu paketin otomatik olarak kurulmasını ister misiniz? Eğer \"Hayır\" cevabı verirseniz Pynar Editör Açıldıktan sonra Paket yöneticisini kullanarak appJar paketini kurabilirsiniz."
+                CustomizeMessageBox_Yes_No(message=mess, clickAccept=self.yesAppjarInstall, icon=QMessageBox.Warning)
+
+                self.appjarIns = True
+        except Exception as err:
+            CustomizeMessageBox_Ok("Bir Hata ile karşılaşıldı", QMessageBox.Critical)
+
+    def yesAppjarInstall(self):
+        res = self.connectedToInternet()
+        if res:
+            self.setAppjarVersion()
+            self.result_install = self.appjarInstall()
+        else:
+            path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+            os.system('pip install ' + path + '/Data/packages/appJar-0.94.0.tar.gz')
+
+    def appjarInstall(self):
+        text = 'appJar'
+        version = "==" + self.version
+        process = subprocess.Popen(
+            [os.path.basename(sys.executable), '-m', 'pip', 'install', text + version,
+             "--disable-pip-version-check"],
+            stdout=subprocess.PIPE, shell=self.c.getShell())
+        while True:
+            # output = process.stdout.readline()
+            rc = process.poll()
+            if rc == 1:  # Hata
+                return False
+            elif rc == 0:  # Başarılı
+                return True
+            elif rc is not None:
+                # TODO:Loglama eklenince burayada log eklenmeli
+                return False
+
+    def setAppjarVersion(self):
+        baseUrl = 'https://pypi.org/pypi/'
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0'}
+        jsonDataUrl = baseUrl + urllib.parse.quote(self.package_name) + "/json"
+        req = requests.get(jsonDataUrl, headers=headers)
+        jsonData = req.json()
+        self.version = jsonData['info']['version']
+
+    def connectedToInternet(self):
+        try:
+            if requests.get('https://google.com').ok:
+                return True
+        except Exception as err:
+            return False
