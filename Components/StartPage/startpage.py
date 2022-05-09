@@ -20,8 +20,10 @@ from pynar import MainWindow
 import webbrowser
 import urllib
 import requests
+import threading
 import subprocess
 import importlib.util
+from PyQt5 import QtCore, QtWidgets
 
 
 class StartPage(QDialog):
@@ -312,13 +314,17 @@ class StartPage(QDialog):
             CustomizeMessageBox_Ok("Bir Hata ile karşılaşıldı", QMessageBox.Critical)
 
     def yesAppjarInstall(self):
-        res = self.connectedToInternet()
-        if res:
-            self.setAppjarVersion()
-            self.result_install = self.appjarInstall()
-        else:
-            path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-            os.system('pip install ' + path + '/Data/packages/appJar-0.94.0.tar.gz')
+        msgBox = LoadingMessageBox()
+        font = QFont()
+        font.setFamily(self.c.getEditorFont())
+        font.setPointSize(self.c.getHistoryMenuFontSize() + 6)
+        msgBox.setFont(font)
+        txt = open(self.c.getHomeDir() + "qssfiles/qmessagebox.qss", "r").read()
+        msgBox.setStyleSheet(txt + "QLabel{height: 110px; min-height: 110px; max-height: 110px; width: 155px; min-width: 155px; max-width: 155px;}")
+        msgBox.setWindowFlags(msgBox.windowFlags() | Qt.FramelessWindowHint | Qt.WindowSystemMenuHint)
+        msgBox.setStandardButtons(QtWidgets.QMessageBox.NoButton)
+        msgBox.execute(consuming_work)
+
 
     def appjarInstall(self):
         text = 'appJar'
@@ -352,3 +358,80 @@ class StartPage(QDialog):
                 return True
         except Exception as err:
             return False
+
+
+def consuming_work():
+    pass
+
+
+
+class LoadingMessageBox(QtWidgets.QMessageBox):
+    started = QtCore.pyqtSignal()
+    finished = QtCore.pyqtSignal()
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.finished.connect(self.accept)
+        movie = QMovie(':/icon/images/loading.gif')
+        label_gif = QtWidgets.QLabel(self)
+        label_gif.setMovie(movie)
+        label_gif.setAlignment(Qt.AlignCenter)
+        label_gif.setGeometry(QtCore.QRect(18, 0, 205, 20))
+        movie.start()
+        label_text = QtWidgets.QLineEdit(self)
+        label_text.setReadOnly(True)
+        label_text.setStyleSheet("border:none; background-color:transparent")
+        label_text.setGeometry(QtCore.QRect(18, 110, 185, 25))
+        label_text.setAlignment(Qt.AlignCenter)
+        label_text.setText("Kurulum yapılıyor Lütfen bekleyiniz...")
+
+    def execute(self, func):
+        threading.Thread(target=self._execute, args=(func,), daemon=True).start()
+        return self.exec_()
+
+    def _execute(self, func):
+        self.started.emit()
+        res = self.connectedToInternet()
+        if res:
+            self.setAppjarVersion()
+            self.result_install = self.appjarInstall()
+        else:
+            path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+            os.system('pip install ' + path + '/Data/packages/appJar-0.94.0.tar.gz')
+        self.finished.emit()
+
+    def appjarInstall(self):
+        text = 'appJar'
+        c = Configuration()
+        version = "==" + self.version
+        process = subprocess.Popen(
+            [os.path.basename(sys.executable), '-m', 'pip', 'install', text + version,
+             "--disable-pip-version-check"],
+            stdout=subprocess.PIPE, shell=c.getShell())
+        while True:
+            # output = process.stdout.readline()
+            rc = process.poll()
+            if rc == 1:  # Hata
+                return False
+            elif rc == 0:  # Başarılı
+                return True
+            elif rc is not None:
+                # TODO:Loglama eklenince burayada log eklenmeli
+                return False
+
+    def setAppjarVersion(self):
+        package_name = 'appJar'
+        baseUrl = 'https://pypi.org/pypi/'
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0'}
+        jsonDataUrl = baseUrl + urllib.parse.quote(package_name) + "/json"
+        req = requests.get(jsonDataUrl, headers=headers)
+        jsonData = req.json()
+        self.version = jsonData['info']['version']
+
+    def connectedToInternet(self):
+        try:
+            if requests.get('https://google.com').ok:
+                return True
+        except Exception as err:
+            return False
+
