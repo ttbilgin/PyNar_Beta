@@ -202,7 +202,7 @@ class CodeEditor(CodeEditor):
         self.setCursorPosition(pos[0], pos[1])
         self.ensureCursorVisible()
         self.ensureLineVisible(pos[0])
-        
+
     def messenger(self, string):
         logfunc(string, parent=self.parent)
 
@@ -341,7 +341,7 @@ class MainWindow(QMainWindow):
         self.log = initialize_log()
         global main_pointer
         main_pointer = self
-        
+
         # self.fileBrowser = None
         self.initUI(self)
         self.centerOnScreen()
@@ -1136,20 +1136,42 @@ class MainWindow(QMainWindow):
         self.timer = QTimer()
         self.timer.timeout.connect(lambda: self.showMessage(self.textPad, tempfile.gettempdir() + "/hata.txt"))
         self.timer.start(1)
- 
+
         self.currentErrorsChange()
         if self.errorConsole.tableWidget.rowCount() > 0:
             self.styntaxError = True
         else:
-            self.styntaxError=False
+            self.styntaxError = False
 
         if self.activeErrorCount == 0 and self.previousErrorCount > 0:
             self.chatbotview.ErrorButtonsClear(chatClear=True)
 
+        if not self.isRun and self.logAndInd.cmdControl == 2:
+            mess = "Birden fazla pencere açacağınız uygulamalar aynı anda çalıştırılamaz. Diğer uygulamalara ait pencereleri kapatıp tekrar deneyiniz."
+            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+
     def command(self, command, directory):
+        self.isRun = True
         if os.path.isfile(directory):
-            os.remove(directory)
-        os.system(command)
+            try:
+                if not self.is_file_in_use(directory):
+                    os.remove(directory)
+                else:
+                    self.isRun = False
+
+            except Exception as err:
+                pass
+        if self.isRun:
+            os.system(command)
+
+    def is_file_in_use(self, file_path):
+        path = Path(file_path)
+        try:
+            path.rename(path)
+        except PermissionError:
+            return True
+        else:
+            return False
 
     def showMessage(self, textpad, directory):
         file = textpad.filename
