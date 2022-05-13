@@ -1147,7 +1147,7 @@ class MainWindow(QMainWindow):
             self.chatbotview.ErrorButtonsClear(chatClear=True)
 
         if not self.isRun and self.logAndInd.cmdControl == 2:
-            mess = "Birden fazla pencere açacağınız uygulamalar aynı anda çalıştırılamaz. Diğer uygulamalara ait pencereleri kapatıp tekrar deneyiniz."
+            mess = "<font color=gray>Şu an çalışmakta olan kod penceresi kapatılmadan aynı kod tekrar çalıştırılamaz!<br/><br/>Çalışmakta olan uygulamalara ait pencereleri kapatıp tekrar deneyiniz..</font>"
             CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
 
     def command(self, command, directory):
