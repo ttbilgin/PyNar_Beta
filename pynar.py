@@ -573,9 +573,27 @@ class MainWindow(QMainWindow):
         statusBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         statusBtn.clicked.connect(self.statusBtnClick)
         statusBtn.setStyleSheet("QPushButton{background-color:transparent;color: #fff}")
-        self.statusBar.addPermanentWidget(statusBtn)
 
+        resetFontSc = QShortcut(QKeySequence('Ctrl+G'), self)
+        resetFontSc.activated.connect(self.fontReset)
+
+        self.statusBar.addPermanentWidget(statusBtn)
         self.errorToDb = error_outputs_to_db()
+
+    def fontReset(self):
+        mess = "Pynar editör font ayarları varsayılan hale getirilecek ve editör yeniden başlatılacaktır devam etmek istiyor musunuz?"
+        CustomizeMessageBox_Yes_No(mess, clickAccept=self.fontResetClick, yes='Evet', no='Hayır', icon=QMessageBox.Information)
+
+    def fontResetClick(self):
+        self.c.setCodeFont("Consolas")
+        self.c.updateConfig('Size', 'size', str("16"))
+
+        self.c.setEditorFont("Tahoma")
+        self.c.updateConfig('Size', 'editorsize', str("10"))
+
+        QtCore.QCoreApplication.quit()
+        pynarBasePath = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+        status = QtCore.QProcess.startDetached(pynarBasePath + os.sep + "pynar")
 
     def statusBtnClick(self):
         message = """<font color=gray><table border=1 bordercolor=\"#acd33b\" cellspacing=\"0\" cellpadding=\"5\">

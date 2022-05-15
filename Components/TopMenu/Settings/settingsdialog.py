@@ -31,6 +31,9 @@ from dialog import Dialog,fontDialog
 class SettingsDialog(Dialog):
     def __init__(self, parent=None, textPad=None):
         super().__init__(parent, textPad)
+        mess = "Seçtiğiniz yazı tipi ayarları pynar editörü kullanışsız hale getirirse varsayılan ayarları yüklemek için herhangi bir anda Ctrl+G tuşuna basabilirsiniz."
+        CustomizeMessageBox_Ok(mess, QMessageBox.Information)
+
         self.parent = parent
         self.textPad = textPad
         self.c = Configuration()
