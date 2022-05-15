@@ -611,6 +611,7 @@ class MainWindow(QMainWindow):
                   <tr><td>CTRL ve S </td><td> Kaydet</td></tr>
                   <tr><td>CTRL ve + </td><td> Yakınlaştır</td></tr>
                   <tr><td>CTRL ve - </td><td> Uzaklaştır</td></tr>
+                  <tr><td>CTRL ve G </td><td> Font ayarlarını sıfırla</td></tr>
                   <tr><td>CTRL ve SHIFT ve S </td><td>  Farklı Kaydet</td></tr>
                   <tr><td>CTRL ve SHIFT ve Z </td><td> İleri al</td></tr></table></font>"""
 
