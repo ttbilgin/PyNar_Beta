@@ -171,6 +171,8 @@ class FindDeadCodeDialog(QDialog):
         self.setGeometry(self.codeView.x() + 300, self.codeView.y() + 400, 400, 300)
         self.setPalette(palette)
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
+        self.setStyleSheet("background-color: #CAD7E0;")
+        self.setWindowIcon(QIcon(':/icon/images/headerLogo1.png'))
         self.setWindowTitle('Hata Ayıklayıcı')
         self.initUI()
 
@@ -182,10 +184,16 @@ class FindDeadCodeDialog(QDialog):
         self.label.setAlignment(Qt.AlignCenter)
 
         self.listWidget = ListWidget()
+        self.listWidget.setStyleSheet("background-color: white;")
 
         updateButton = PushButton('Kaydet + Güncelle')
         updateButton.clicked.connect(self.update)
+
         okButton = PushButton('Tamam')
+        okButton.setStyleSheet("QPushButton { color: white;padding: 5px;font-size: 14px;margin: 4px 2px;border-radius: 4px; background-color: rgb(0, 170, 255);} " \
+                       "QPushButton::hover{background-color:rgb(4, 124, 184)}")
+
+
         okButton.clicked.connect(self.onClose)
 
         hbox = QHBoxLayout()
