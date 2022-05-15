@@ -225,6 +225,7 @@ class CodeEditor(CodeEditor):
         self.warningMes.show()
 
     def mousePressEvent(self, event):
+        super(CodeEditor, self).mousePressEvent(event)
         self.parent.tab_widget.PynarTabs.setCurrentIndex(0)
 
 # Solmenü override
