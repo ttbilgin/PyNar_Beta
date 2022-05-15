@@ -98,8 +98,13 @@ class Configuration():
 
     def getReleaseInfo(self):
         return self.config['releaseInfo']['release']
+        
+    def getAutoCloseOnK(self):
+        return self.config['OnK']['autoclose']
+        
+    def getStatusBarOnK(self):
+        return self.config['OnK']['statusbar']
 
-    #
     def setSystem(self, system):
         self.config['System']['system'] = system
 
@@ -196,6 +201,9 @@ class Configuration():
 
         config['Font']['code_font'] = 'Consolas'
         config['Font']['editor_font'] = 'Segoe UI'
+        
+        config['OnK']['autoclose'] = 'True'
+        config['OnK']['statusbar'] = 'True'
 
         return config
 

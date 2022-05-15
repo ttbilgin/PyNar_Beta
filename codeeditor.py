@@ -321,12 +321,12 @@ class CodeEditor(QsciScintilla):
             self.SendScintilla(self.SCI_INDICATORFILLRANGE, i, 1)
             self.mainWindow.statusBar.setStyleSheet("QStatusBar{padding-left:8px;background:rgba(255,0,0,255);color:white;font-weight:bold;}")
             self.mainWindow.statusBar.showMessage(resText, 3000)
-        mainText = self.text()
+        mainText = self.text().encode("utf-8")
 		#tek tırnaklar kapatılmış mı hesapla
-        singleQuotaIndex=[i for i in range(len(mainText)) if mainText.startswith("'", i) and self.SendScintilla(self.SCI_GETSTYLEAT, i) != 1]
-        singleQuotaIndexEscaped=[i+1 for i in range(len(mainText)) if mainText.startswith("\\'", i)] # \ işaretinin posizyonunu verdiği için +1 ekledik
-        doubleQuotaIndex=[i for i in range(len(mainText)) if mainText.startswith('"', i) and self.SendScintilla(self.SCI_GETSTYLEAT, i) != 1]
-        doubleQuotaIndexEscaped=[i+1 for i in range(len(mainText)) if mainText.startswith('\\"', i)] # \ işaretinin posizyonunu verdiği için +1 ekledik
+        singleQuotaIndex=[i for i in range(len(mainText)) if mainText.startswith(b"'", i) and self.SendScintilla(self.SCI_GETSTYLEAT, i) != 1]
+        singleQuotaIndexEscaped=[i+1 for i in range(len(mainText)) if mainText.startswith(b"\\'", i)] # \ işaretinin posizyonunu verdiği için +1 ekledik
+        doubleQuotaIndex=[i for i in range(len(mainText)) if mainText.startswith(b'"', i) and self.SendScintilla(self.SCI_GETSTYLEAT, i) != 1]
+        doubleQuotaIndexEscaped=[i+1 for i in range(len(mainText)) if mainText.startswith(b'\\"', i)] # \ işaretinin posizyonunu verdiği için +1 ekledik
 
         singleQuotaIndex=list(set(singleQuotaIndex)-set(singleQuotaIndexEscaped)) #escape edilmiş ' işaretini listeden çıkar
         doubleQuotaIndex=list(set(doubleQuotaIndex)-set(doubleQuotaIndexEscaped)) #escape edilmiş " işaretini listeden çıkar
@@ -334,11 +334,12 @@ class CodeEditor(QsciScintilla):
 		
         #eğer QuotaIndex tek sayıda elemandan oluşuyorsa listedeki en son indisli elemanın altını çizsin.
         if(len(singleQuotaIndex) % 2 == 1):
-            self.SendScintilla(self.SCI_INDICATORFILLRANGE, singleQuotaIndex[-1], 1)
+            self.SendScintilla(self.SCI_INDICATORFILLRANGE, max(singleQuotaIndex), 1)
             self.mainWindow.statusBar.setStyleSheet("QStatusBar{padding-left:8px;background:rgba(255,0,0,255);color:white;font-weight:bold;}")
             self.mainWindow.statusBar.showMessage('Tek Tırnak kapatılmadı!', 3000)
         if(len(doubleQuotaIndex) % 2 == 1):
-            self.SendScintilla(self.SCI_INDICATORFILLRANGE, doubleQuotaIndex[-1], 1)
+            #print(doubleQuotaIndex)
+            self.SendScintilla(self.SCI_INDICATORFILLRANGE, max(doubleQuotaIndex), 1)
             self.mainWindow.statusBar.setStyleSheet("QStatusBar{padding-left:8px;background:rgba(255,0,0,255);color:white;font-weight:bold;}")
             self.mainWindow.statusBar.showMessage('Çift Tırnak kapatılmadı!', 3000)
     
@@ -352,7 +353,9 @@ class CodeEditor(QsciScintilla):
             x = self.SendScintilla(self.SCI_GETSTYLEAT, i)
             if(x == 1):#1 -> yorum için kullanılan stil numarası
                 continue
+            
             char = chr(val)
+            
             if(char == openChar):
                 openParanthList.append(i)
             elif(char == closeChar):
@@ -768,6 +771,38 @@ class CodeEditor(QsciScintilla):
         if (key == Qt.Key_K and key_modifiers == Qt.ControlModifier):
             self.toggle_commenting()
 
+        self.on_k(event.text())
+
+    def on_k(self, id):
+        if self.isReadOnly():
+            return
+
+        c = Configuration()
+        # 40 ( - 39 ' - 34 " - 91 [ - 123 {
+        if c.getAutoCloseOnK():
+            # if id == 40:
+            if id == "(":
+                self.insert(")")
+            # elif id == 39:
+            elif id == "'":
+                self.insert("'")
+            # elif id == 34:
+            elif id == '"':
+                self.insert('"')
+            # elif id == 91:
+            elif id == "[":
+                self.insert(']')
+            # elif id == 123:
+            elif id == "{":
+                self.insert('}')
+        #
+        if c.getStatusBarOnK():
+            line, column = self.getCursorPosition()
+            lines = self.lines()
+            if not self.mainWindow.statusBar.currentMessage():
+                self.mainWindow.statusBar.showMessage("Satır: {0} Sütun: {1}".format(line+1, column))
+
+
     def toggle_commenting(self):
         # Check if the selections are valid
         selections = self.get_selections()
@@ -914,7 +949,7 @@ class CodeEditor(QsciScintilla):
         charlist = []
         text = ""
         for i in itertools.chain(paranthO, bracketO, squaredbO):
-            charlist.append(self.text()[i])
+            charlist.append(chr(self.text().encode("utf-8")[i]))
         charlist = list(set(charlist))
 
         if len(charlist) != 0 and charlist is not None:
@@ -928,7 +963,7 @@ class CodeEditor(QsciScintilla):
         charlist = []
         text = ""
         for i in itertools.chain(paranthC, bracketC, squaredbC):
-            charlist.append(self.text()[i])
+            charlist.append(chr(self.text().encode("utf-8")[i]))
         charlist = list(set(charlist))
 
         if len(charlist) != 0 and charlist is not None:
