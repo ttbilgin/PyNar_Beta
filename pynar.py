@@ -1222,8 +1222,6 @@ class MainWindow(QMainWindow):
         else:
             if self.chatbotview.answerButton is None:
                 self.chatbotErrorButtonsClear()
-            if self.logAndInd.cmdControl == 2 and self.falseDataBase == "":
-                self.falseDataBase = self.addCodeData()
     def currentErrorsChange(self):
         self.previousErrorCount = self.activeErrorCount
         self.activeErrorCount = self.errorConsole.tableWidget.rowCount()
@@ -1301,16 +1299,6 @@ class MainWindow(QMainWindow):
 
     def chatbotErrorButtonsClear(self):
         self.chatbotview.ErrorButtonsClear()
-
-    def addCodeData(self):
-        path = os.path.dirname(os.path.realpath(__file__)) + "/Data/CodeDataset"
-        num = random.choice(range(10000000000,100000000000))
-        dataList = os.listdir(path)
-        while num in dataList:
-            num = random.choice(range(10000000000, 100000000000))
-        with open(path + "/" +str(num) + ".py", "w", encoding="utf-8") as f:
-            f.write(self.textPad.text())
-        return path + "/" +str(num) + ".py"
 
     def control(self):
         if self.token is None:
