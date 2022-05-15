@@ -224,6 +224,9 @@ class CodeEditor(CodeEditor):
         self.warningMes.setWindowTitle("Uyarı")
         self.warningMes.show()
 
+    def mousePressEvent(self, event):
+        self.parent.tab_widget.PynarTabs.setCurrentIndex(0)
+
 # Solmenü override
 class UcLMMenus(UcLMMenus):
     def __init__(self, main=None, parent=None):
