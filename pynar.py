@@ -324,7 +324,6 @@ class MainWindow(QMainWindow):
         self.openExam = None
         self.examList = []
         self.exCount = 0
-        self.falseDataBase = ""
         self.activeErrorCount = 0
         self.previousErrorCount = 0
         self.btnRun = HoverButton(self)
@@ -1107,7 +1106,6 @@ class MainWindow(QMainWindow):
         thread.start()
 
     def run(self):
-        self.falseDataBase = ""
         self.errorConsole.message = None
         self.errorConsole.clear()
         self.splitterV.handle(1).setEnabled(True)
