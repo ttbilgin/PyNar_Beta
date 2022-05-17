@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QDialog, QHBoxLayout,
                              QPushButton, QMainWindow, QCheckBox, QDesktopWidget,
                              QGroupBox, QSpinBox, QTextEdit, QTabWidget,
                              QDialogButtonBox, QMessageBox, QListWidget,
-                             QListWidgetItem, QComboBox, QFontDialog)
+                             QListWidgetItem, QComboBox, QFontDialog, QRadioButton)
 from PyQt5.QtGui import (QFont, QPalette, QIcon)
 from Components.MessageBox.CustomizeMessageBox import CustomizeMessageBox_Yes_No, CustomizeMessageBox_Ok
 from PyQt5.Qt import Qt
@@ -36,12 +36,13 @@ class SettingsDialog(Dialog):
         self.parent = parent
         self.textPad = textPad
         self.c = Configuration()
+        self.autoSelected = eval(self.c.getAutoSelectState())
         self.setWindowTitle('Editör Ayarları')
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setWindowIcon(QIcon(':/icon/images/settings_i.png'))
         self.setStyleSheet("background-color: #CAD7E0;")
-        self.setMinimumSize(QSize(600, 363))
-        self.setMaximumSize(QSize(600, 363))
+        self.setMinimumSize(QSize(600, 420))
+        self.setMaximumSize(QSize(600, 420))
         self.initUI()
 
 
@@ -217,8 +218,36 @@ class SettingsDialog(Dialog):
         labelOpen.clicked.connect(self.openLogFolder)
         labelOpen.setObjectName("settingsMenu")
 
+        pythonInterpreter = WhiteLabel(groupBox)
+        pythonInterpreter.setGeometry(QRect(30, 281, 205, 22))
+        pythonInterpreter.setText("Python Yorumlayıcı:")
+        pythonInterpreter.setFont(font)
+
+        self.radioBtnAutomatic = QRadioButton(groupBox)
+        self.radioBtnAutomatic.setText("Otomatik Seç")
+        self.radioBtnAutomatic.setGeometry(QRect(295, 281, 100, 22))
+        self.radioBtnAutomatic.setChecked(eval(self.c.getAutoSelectState()))
+        self.radioBtnAutomatic.toggled.connect(lambda: self.btnstate(self.radioBtnAutomatic))
+
+        self.radioBtnByHand = QRadioButton(groupBox)
+        self.radioBtnByHand.setText("Ben Seçeceğim")
+        self.radioBtnByHand.setGeometry(QRect(400, 281, 100, 22))
+        self.radioBtnByHand.setChecked(not eval(self.c.getAutoSelectState()))
+        self.radioBtnByHand.toggled.connect(lambda: self.btnstate(self.radioBtnByHand))
+
+        self.comboPythonVersionList = QComboBox(groupBox)
+        self.comboPythonVersionList.setGeometry(QRect(30, 311, 515, 22))
+        self.comboPythonVersionList.setStyleSheet("QComboBox { border : 1px solid gray; selection-background-color: blue;}")
+        exeList = self.c.getInstalledPythonsExes().split(';')
+        versionList = self.c.getInstalledPythonsVersions().split(';')
+        for i in range(0, len(exeList)):
+            self.comboPythonVersionList.addItem(exeList[i] + "   Sürüm: " + versionList[i])
+
+        self.comboPythonVersionList.setVisible(not eval(self.c.getAutoSelectState()))
+
+
         okButton = PushButton(groupBox)
-        okButton.setGeometry(QRect(30, 285, 141, 41))
+        okButton.setGeometry(QRect(30, 345, 141, 41))
         okButton.setText('TAMAM')
         okButton.setFont(font)
         okButton.setStyleSheet("QPushButton { color: white;padding: 5px;margin: 4px 2px;border-radius: 4px; background-color: rgb(0, 170, 255);} " \
@@ -236,6 +265,17 @@ class SettingsDialog(Dialog):
         layout.addWidget(groupBox)
         self.setLayout(layout)
         self.center()
+
+    def btnstate(self, b):
+        if b == self.radioBtnAutomatic:
+            if b.isChecked():
+                self.comboPythonVersionList.setVisible(False)
+                self.autoSelected = True
+
+        if b == self.radioBtnByHand:
+            if b.isChecked():
+                self.comboPythonVersionList.setVisible(True)
+                self.autoSelected = False
 
     def changeCodeFont(self):
         font = QFont()
@@ -325,7 +365,11 @@ class SettingsDialog(Dialog):
     def close(self):
         tab = self.tabWidthBox.value()
         self.c.updateConfig('Tab', 'tab', str(tab))
-
+        self.c.setAutoSelectState(str(self.radioBtnAutomatic.isChecked()))
+        if not self.autoSelected:
+            selected = self.comboPythonVersionList.currentText().split("   Sürüm: ")
+            self.c.setSelectedPythonExe(selected[0])
+            self.c.setSelectedPythonVersion(selected[1])
         self.done(1)
 
 class clickableLabel(QLabel):

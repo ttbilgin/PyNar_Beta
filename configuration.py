@@ -159,6 +159,12 @@ class Configuration():
         
         config['System'] = {}
         config['System']['system'] = ''
+        config['System']['installed_pythons_versions'] = ''
+        config['System']['installed_pythons_exes'] = ''
+        config['System']['selected_python_version'] = ''
+        config['System']['selected_python_exe'] = ''
+        config['System']['automatic_selection'] = 'True'
+
         
         config['Tab'] = {}
         config['Tab']['tab'] = '6'
@@ -231,6 +237,78 @@ class Configuration():
 
     def getShell(self):
         return True if self.config['System']['system'] == "windows" else False
+
+    def setInstalledPythonsVersions(self, param):
+        self.config['System']['installed_pythons_versions'] = param
+
+        path = os.path.realpath(__file__)
+        basename = self.checkPath(os.path.dirname(path))
+
+        iniPath = basename + "/Config/pynar.ini"
+
+        with open(iniPath, 'w', encoding='utf-8') as f:
+            self.config.write(f)
+
+    def getInstalledPythonsVersions(self):
+        return self.config['System']['installed_pythons_versions']
+
+    def setInstalledPythonsExes(self, param):
+        self.config['System']['installed_pythons_exes'] = param
+
+        path = os.path.realpath(__file__)
+        basename = self.checkPath(os.path.dirname(path))
+
+        iniPath = basename + "/Config/pynar.ini"
+
+        with open(iniPath, 'w', encoding='utf-8') as f:
+            self.config.write(f)
+
+    def getInstalledPythonsExes(self):
+        return self.config['System']['installed_pythons_exes']
+
+    def setSelectedPythonVersion(self, param):
+        self.config['System']['selected_python_version'] = param
+
+        path = os.path.realpath(__file__)
+        basename = self.checkPath(os.path.dirname(path))
+
+        iniPath = basename + "/Config/pynar.ini"
+
+        with open(iniPath, 'w', encoding='utf-8') as f:
+            self.config.write(f)
+
+    def getSelectedPythonVersion(self):
+        return self.config['System']['selected_python_version']		
+
+    def setSelectedPythonExe(self, param):
+        self.config['System']['selected_python_exe'] = param
+
+        path = os.path.realpath(__file__)
+        basename = self.checkPath(os.path.dirname(path))
+
+        iniPath = basename + "/Config/pynar.ini"
+
+        with open(iniPath, 'w', encoding='utf-8') as f:
+            self.config.write(f)
+
+    def getSelectedPythonExe(self):
+        return self.config['System']['selected_python_exe']
+
+    def setAutoSelectState(self, param):
+        self.config['System']['automatic_selection'] = param
+
+        path = os.path.realpath(__file__)
+        basename = self.checkPath(os.path.dirname(path))
+
+        iniPath = basename + "/Config/pynar.ini"
+
+        with open(iniPath, 'w', encoding='utf-8') as f:
+            self.config.write(f)
+
+    def getAutoSelectState(self):
+        return self.config['System']['automatic_selection']
+
+
 if __name__ == '__main__':
     c = Configuration()
 
