@@ -31,8 +31,7 @@ from dialog import Dialog,fontDialog
 class SettingsDialog(Dialog):
     def __init__(self, parent=None, textPad=None):
         super().__init__(parent, textPad)
-        mess = "Seçtiğiniz yazı tipi ayarları pynar editörü kullanışsız hale getirirse varsayılan ayarları yüklemek için herhangi bir anda Ctrl+G tuşuna basabilirsiniz."
-        CustomizeMessageBox_Ok(mess, QMessageBox.Information)
+        self.mess = "Seçtiğiniz yazı tipi ayarları pynar editörü kullanışsız hale getirirse varsayılan ayarları yüklemek için herhangi bir anda Ctrl+G tuşuna basabilirsiniz."
 
         self.parent = parent
         self.textPad = textPad
@@ -242,7 +241,7 @@ class SettingsDialog(Dialog):
         font = QFont()
         font.setFamily(self.c.getCodeFont())
         font.setPointSize(int(self.c.getFontSize()))
-
+        CustomizeMessageBox_Ok(self.mess, QMessageBox.Information)
         font, ok = self.codeFontDialog.getFont(font, fontDialog(), "Font Ayarları", QFontDialog.MonospacedFonts)
         if ok:
             fontData = font.toString().split(',')
@@ -257,7 +256,7 @@ class SettingsDialog(Dialog):
             font = QFont()
             font.setFamily(self.c.getEditorFont())
             font.setPointSize(self.fontSize)
-
+            CustomizeMessageBox_Ok(self.mess, QMessageBox.Information)
             font, ok = self.editorFontDialog.getFont(font, fontDialog(), "Font Ayarları", QFontDialog.ProportionalFonts)
             if ok:
                 fontData = font.toString().split(',')
