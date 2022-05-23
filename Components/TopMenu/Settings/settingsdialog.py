@@ -41,8 +41,8 @@ class SettingsDialog(Dialog):
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setWindowIcon(QIcon(':/icon/images/settings_i.png'))
         self.setStyleSheet("background-color: #CAD7E0;")
-        self.setMinimumSize(QSize(600, 420))
-        self.setMaximumSize(QSize(600, 420))
+        self.setMinimumSize(QSize(640, 420))
+        self.setMaximumSize(QSize(640, 420))
         self.initUI()
 
 
@@ -236,7 +236,7 @@ class SettingsDialog(Dialog):
         self.radioBtnByHand.toggled.connect(lambda: self.btnstate(self.radioBtnByHand))
 
         self.comboPythonVersionList = QComboBox(groupBox)
-        self.comboPythonVersionList.setGeometry(QRect(30, 311, 515, 22))
+        self.comboPythonVersionList.setGeometry(QRect(30, 311, 555, 22))
         self.comboPythonVersionList.setStyleSheet("QComboBox { border : 1px solid gray; selection-background-color: blue;}")
         exeList = self.c.getInstalledPythonsExes().split(';')
         versionList = self.c.getInstalledPythonsVersions().split(';')
