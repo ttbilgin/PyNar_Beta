@@ -242,6 +242,8 @@ class SettingsDialog(Dialog):
         versionList = self.c.getInstalledPythonsVersions().split(';')
         for i in range(0, len(exeList)):
             self.comboPythonVersionList.addItem(exeList[i] + "   Sürüm: " + versionList[i])
+            if versionList[i] == self.c.getSelectedPythonVersion():
+                self.comboPythonVersionList.setCurrentIndex(i)
 
         self.comboPythonVersionList.setVisible(not eval(self.c.getAutoSelectState()))
 
