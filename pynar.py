@@ -1112,8 +1112,8 @@ class MainWindow(QMainWindow):
     def interpreter(self):
         c = Configuration()
         system = c.getSystem()
-        command = c.getInterpreter(system)
-
+        python_exe = c.getSelectedPythonExe()
+        command = c.getInterpreter(system).format(python_exe)
         thread = RunThread(command)
         thread.start()
 
@@ -1132,7 +1132,8 @@ class MainWindow(QMainWindow):
         self.save()
         c = Configuration()
         system = c.getSystem()
-        command = c.getRun(system).format(self.textPad.filename)
+        python_exe = c.getSelectedPythonExe()
+        command = c.getRun(system).format(self.textPad.filename,python_exe)
         #Kodun içinde syntax hatası varmı compile ederek kontrol et, hata varsa cmd minimize olsun
         #Hata yok ise cmd görünsün, runtime hatalarında işe yaramaz.
         if not self.textPad.filename:

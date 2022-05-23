@@ -189,7 +189,9 @@ class PMDialog(Dialog):
         self.Update_button.hide()
 
     def _setInstructıonPage(self,first=False):
-        data = subprocess.check_output(["pip3", "list", "--format", "json",  "--disable-pip-version-check"], shell = self.c.getShell())
+        c = Configuration()
+        python_exe = c.getSelectedPythonExe()
+        data = subprocess.check_output([python_exe, '-m', 'pip', "list", "--format", "json",  "--disable-pip-version-check"], shell = self.c.getShell())
         parsed_results = json.loads(data)
         dPackageDict = {}
         self.List_line.clear()
@@ -337,7 +339,9 @@ class PMDialog(Dialog):
     def download_command(self, update=False):
         text = (self.Search_line.text() if not update else self.List_line.currentItem().text())
         version = "==" + self.Version_list.currentText()
-        process = subprocess.Popen([os.path.basename(sys.executable), '-m', 'pip', 'install', text + version,  "--disable-pip-version-check"], stdout=subprocess.PIPE, shell = self.c.getShell())
+        c = Configuration()
+        python_exe = c.getSelectedPythonExe()
+        process = subprocess.Popen([python_exe, '-m', 'pip', 'install', text + version,  "--disable-pip-version-check"], stdout=subprocess.PIPE, shell = self.c.getShell())
         while True:
             output = process.stdout.readline()
             if output:
@@ -391,8 +395,10 @@ class PMDialog(Dialog):
         runs.start()
 
     def uninstall_command(self):
+        c = Configuration()
+        python_exe = c.getSelectedPythonExe()
         process = subprocess.Popen(
-            [os.path.basename(sys.executable), '-m', 'pip', 'uninstall', '-y', self.List_line.currentItem().text(), "--disable-pip-version-check"],
+            [python_exe, '-m', 'pip', 'uninstall', '-y', self.List_line.currentItem().text(), "--disable-pip-version-check"],
             stdout=subprocess.PIPE, shell = self.c.getShell())
         while True:
             output = process.stdout.readline()

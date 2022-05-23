@@ -77,7 +77,7 @@ class detectos:
             try:
                 _result = subprocess.run([i, "-V"], stdout=subprocess.PIPE, check=True, stderr=subprocess.DEVNULL)
                 installed_pythons_versions.append(_result.stdout.decode('utf-8'))
-                installed_python_exes.append(i)
+                installed_python_exes.append(repr(i).replace('\'',''))
             except (subprocess.CalledProcessError, OSError):
                 pass
 
