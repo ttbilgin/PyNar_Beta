@@ -137,12 +137,12 @@ class CodeEditor(QsciScintilla):
         # self.setFoldMarginColors(QColor('#C0C0C0'), QColor('#C0C0C0'))
 
         # CallTipBox
-        self.setCallTipsForegroundColor(QColor('#FFFFFF'))
-        self.setCallTipsBackgroundColor(QColor('#282828'))
-        self.setCallTipsHighlightColor(QColor('#3b5784'))
+        self.setCallTipsForegroundColor(QColor('#505050'))
+        self.setCallTipsBackgroundColor(QColor('#f1e472'))
+        self.setCallTipsHighlightColor(QColor('#ff0000'))
         self.setCallTipsStyle(QsciScintilla.CallTipsContext)
         self.setCallTipsPosition(QsciScintilla.CallTipsBelowText)
-        self.setCallTipsVisible(-1)
+        self.setCallTipsVisible(0)
 
         # change caret's color
         # self.SendScintilla(QsciScintilla.SCI_SETCARETFORE, QColor('#98fb98'))
@@ -589,7 +589,24 @@ class CodeEditor(QsciScintilla):
         #self.registerImage(1, img) #bundan vazgeçiyoruz düzgün çalışmıyor 19.04.2022
 
         for word in self.keywords:
-            self.autocomplete.add(word) #redball gösterme
+            self.autocomplete.add(word)  # redball gösterme
+        # -----Call Tip Ekleme------------------------
+
+        autoCompleteListFiles = os.listdir(
+            self.c.getHomeDir() + self.c.getHtmlHelpPath("html_help_path") + "/AutoCompleteLists")
+        for i in range(len(autoCompleteListFiles)):
+            with open(self.c.getHomeDir() + self.c.getHtmlHelpPath("html_help_path") + "/AutoCompleteLists/" +
+                      autoCompleteListFiles[i], "r",
+                      errors="ignore", encoding="utf-8") as f:
+                if i == 0:
+                    autoCompleteList = f.read().splitlines()
+                else:
+                    autoCompleteList += f.read().splitlines()
+
+        # Add the functions to the api
+        for s in autoCompleteList:
+            self.autocomplete.add(s)
+        # ------Call Tip Ekleme sonu------------------------
 
         if not text:
 
