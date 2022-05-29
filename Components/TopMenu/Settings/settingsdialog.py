@@ -372,6 +372,14 @@ class SettingsDialog(Dialog):
             selected = self.comboPythonVersionList.currentText().split("   Sürüm: ")
             self.c.setSelectedPythonExe(selected[0])
             self.c.setSelectedPythonVersion(selected[1])
+        else:
+            self.c.updateConfig('System', 'system', '')
+            self.c.updateConfig('System', 'installed_pythons_versions', '')
+            self.c.updateConfig('System', 'installed_pythons_exes', '')
+            self.c.updateConfig('System', 'selected_python_version', '')
+            self.c.updateConfig('System', 'selected_python_exe', '')
+            self.c.updateConfig('System', 'automatic_selection', 'True')
+
         self.done(1)
 
 class clickableLabel(QLabel):
