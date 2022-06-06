@@ -173,7 +173,7 @@ class FindDeadCodeDialog(QDialog):
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setStyleSheet("background-color: #CAD7E0;")
         self.setWindowIcon(QIcon(':/icon/images/headerLogo1.png'))
-        self.setWindowTitle('Hata Ayıklayıcı')
+        self.setWindowTitle('Gereksiz Kod Listesi')
         self.initUI()
 
     def initUI(self):
