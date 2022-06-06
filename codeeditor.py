@@ -197,7 +197,7 @@ class CodeEditor(QsciScintilla):
         selectAllAction.triggered.connect(self.getContext)
         sepAction4 = QAction("", self)
         sepAction4.setSeparator(True)
-        breakpointAction = QAction("Hata Ayıklayıcıyı Çalıştır", self)
+        breakpointAction = QAction("Gereksiz Kod Analizi", self)
         breakpointAction.triggered.connect(self.breakpointContext)
         terminalAction = QAction("Terminal Aç", self)
         terminalAction.triggered.connect(self.termContext)
