@@ -103,5 +103,6 @@
     <file>images/resize2.png</file>
     <file>images/close2.png</file>
     <file>images/exam-background.png</file>
+    <file>images/debug-icon.png</file>
   </qresource>
 </RCC>

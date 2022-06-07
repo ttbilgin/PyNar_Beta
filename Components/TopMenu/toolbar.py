@@ -89,6 +89,7 @@ class ToolBar(QWidget):
         self.newAction = QAction(QIcon(':/icon/images/addfile.png'), 'Yeni', self)
         self.closeAction = QAction(QIcon(':/icon/images/addfile.png'), 'Kapat', self)
         self.historyAction = QAction(QIcon(':/icon/images/history.png'), 'Son Kullanılan Dosyalar', self)
+        self.debugAction = QAction(QIcon(':/icon/images/debug-icon.png'), 'Debugger', self)
 
         self.newAction.setShortcut('Ctrl+N')
         self.newAction.triggered.connect(self.parent.new)
@@ -123,6 +124,9 @@ class ToolBar(QWidget):
         self.interpreterAction.setShortcut('F10')
         self.interpreterAction.triggered.connect(self.parent.interpreter)
 
+        # self.debugAction.setShortcut('')
+        self.debugAction.triggered.connect(self.parent.debugger)
+
         self.historyAction.setShortcut('Ctrl+H')
         self.historyAction.triggered.connect(self.parent.history)
 
@@ -145,6 +149,7 @@ class ToolBar(QWidget):
         self.toolbarFile.addAction(self.zoomOutAction)
         self.toolbarFile.addAction(self.findAction)
         self.toolbarFile.addAction(self.interpreterAction)
+        self.toolbarFile.addAction(self.debugAction)
         # self.toolbarFile.addAction(self.terminalAction)
 
 
@@ -200,6 +205,7 @@ class ToolBar(QWidget):
         self.zoomInAction.setEnabled(activeState)
         self.zoomOutAction.setEnabled(activeState)
         self.interpreterAction.setEnabled(activeState)
+        self.debugAction.setEnabled(activeState)
         # self.terminalAction.setEnabled(activeState)
         self.findAction.setEnabled(activeState)
 
