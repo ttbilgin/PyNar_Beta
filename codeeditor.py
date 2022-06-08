@@ -244,36 +244,37 @@ class CodeEditor(QsciScintilla):
                 break
 
     def onTextChanged(self):
-        notebook = self.mainWindow.notebook
-        textPad = notebook.currentWidget()
-        index = notebook.currentIndex()
-        if index != 0:
-            if self.debugging is True:
-                self.mainWindow.statusBar.showMessage('Kod Editördeki  satırları silerseniz veya değiştirirseniz Kod Ekranını güncellemeyi unutmayın!', 3000)
+        if self.parent.isNewPythonFile is not True:
+            notebook = self.mainWindow.notebook
+            textPad = notebook.currentWidget()
+            index = notebook.currentIndex()
+            if index != 0:
+                if self.debugging is True:
+                    self.mainWindow.statusBar.showMessage('Kod Editördeki  satırları silerseniz veya değiştirirseniz Kod Ekranını güncellemeyi unutmayın!', 3000)
 
-            if textPad == None:
-                return
+                if textPad == None:
+                    return
 
-            if textPad.filename:
+                if textPad.filename:
+                    if not '*' in notebook.tabText(index):
+                        fname = os.path.basename(textPad.filename)
+                        fname += '*'
+                        notebook.setTabText(index, fname)
+
+                else:
+                    fname = notebook.tabText(index)
+                    fname += '*'
+
+                    if not '*' in notebook.tabText(index):
+                        notebook.setTabText(index, fname)
+            else:
                 if not '*' in notebook.tabText(index):
                     fname = os.path.basename(textPad.filename)
                     fname += '*'
                     notebook.setTabText(index, fname)
 
-            else:
-                fname = notebook.tabText(index)
-                fname += '*'
-
-                if not '*' in notebook.tabText(index):
-                    notebook.setTabText(index, fname)
-        else:
-            if not '*' in notebook.tabText(index):
-                fname = os.path.basename(textPad.filename)
-                fname += '*'
-                notebook.setTabText(index, fname)
-                
-        #Indicator fonksiyonunu çalıştır
-        self.indicatorFill()
+            #Indicator fonksiyonunu çalıştır
+            self.indicatorFill()
 
     def setText(self, text):
         super().setText(text)

@@ -580,6 +580,7 @@ class MainWindow(QMainWindow):
 
         self.statusBar.addPermanentWidget(statusBtn)
         self.errorToDb = error_outputs_to_db()
+        self.isNewPythonFile = False
 
     def fontReset(self):
         mess = "Pynar editör font ayarları varsayılan hale getirilecek ve editör yeniden başlatılacaktır devam etmek istiyor musunuz?"
@@ -680,6 +681,7 @@ class MainWindow(QMainWindow):
         self.notebook.closeTab(self.notebook.currentIndex())
 
     def open(self, starter=None, getPath=None):
+        self.isNewPythonFile = True
         if self.ExamWindow is None or self.ExamWindow.isStarted == False:
             dialog = QFileDialog(self)
             dialog.setViewMode(QFileDialog.List)
@@ -704,6 +706,35 @@ class MainWindow(QMainWindow):
             mess = "Aktif Sınavınız varken yeni pencere açamazsınız"
             CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
 
+        self.isNewPythonFile = False
+
+    def openPythonFiles(self, starter=None, getPath=None):
+        self.isNewPythonFile = True
+        if self.ExamWindow is None or self.ExamWindow.isStarted == False:
+            dialog = QFileDialog(self)
+            dialog.setViewMode(QFileDialog.List)
+
+            if plt == "Windows":
+                documents_dir = os.path.join(os.environ['USERPROFILE'] + "/Documents/PynarKutu/")
+            elif plt == "Linux":
+                documents_dir = subprocess.check_output(["xdg-user-dir", "DOCUMENTS"], universal_newlines = True).strip() + "/PynarKutu"
+
+            if not os.path.exists(documents_dir):
+                os.makedirs(documents_dir)
+
+            if starter:
+                filePath = getPath
+                filename = (filePath, "*")
+            else:
+                filename = dialog.getOpenFileNames(self, "Aç", documents_dir, filter="Python scripts (*.py)")
+
+            for file in filename[0]:
+                self.openFile(file)
+        else:
+            mess = "Aktif Sınavınız varken yeni pencere açamazsınız"
+            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+
+        self.isNewPythonFile = False
 
     def openFile(self, filePath):
         if self.ExamWindow is None or self.ExamWindow.isStarted == False:

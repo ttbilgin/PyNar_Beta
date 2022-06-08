@@ -98,7 +98,7 @@ class ToolBar(QWidget):
         self.closeAction.triggered.connect(self.parent.close)
 
         self.openAction.setShortcut('Ctrl+O')
-        self.openAction.triggered.connect(self.parent.open)
+        self.openAction.triggered.connect(self.parent.openPythonFiles)
 
         self.saveAction.setShortcut('Ctrl+S')
         self.saveAction.triggered.connect(self.parent.save)
