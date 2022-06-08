@@ -573,7 +573,7 @@ class MainWindow(QMainWindow):
         statusBtn.setText("Kısayollar")
         statusBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         statusBtn.clicked.connect(self.statusBtnClick)
-        statusBtn.setStyleSheet("QPushButton{background-color:transparent;color: #fff}")
+        statusBtn.setStyleSheet("QPushButton{background-color:rgb(0, 96, 132);color: white; border:none}")
 
         resetFontSc = QShortcut(QKeySequence('Ctrl+G'), self)
         resetFontSc.activated.connect(self.fontReset)

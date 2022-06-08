@@ -225,13 +225,13 @@ class SettingsDialog(Dialog):
 
         self.radioBtnAutomatic = QRadioButton(groupBox)
         self.radioBtnAutomatic.setText("Otomatik Seç")
-        self.radioBtnAutomatic.setGeometry(QRect(295, 281, 100, 22))
+        self.radioBtnAutomatic.setGeometry(QRect(295, 281, 130, 22))
         self.radioBtnAutomatic.setChecked(eval(self.c.getAutoSelectState()))
         self.radioBtnAutomatic.toggled.connect(lambda: self.btnstate(self.radioBtnAutomatic))
 
         self.radioBtnByHand = QRadioButton(groupBox)
         self.radioBtnByHand.setText("Ben Seçeceğim")
-        self.radioBtnByHand.setGeometry(QRect(400, 281, 100, 22))
+        self.radioBtnByHand.setGeometry(QRect(430, 281, 130, 22))
         self.radioBtnByHand.setChecked(not eval(self.c.getAutoSelectState()))
         self.radioBtnByHand.toggled.connect(lambda: self.btnstate(self.radioBtnByHand))
 
