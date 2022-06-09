@@ -1150,42 +1150,55 @@ class MainWindow(QMainWindow):
 
     def debugger(self):
         self.save()
-        breakpointLine = self.notebook.getCurrentTextPad().breakpointLine
-        if breakpointLine is not None:
-            breakpointLine_code = self.textPad.text()
-            gui_libs=['appjar','pyqt','tkinter']
-            if any(x in breakpointLine_code.lower() for x in gui_libs): #gui kodlarda pencere kapatılmazsa pdb devam etmiyor.
-                mess = "Bu kodlar <b>PyQt, Tkinter, AppJar</b> gibi görsel bileşenler içerdiği için hata ayıklayıcının bir sonraki satıra devam edebilmesi için kod çalıştırma sırasında oluşan pencerenin kapatılması gerekmektedir. Pencere kapatılmaz ise kod bir sonraki satıra ilerlemez !"
-                CustomizeMessageBox_Ok(mess, QMessageBox.Information)
-                #return				
-            c = Configuration()
-            system = c.getSystem()
-            python_exe = c.getSelectedPythonExe()
+        c = Configuration()
+        system = c.getSystem()
+        python_exe = c.getSelectedPythonExe()
+        command = c.getRun(system).format(self.textPad.filename, python_exe)
+
+        source = open(self.textPad.filename, 'r', encoding="utf-8").read()
+        try:
+            compile(source, '<string>', 'exec', dont_inherit=True)
+
+            breakpointLine = self.notebook.getCurrentTextPad().breakpointLine
+            if breakpointLine is not None:
+                breakpointLine_code = self.textPad.text()
+                gui_libs=['appjar','pyqt','tkinter']
+                if any(x in breakpointLine_code.lower() for x in gui_libs): #gui kodlarda pencere kapatılmazsa pdb devam etmiyor.
+                    mess = "Bu kodlar <b>PyQt, Tkinter, AppJar</b> gibi görsel bileşenler içerdiği için hata ayıklayıcının bir sonraki satıra devam edebilmesi için kod çalıştırma sırasında oluşan pencerenin kapatılması gerekmektedir. Pencere kapatılmaz ise kod bir sonraki satıra ilerlemez !"
+                    CustomizeMessageBox_Ok(mess, QMessageBox.Information)
+                    #return
+                c = Configuration()
+                system = c.getSystem()
+                python_exe = c.getSelectedPythonExe()
 
 
-            pdbrc_file_path = Path(os.path.expanduser("~") + os.sep + ".pdbrc")
-            pdbrc_file_content = """
-m=  "-------------------------------------------------\\n"
-m=m+"|    iLK {0} SATIR CALISTI...                     |\\n"
-m=m+"|    DEVAM iCiN enter TUSUNA BASINIZ.           |\\n"
-m=m+"|    CIKIS iCiN q TUSUNA BASINIZ.               |\\n"
-m=m+"-------------------------------------------------\\n"
-!(lambda: exec(\'import gc, pdb; next(o for o in gc.get_objects() if isinstance(o, pdb.Pdb)).prompt = \">> \"\',##))()
-b {1}
-!print('=================PROGRAM CIKTISI=================')
-{2}
-!print(m)
-"""
-            with open(pdbrc_file_path, 'w', encoding='utf-8') as file:
-                file.write(pdbrc_file_content.format(breakpointLine-1,breakpointLine,'c' if breakpointLine!=1 else '').replace('##','{}'))
-            command = c.getInterpreter(system).format(python_exe)+ ' -m pdb ' + self.textPad.filename
-            thread = RunThread(command)
-            thread.start()
+                pdbrc_file_path = Path(os.path.expanduser("~") + os.sep + ".pdbrc")
+                pdbrc_file_content = """
+    m=  "-------------------------------------------------\\n"
+    m=m+"|    iLK {0} SATIR CALISTI...                     |\\n"
+    m=m+"|    DEVAM iCiN enter TUSUNA BASINIZ.           |\\n"
+    m=m+"|    CIKIS iCiN q TUSUNA BASINIZ.               |\\n"
+    m=m+"-------------------------------------------------\\n"
+    !(lambda: exec(\'import gc, pdb; next(o for o in gc.get_objects() if isinstance(o, pdb.Pdb)).prompt = \">> \"\',##))()
+    b {1}
+    !print('=================PROGRAM CIKTISI=================')
+    {2}
+    !print(m)
+    """
+                with open(pdbrc_file_path, 'w', encoding='utf-8') as file:
+                    file.write(pdbrc_file_content.format(breakpointLine-1,breakpointLine,'c' if breakpointLine!=1 else '').replace('##','{}'))
+                command = c.getInterpreter(system).format(python_exe)+ ' -m pdb ' + self.textPad.filename
+                thread = RunThread(command)
+                thread.start()
 
-        else:
-            mess = "Hata ayıklayıcıyı çalıştırmak için lütfen bir satır seçiniz"
+            else:
+                mess = "Hata ayıklayıcıyı çalıştırmak için lütfen bir satır seçiniz"
+                CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+
+        except:
+            mess= "Debug etmek istediğiniz kodlarda hata bulunmaktadır, lütfen hataları düzelterek tekrar deneyiniz!"
             CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
-
+            self.run()
 
     def terminal(self):
         c = Configuration()
