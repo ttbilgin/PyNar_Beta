@@ -487,8 +487,8 @@ class MainWindow(QMainWindow):
         self.vBoxLayout.addLayout(self.hBoxLayout2)
         self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
 
-        MainWindow.resize(1600, 900)
-        MainWindow.setMinimumSize(QtCore.QSize(1200, 700))
+        #MainWindow.resize(1600, 900)
+        MainWindow.setMinimumSize(QtCore.QSize(1250, 800))
 
         self.setWindowTitle('PyNar Kod Editörü')
 
