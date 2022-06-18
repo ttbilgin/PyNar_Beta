@@ -38,7 +38,7 @@ class HelpDialog(Dialog):
 
         self.setObjectName("HelpWidget")
         self.setWindowTitle('Yardım')
-        self.setMinimumSize(QSize(1500, 900))
+        self.setMinimumSize(QSize(1200, 700))
         self.setLayout(mainLayout)
         self.setModal(False)
 
