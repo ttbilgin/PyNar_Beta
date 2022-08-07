@@ -168,7 +168,7 @@ class FindDeadCodeDialog(QDialog):
         palette = QPalette()
         role = QPalette.Background
         # palette.setColor(role, QColor('#2c2c2c'))
-        self.setGeometry(self.codeView.x() + 300, self.codeView.y() + 400, 400, 300)
+        self.setGeometry(self.codeView.x() + 300, self.codeView.y() + 450, 450, 300)
         self.setPalette(palette)
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setStyleSheet("background-color: #CAD7E0;")
