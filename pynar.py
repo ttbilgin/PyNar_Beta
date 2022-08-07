@@ -1192,7 +1192,7 @@ class MainWindow(QMainWindow):
                 thread.start()
 
             else:
-                mess = "Hata ayıklayıcıyı çalıştırmak için lütfen bir satır seçiniz"
+                mess = "Hata ayıklayıcıyı çalıştırmak için lütfen bir satırı işaretleyiniz!\n\nKodlarınız işaretlediğiniz satıra kadar çalışacak ve  işaretli satırda bekleyecektir.\n\nBir satırı işaretlemek için satır numarasının bitimindeki boş alana tıklayınız. Kırmızı Ok sembolü göründüğünde işaretlenmiş olacaktır."
                 CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
 
         except:
