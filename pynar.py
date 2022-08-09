@@ -552,7 +552,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.splitter)
 
         # log
-        self.logAndInd = writeLog(os.path.dirname(os.path.realpath(__file__)), self.errorConsole, self.splitterV)
+        self.logAndInd = writeLog(self, os.path.dirname(os.path.realpath(__file__)), self.errorConsole, self.splitterV)
         self.logAndInd.closeButton.pressed.connect(self.closeErrorConsole)
 
         # Dosya toolbar oluşturuluyor..

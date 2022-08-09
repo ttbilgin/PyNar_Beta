@@ -17,8 +17,9 @@ from shutil import copyfile, copy
 
 class writeLog():
     cmdControl = 0
-    def __init__(self, data_folder, errorConsole, splitterV):
+    def __init__(self, parent, data_folder, errorConsole, splitterV):
         self.c = Configuration()
+        self.parent = parent
         self.errDict = {}
         self.splitterV = splitterV
         self.errorConsole = errorConsole
@@ -112,6 +113,8 @@ class writeLog():
                 self.closePressed(textPad)
                 self.splitterV.setSizes([714, 0])
                 self.cmdControl = 2
+
+            self.parent.activateWindow()
         except:
             mess = """Hata mesajlarını görüntüleyebilmeniz için lütfen pyright programının son <br>sürümünü 
             <a href='https://www.pynar.org/releases/pyright/'> <b>buraya_tıklayarak</b></a> indiriniz ve zip dosyayı <br>
