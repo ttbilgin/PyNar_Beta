@@ -383,7 +383,14 @@ class LoadingMessageBox(QtWidgets.QMessageBox):
         label_text.setStyleSheet("border:none; background-color:transparent")
         label_text.setGeometry(QtCore.QRect(18, 110, 185, 25))
         label_text.setAlignment(Qt.AlignCenter)
-        label_text.setText("Kurulum yapılıyor Lütfen bekleyiniz...")
+        label_text.setText("Kurulum yapılıyor")
+
+        label_text2 = QtWidgets.QLineEdit(self)
+        label_text2.setReadOnly(True)
+        label_text2.setStyleSheet("border:none; background-color:transparent")
+        label_text2.setGeometry(QtCore.QRect(18, 135, 185, 25))
+        label_text2.setAlignment(Qt.AlignCenter)
+        label_text2.setText("Lütfen bekleyiniz...")
 
     def execute(self, func):
         threading.Thread(target=self._execute, args=(func,), daemon=True).start()
