@@ -352,7 +352,7 @@ class UcChatBotView(QWidget):
                 if ButtonIndex is None and (user_message is None or user_message == ''):
                     self.robot_message = usermessages['startMessage']
 
-                elif len(user_message) <= 3:
+                elif self.lineEdit_sendMessage.text() != '' and len(user_message) <= 3:
                     self.robot_message = "Öğrenmek istediğiniz konuyu daha detaylı yazabilir misiniz?"
 
                 else:
