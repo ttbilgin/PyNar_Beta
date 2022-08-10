@@ -108,13 +108,13 @@ class writeLog():
                 self.cmdControl = 1
 
                 self.dataBase.writePyrightError(self.parseData['diagnostics'],textPad)
-
+                self.parent.activateWindow()
             else:
                 self.closePressed(textPad)
                 self.splitterV.setSizes([714, 0])
                 self.cmdControl = 2
 
-            self.parent.activateWindow()
+
         except:
             mess = """Hata mesajlarını görüntüleyebilmeniz için lütfen pyright programının son <br>sürümünü 
             <a href='https://www.pynar.org/releases/pyright/'> <b>buraya_tıklayarak</b></a> indiriniz ve zip dosyayı <br>
