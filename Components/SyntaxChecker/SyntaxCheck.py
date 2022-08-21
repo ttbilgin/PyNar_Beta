@@ -116,9 +116,9 @@ class writeLog():
 
 
         except:
-            mess = """Hata mesajlarını görüntüleyebilmeniz için lütfen pyright programının son <br>sürümünü 
-            <a href='https://www.pynar.org/releases/pyright/'> <b>buraya_tıklayarak</b></a> indiriniz ve zip dosyayı <br>
-            <b>{}</b> klasörü içine açınız.""".format(parentdir + '\\Bin')
+            mess = """<p>Hata mesajlarını görüntülemek için lütfen pyright programının son sürümünü 
+		      <a href='https://www.pynar.org/releases/pyright/'> <b>buraya_tıklayarak</b></a> indiriniz ve dosyayı
+		       <a href='file:///{}'> <b>buradaki</b></a> klasörün içine açınız.</p>""".format(parentdir + '\\Bin')
             CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
 
 
