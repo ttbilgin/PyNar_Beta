@@ -598,7 +598,7 @@ class MainWindow(QMainWindow):
         status = QtCore.QProcess.startDetached(pynarBasePath + os.sep + "pynar")
 
     def statusBtnClick(self):
-        message = """<font color=gray><table border=1 bordercolor=\"#acd33b\" cellspacing=\"0\" cellpadding=\"5\">
+        message = """<font color=gray><table border=1 bordercolor=\"#acd33b\" cellspacing=\"0\" cellpadding=\"2\">
                   <tr><th>Tuş Kombinasyonu </th><th> Görevi </th></tr>
                   <tr><td>CTRL ve X </td><td> Kes </td></tr>
                   <tr><td>CTRL ve V </td><td> Yapıştır </td></tr>
