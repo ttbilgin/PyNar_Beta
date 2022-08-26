@@ -283,7 +283,7 @@ class SettingsDialog(Dialog):
         font = QFont()
         font.setFamily(self.c.getCodeFont())
         font.setPointSize(int(self.c.getFontSize()))
-        CustomizeMessageBox_Ok(self.mess, QMessageBox.Information)
+        CustomizeMessageBox_Ok(self.mess, "information")
         font, ok = self.codeFontDialog.getFont(font, fontDialog(), "Font Ayarları", QFontDialog.MonospacedFonts)
         if ok:
             fontData = font.toString().split(',')
@@ -298,7 +298,7 @@ class SettingsDialog(Dialog):
             font = QFont()
             font.setFamily(self.c.getEditorFont())
             font.setPointSize(self.fontSize)
-            CustomizeMessageBox_Ok(self.mess, QMessageBox.Information)
+            CustomizeMessageBox_Ok(self.mess, "information")
             font, ok = self.editorFontDialog.getFont(font, fontDialog(), "Font Ayarları", QFontDialog.ProportionalFonts)
             if ok:
                 fontData = font.toString().split(',')
@@ -333,7 +333,7 @@ class SettingsDialog(Dialog):
         filelist = [f for f in os.listdir(logDir) if f.endswith(".json")]
         for f in filelist:
             os.remove(os.path.join(logDir, f))
-        CustomizeMessageBox_Ok("Tüm Kullanım Verileri Silindi", QMessageBox.Information)
+        CustomizeMessageBox_Ok("Tüm Kullanım Verileri Silindi", "information")
 
     def openLogFolder(self):
         try:

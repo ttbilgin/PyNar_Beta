@@ -118,7 +118,7 @@ class EnterDialog(QDialog):
             try:
                 os.rename(self.filePath, newPathName)
             except Exception as e:
-                CustomizeMessageBox_Ok('Yol yeniden adlandırılamadı\n\n' + str(e), QMessageBox.Critical)
+                CustomizeMessageBox_Ok('Yol yeniden adlandırılamadı\n\n' + str(e), "critical")
             
         if not self.fileDir:
             newName = self.text.text()
@@ -133,7 +133,7 @@ class EnterDialog(QDialog):
             try:
                 os.rename(self.filePath, newFilename)
             except Exception as e:
-                CustomizeMessageBox_Ok('Dosya yeniden adlandırılamadı<br>' + str(e), QMessageBox.Critical)
+                CustomizeMessageBox_Ok('Dosya yeniden adlandırılamadı<br>' + str(e), "critical")
            
         self.close()
 

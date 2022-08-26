@@ -441,9 +441,9 @@ class FindReplaceDialog(QDialog):
 
     def messageBoxShow(self,i,find_text,replace_text):
         if i > 0:
-            CustomizeMessageBox_Ok("""{} Adet "{}" İfadesi "{}" ile Değiştirildi.""".format(i, find_text, replace_text), QMessageBox.Information)
+            CustomizeMessageBox_Ok("""{} Adet "{}" İfadesi "{}" ile Değiştirildi.""".format(i, find_text, replace_text), "information")
         else:
-            CustomizeMessageBox_Ok("Değiştirilecek kelime bulunamadı.", QMessageBox.Critical)
+            CustomizeMessageBox_Ok("Değiştirilecek kelime bulunamadı.", "critical")
 
     def center(self):
         screen = QDesktopWidget().screenGeometry()

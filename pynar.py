@@ -184,7 +184,9 @@ class CodeEditor(CodeEditor):
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat("text/plain"):
             if isinstance(event.source(),QTreeView) and self.menus.forceNewPage and len(self.text())>0:
-                self.newPageWarningShow()
+                mess = "Sürüklemek istediğiniz sayfada yazılmış kodlar var. Bu kod örneğini çalıştırmak için <b> yeni bir sayfa</b> oluşturup o sayfaya <b>sürükleyebilirsiniz.</b>"
+                self.mess = CustomizeMessageBox_Ok(mess, "critical", True)
+                self.mess.show()
             else:
                 event.accept()
         else:
@@ -206,23 +208,6 @@ class CodeEditor(CodeEditor):
     def messenger(self, string):
         logfunc(string, parent=self.parent)
 
-    def newPageWarningShow(self):
-        mess = "Sürüklemek istediğiniz sayfada yazılmış kodlar var. Bu kod örneğini çalıştırmak için <b> yeni bir sayfa</b> oluşturup o sayfaya <b>sürükleyebilirsiniz.</b>"
-        self.warningMes = QMessageBox()
-        self.warningMes.setWindowFlags(self.warningMes.windowFlags() | Qt.FramelessWindowHint | Qt.WindowSystemMenuHint)
-        self.warningMes.setIcon(QMessageBox.Warning)
-        self.warningMes.setText(mess)
-        c = Configuration()
-        font = QFont()
-        font.setFamily(self.c.getEditorFont())
-        font.setPointSize(self.c.getHistoryMenuFontSize() + 6)
-        self.warningMes.setFont(font)
-        self.warningMes.setStyleSheet(open(c.getHomeDir() + "qssfiles/qmessagebox.qss", "r").read())
-        self.warningMes.setStandardButtons(QMessageBox.Ok)
-        btnOk = self.warningMes.button(QMessageBox.Ok)
-        btnOk.setText('Tamam')
-        self.warningMes.setWindowTitle("Uyarı")
-        self.warningMes.show()
 
     def mousePressEvent(self, event):
         super(CodeEditor, self).mousePressEvent(event)
@@ -584,7 +569,7 @@ class MainWindow(QMainWindow):
 
     def fontReset(self):
         mess = "Pynar editör font ayarları varsayılan hale getirilecek ve editör yeniden başlatılacaktır devam etmek istiyor musunuz?"
-        CustomizeMessageBox_Yes_No(mess, clickAccept=self.fontResetClick, yes='Evet', no='Hayır', icon=QMessageBox.Information)
+        CustomizeMessageBox_Yes_No(mess, clickAccept=self.fontResetClick, yes='Evet', no='Hayır', icon="information")
 
     def fontResetClick(self):
         self.c.setCodeFont("Consolas")
@@ -618,7 +603,7 @@ class MainWindow(QMainWindow):
                   <tr><td>CTRL ve SHIFT ve Z </td><td> İleri al</td></tr></table></font>"""
 
         CustomizeMessageBox_Yes_No(message, clickCancel=self.detailInfoClick, yes='Tamam', no='Detaylı Bilgi',
-                                           icon=QMessageBox.Information)
+                                           icon="information")
 
     def detailInfoClick(self):
         c = Configuration()
@@ -675,7 +660,7 @@ class MainWindow(QMainWindow):
             self.changeToolbarButtonActive(True)
         else:
             mess = "Aktif Sınavınız varken yeni pencere açamazsınız"
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
 
     def close(self):
         self.notebook.closeTab(self.notebook.currentIndex())
@@ -704,7 +689,7 @@ class MainWindow(QMainWindow):
             return ret
         else:
             mess = "Aktif Sınavınız varken yeni pencere açamazsınız"
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
 
         self.isNewPythonFile = False
 
@@ -732,7 +717,7 @@ class MainWindow(QMainWindow):
                 self.openFile(file)
         else:
             mess = "Aktif Sınavınız varken yeni pencere açamazsınız"
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
 
         self.isNewPythonFile = False
 
@@ -771,7 +756,7 @@ class MainWindow(QMainWindow):
             return True
         else:
             mess = "Aktif Sınavınız varken yeni pencere açamazsınız"
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
 
     def save(self):
         filename = self.textPad.filename
@@ -1167,7 +1152,7 @@ class MainWindow(QMainWindow):
                     gui_libs=['appjar','pyqt','tkinter']
                     if any(x in breakpointLine_code.lower() for x in gui_libs): #gui kodlarda pencere kapatılmazsa pdb devam etmiyor.
                         mess = "Bu kodlar <b>PyQt, Tkinter, AppJar</b> gibi görsel bileşenler içerdiği için hata ayıklayıcının bir sonraki satıra devam edebilmesi için kod çalıştırma sırasında oluşan pencerenin kapatılması gerekmektedir. Pencere kapatılmaz ise kod bir sonraki satıra ilerlemez !"
-                        CustomizeMessageBox_Ok(mess, QMessageBox.Information)
+                        CustomizeMessageBox_Ok(mess, "information")
                         #return
                     c = Configuration()
                     system = c.getSystem()
@@ -1195,11 +1180,11 @@ class MainWindow(QMainWindow):
 
                 else:
                     mess = "Hata ayıklayıcıyı çalıştırmak için lütfen bir satırı işaretleyiniz!\n\nKodlarınız işaretlediğiniz satıra kadar çalışacak ve  işaretli satırda bekleyecektir.\n\nBir satırı işaretlemek için satır numarasının bitimindeki boş alana tıklayınız. Kırmızı Ok sembolü göründüğünde işaretlenmiş olacaktır."
-                    CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+                    CustomizeMessageBox_Ok(mess, "critical")
 
             except:
                 mess= "Debug etmek istediğiniz kodlarda hata bulunmaktadır, lütfen hataları düzelterek tekrar deneyiniz!"
-                CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+                CustomizeMessageBox_Ok(mess, "critical")
                 self.run()
 
     def terminal(self):
@@ -1255,7 +1240,7 @@ class MainWindow(QMainWindow):
 
         if not self.isRun and self.logAndInd.cmdControl == 2:
             mess = "<font color=gray>Şu an çalışmakta olan kod penceresi kapatılmadan aynı kod tekrar çalıştırılamaz!<br/><br/>Çalışmakta olan uygulamalara ait pencereleri kapatıp tekrar deneyiniz..</font>"
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
 
     def command(self, command, directory):
         self.isRun = True
@@ -1513,10 +1498,10 @@ class MainWindow(QMainWindow):
                 self.ExamWindow.activateWindow()
                 if self.ExamWindow.lesson != lesson:
                     mess = 'Açık bir sınav ekranı varken farklı bir sınav açamazsınız. Sınavınızı değişmek için mevcut olanı kapatıp yeniden seçim yapabilirsiniz'
-                    CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+                    CustomizeMessageBox_Ok(mess, "critical")
         else:
             mess = "Sınava Başlayabilmek için Ayarlar penceresi altındaki \'Sınav verilerini kaydet\' alanını seçmelisiniz'"
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
 
     def fetchExams(self):
         serverAdd = self.c.getServerAddress()
@@ -1544,7 +1529,7 @@ class MainWindow(QMainWindow):
             CustomizeMessageBox_Ok("Pynar Editör Sürüm: " + self.c.getReleaseInfo() +
                                    "\nPython version: " + str(platform.python_version()) +
                                    "\nQt version: " + str(QT_VERSION_STR) +
-                                   "\nPyQt version: " + str(PYQT_VERSION_STR), QMessageBox.Information)
+                                   "\nPyQt version: " + str(PYQT_VERSION_STR), "information")
         except Exception as err:
             print("error show releaseInfo: {0}".format(err))
 # if __name__ == '__main__':

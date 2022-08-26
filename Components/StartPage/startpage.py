@@ -52,7 +52,7 @@ class StartPage(QDialog):
                 self.mainWindow.show()
                 self.hide()
             else:
-                CustomizeMessageBox_Ok('Dosya bulunamadı', QMessageBox.Warning)
+                CustomizeMessageBox_Ok('Dosya bulunamadı', "warning")
 
     def setupUi(self, startpage_container):
         startpage_container.setObjectName("StartPage")
@@ -307,11 +307,11 @@ class StartPage(QDialog):
             self.appjarIns = False
             if spec is None:
                 mess = "Kullandığınız Python sürümünde appJar paketi bulunmuyor, PyNar Editörde Görsel programlama yapabilmeniz için appJar paketi gereklidir. Bu paketin otomatik olarak kurulmasını ister misiniz? Eğer \"Hayır\" cevabı verirseniz Pynar Editör Açıldıktan sonra Paket yöneticisini kullanarak appJar paketini kurabilirsiniz."
-                CustomizeMessageBox_Yes_No(message=mess, clickAccept=self.yesAppjarInstall, icon=QMessageBox.Warning)
+                CustomizeMessageBox_Yes_No(message=mess, clickAccept=self.yesAppjarInstall, icon="warning")
 
                 self.appjarIns = True
         except Exception as err:
-            CustomizeMessageBox_Ok("Bir Hata ile karşılaşıldı", QMessageBox.Critical)
+            CustomizeMessageBox_Ok("Bir Hata ile karşılaşıldı", "critical")
 
     def yesAppjarInstall(self):
         msgBox = LoadingMessageBox()

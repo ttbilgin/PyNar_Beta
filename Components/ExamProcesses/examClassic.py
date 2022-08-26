@@ -325,11 +325,11 @@ class ExamWindow(UI_Exam, ShadowWindow):
 
     def startButton(self):
         if self.parent.notebook.currentIndex() == -1:
-            CustomizeMessageBox_Ok('Sınava başlamadan önce sadece 1 adet boş kod editörü açmış olmanız ve sınavınız bitene kadar kapatmamanız gerekmektedir.', QMessageBox.Critical)
+            CustomizeMessageBox_Ok('Sınava başlamadan önce sadece 1 adet boş kod editörü açmış olmanız ve sınavınız bitene kadar kapatmamanız gerekmektedir.', "critical")
         elif self.parent.notebook.currentIndex() > 0:
-            CustomizeMessageBox_Ok('Sadece 1 adet boş kod editörü açmış olmanız ve sınavınız bitene kadar kapatmamanız gerekmektedir.', QMessageBox.Critical)
+            CustomizeMessageBox_Ok('Sadece 1 adet boş kod editörü açmış olmanız ve sınavınız bitene kadar kapatmamanız gerekmektedir.', "critical")
         elif self.parent.textPad.text() != '':
-            CustomizeMessageBox_Ok('Kod editörünüz boş olmalıdır ve sınavınız bitene kadar kapatmamanız gerekmektedir.', QMessageBox.Critical)
+            CustomizeMessageBox_Ok('Kod editörünüz boş olmalıdır ve sınavınız bitene kadar kapatmamanız gerekmektedir.', "critical")
         else:  # Birden fazla açık varmı diye bakılmalı
             self.setExamLogFileName()
             self.isStarted = True
@@ -451,9 +451,9 @@ class SendWindow(QMainWindow):
         self.parent.timerWindow.close()
         if res:
             self.parent.parent.setExamImage()
-            CustomizeMessageBox_Ok('Sınavınız başarıyla tamamlanmıştır.', QMessageBox.Information)
+            CustomizeMessageBox_Ok('Sınavınız başarıyla tamamlanmıştır.', "information")
         else:
-            CustomizeMessageBox_Ok('Bir Hata ile karşılaşıldı. Öğretmeniniz ile iletişime geçiniz', QMessageBox.Critical)
+            CustomizeMessageBox_Ok('Bir Hata ile karşılaşıldı. Öğretmeniniz ile iletişime geçiniz', "critical")
 
     def stopExam2(self):
             self.startExamBtn.setEnabled(False)
@@ -504,7 +504,7 @@ class SendWindow(QMainWindow):
                     file.write(text)
 
             except Exception as e:
-                CustomizeMessageBox_Ok(str(e), QMessageBox.Critical)
+                CustomizeMessageBox_Ok(str(e), "critical")
 
 
         id = self.parent.questionInfo["exam_id"]

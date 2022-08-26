@@ -38,7 +38,7 @@ class PMDialog(Dialog):
         self.c = Configuration()
         try:
             subprocess.check_output(["conda", "-V"], shell=self.c.getShell(), stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-            CustomizeMessageBox_Ok("\nBilgisayarınızda Anaconda dağıtımından gelen bir python sürümü bulunmaktadır. Anaconda kendi paket yöneticisini kullanmaktadır. PyNar Paket Yöneticisi Anaconda dağıtımıyla uyumlu değildir, eğer PyNar paket yöneticisini kullanmak istiyorsanız Anaconda yazılımını bilgisayarınızdan kaldırınız.",QMessageBox.Critical)
+            CustomizeMessageBox_Ok("\nBilgisayarınızda Anaconda dağıtımından gelen bir python sürümü bulunmaktadır. Anaconda kendi paket yöneticisini kullanmaktadır. PyNar Paket Yöneticisi Anaconda dağıtımıyla uyumlu değildir, eğer PyNar paket yöneticisini kullanmak istiyorsanız Anaconda yazılımını bilgisayarınızdan kaldırınız.", "critical")
         except:
             self.parent = parent
             self.textPad = textPad
@@ -446,7 +446,7 @@ class PMDialog(Dialog):
         self.noneBlock()
         return
     def _packageNotFound(self):
-        CustomizeMessageBox_Ok('Paket Bulunamadı!', QMessageBox.Critical)
+        CustomizeMessageBox_Ok('Paket Bulunamadı!', "critical")
         self.noneBlock()
         return
 

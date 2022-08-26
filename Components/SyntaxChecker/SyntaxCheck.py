@@ -119,7 +119,7 @@ class writeLog():
             mess = """<p>Hata mesajlarını görüntülemek için lütfen pyright programının son sürümünü 
 		      <a href='https://www.pynar.org/releases/pyright/'> <b>buraya_tıklayarak</b></a> indiriniz ve dosyayı
 		       <a href='file:///{}'> <b>buradaki</b></a> klasörün içine açınız.</p>""".format(parentdir + '\\Bin')
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
 
 
     def generate_system_id(self):

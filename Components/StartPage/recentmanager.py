@@ -100,7 +100,7 @@ class RecentManager():
 
             return True
         except:
-            CustomizeMessageBox_Ok('Listeden çıkarma işlemi gerçekleştirilemedi!', QMessageBox.Critical)
+            CustomizeMessageBox_Ok('Listeden çıkarma işlemi gerçekleştirilemedi!', "critical")
             return False
 
     # recent dosyası içindeki pathlar geçersiz ise hepsini siler

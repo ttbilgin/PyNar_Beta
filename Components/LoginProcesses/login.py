@@ -106,7 +106,7 @@ class fileUploadWindow(QDialog):
             filename = self.inputName.text()
 
             if len(filename) == 0:
-                CustomizeMessageBox_Ok("Lütfen bir dosya adı giriniz.", QMessageBox.Critical)
+                CustomizeMessageBox_Ok("Lütfen bir dosya adı giriniz.", "critical")
                 return
 
             filename = filename.split(".")
@@ -138,7 +138,7 @@ class fileUploadWindow(QDialog):
 
             if os.path.exists(self.directoryPath + filename):
                 mess = "Belgelerim\PynarKutu klasörü altında " + "'" + filename + "'" + " Adında bir dosya zaten bulunuyor. Lüften isim değişikliği yapıp tekrar kaydetmeyi deneyiniz."
-                CustomizeMessageBox_Ok(mess, QMessageBox.Warning)
+                CustomizeMessageBox_Ok(mess, "warning")
 
                 return 1
 
@@ -156,7 +156,7 @@ class fileUploadWindow(QDialog):
                     file.write(text)
 
             except Exception as e:
-                CustomizeMessageBox_Ok(str(e), QMessageBox.Critical)
+                CustomizeMessageBox_Ok(str(e), "critical")
 
         self.sendTeacherClick()
 
@@ -169,7 +169,7 @@ class fileUploadWindow(QDialog):
         if (res_json['ok'] != True):
             if res_json['description'] == 'Kullanıcının kayıtlı olduğu bir kurum bulunamadı.':
                 mess = "Öğretmene gönderebilmek için <a href='www.pynar.org/portal'>www.pynar.org/portal</a> adresinden öğrenci olarak giriş yaparak okuduğunuz okulu ve öğretmeninizi seçmelisiniz."
-                CustomizeMessageBox_Ok(mess, QMessageBox.Warning)
+                CustomizeMessageBox_Ok(mess, "warning")
 
             else:
                 CustomizeMessageBox_Ok(str(res_json['description']), QMessageBox.Critical)
@@ -177,7 +177,7 @@ class fileUploadWindow(QDialog):
         else:
             data = res_json['result'].get('data')
             if data.get('institution_id') == None or data.get('teacher_id') == None:
-                CustomizeMessageBox_Ok('Lütfen portal üzerinden okul ve öğretmen adı seçiniz.', QMessageBox.Critical)
+                CustomizeMessageBox_Ok('Lütfen portal üzerinden okul ve öğretmen adı seçiniz.', "critical")
                 self.done(1)
                 return -1
 
@@ -193,9 +193,9 @@ class fileUploadWindow(QDialog):
             x = requests.post(server_update_url, files=file_dict, headers=headers, data=myobj, verify=False)
             res_json = x.json()
             if res_json['ok'] == True:
-                CustomizeMessageBox_Ok('<b>Başarılı!<br></b>' + self.userMess.format(self.textpad.filename.split("/")[-1]), QMessageBox.Information)
+                CustomizeMessageBox_Ok('<b>Başarılı!<br></b>' + self.userMess.format(self.textpad.filename.split("/")[-1]), "information")
             else:
-                CustomizeMessageBox_Ok(str(res_json['description']), QMessageBox.Critical)
+                CustomizeMessageBox_Ok(str(res_json['description']), "critical")
                 self.returnValue = 2
                 return -1
         self.done(1)
@@ -207,7 +207,7 @@ class fileUploadWindow(QDialog):
             filename = self.inputName.text()
 
             if len(filename) == 0:
-                CustomizeMessageBox_Ok("Lütfen bir dosya adı giriniz.", QMessageBox.Critical)
+                CustomizeMessageBox_Ok("Lütfen bir dosya adı giriniz.", "critical")
                 return
             filename = filename.split(".")
             if len(filename) == 1:
@@ -238,7 +238,7 @@ class fileUploadWindow(QDialog):
 
             if os.path.exists(self.directoryPath + filename):
                 mess = "Belgelerim\PynarKutu klasörü altında " + "'" + filename + "'" + " Adında bir dosya zaten bulunuyor. Lüften isim değişikliği yapıp tekrar kaydetmeyi deneyiniz."
-                CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+                CustomizeMessageBox_Ok(mess, "critical")
                 return 1
 
             with open(self.directoryPath + filename,"w",encoding='utf8') as f:
@@ -255,7 +255,7 @@ class fileUploadWindow(QDialog):
                     file.write(text)
 
             except Exception as e:
-                CustomizeMessageBox_Ok(str(e), QMessageBox.Critical)
+                CustomizeMessageBox_Ok(str(e), "critical")
 
         server_update_url = self.serverAddress + '/api/v1/user/file/upload'
 
@@ -276,9 +276,9 @@ class fileUploadWindow(QDialog):
         x = requests.post(server_update_url, files=file_dict, headers=headers, data=myobj, verify=False)
         res_json = x.json()
         if (res_json['ok'] == True):
-            CustomizeMessageBox_Ok('<b>Başarılı!<br></b>' + message.format(self.textpad.filename.split("/")[-1]), QMessageBox.Information)
+            CustomizeMessageBox_Ok('<b>Başarılı!<br></b>' + message.format(self.textpad.filename.split("/")[-1]), "information")
         else:
-            CustomizeMessageBox_Ok(str(res_json['description']), QMessageBox.Critical)
+            CustomizeMessageBox_Ok(str(res_json['description']), "critical")
             self.returnValue = 2
             return -1
 
@@ -372,12 +372,12 @@ class FilesWindow(QDialog):
             if listItems:
                 for item in listItems:
                     self.list.takeItem(self.list.row(item))
-            CustomizeMessageBox_Ok('<b>Başarılı!<br></b>' + res_json['result'].get('message'), QMessageBox.Information)
+            CustomizeMessageBox_Ok('<b>Başarılı!<br></b>' + res_json['result'].get('message'), "information")
 
             if (self.list.count() < 1):
                 self.accept()
         else:
-            CustomizeMessageBox_Ok(str(res_json['description']), QMessageBox.Information)
+            CustomizeMessageBox_Ok(str(res_json['description']), "information")
 
     def open(self):
         try:
@@ -415,15 +415,15 @@ class FilesWindow(QDialog):
                     open(self.directoryPath + filename, 'wb').write(self.res.content)
                     mess = "<b>İndirme Başarılı<br></b>Buluttan indirilen \"{}\" dosyası PynarKutunuza kaydedildi".format(filename)
                     self.fullpath = self.directoryPath + filename
-                    CustomizeMessageBox_Yes_No(mess, clickAccept=self.okBtn, clickCancel=self.saveToDifferentLocation, yes='Tamam', no='Farklı Konuma Kaydet', icon=QMessageBox.Information)
+                    CustomizeMessageBox_Yes_No(mess, clickAccept=self.okBtn, clickCancel=self.saveToDifferentLocation, yes='Tamam', no='Farklı Konuma Kaydet', icon="information")
                     self.close()
                 except:
-                    CustomizeMessageBox_Ok("İşlem başarısız oldu lütfen daha sonra  tekrar deneyiniz.", QMessageBox.Critical)
+                    CustomizeMessageBox_Ok("İşlem başarısız oldu lütfen daha sonra  tekrar deneyiniz.", "critical")
                     return -1
             return 1
 
         except Exception as e:
-            CustomizeMessageBox_Ok("İşlem başarısız oldu lütfen daha sonra  tekrar deneyiniz.", QMessageBox.Critical)
+            CustomizeMessageBox_Ok("İşlem başarısız oldu lütfen daha sonra  tekrar deneyiniz.", "critical")
             return -1
 
     def okBtn(self):
@@ -458,18 +458,18 @@ class FilesWindow(QDialog):
             open(self.directoryPath + filename, 'wb').write(self.res.content)
             mess = "<b>İndirme Başarılı<br></b>Buluttan indirilen \"{}\" dosyası PynarKutunuza kaydedildi".format(
                 filename)
-            CustomizeMessageBox_Ok(mess, QMessageBox.Information)
+            CustomizeMessageBox_Ok(mess, "information")
             self.fullpath = self.directoryPath + filename
             self.close()
             return 1
         except:
             mess = "İşlem başarısız oldu lütfen daha sonra  tekrar deneyiniz."
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
             return 1
 
     def downCancel(self):
         mess = "İndirme iptal edildi."
-        CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+        CustomizeMessageBox_Ok(mess, "critical")
         return -1
 
     def close(self):
@@ -613,10 +613,10 @@ class Login(QDialog):
                     self.accept()
                     self.parent.setExamImage()
                 else:
-                    CustomizeMessageBox_Ok(str(res_json['description']), QMessageBox.Critical)
+                    CustomizeMessageBox_Ok(str(res_json['description']), "critical")
 
         except Exception as e:
-            CustomizeMessageBox_Ok(str(e), QMessageBox.Critical)
+            CustomizeMessageBox_Ok(str(e), "critical")
 
     def center(self):
         screen = QDesktopWidget().screenGeometry()
@@ -629,9 +629,9 @@ class Login(QDialog):
             res = self.sendResetRequest(email)
             if res:
                 self.close()
-                CustomizeMessageBox_Ok("İşlem Başarılı! E-postanıza gönderilen linke tıklayarak şifre yenileme işleminizi tamamlayabilirsiniz.", QMessageBox.Information)
+                CustomizeMessageBox_Ok("İşlem Başarılı! E-postanıza gönderilen linke tıklayarak şifre yenileme işleminizi tamamlayabilirsiniz.", "information")
         else:
-            CustomizeMessageBox_Ok("İşleme devam edilebilmesi için uygun formatta bir e-mail giriniz.", QMessageBox.Warning)
+            CustomizeMessageBox_Ok("İşleme devam edilebilmesi için uygun formatta bir e-mail giriniz.", "warning")
 
     def sendResetRequest(self, email):
         URL = 'https://pynar.org'
@@ -647,7 +647,7 @@ class Login(QDialog):
                 return True
         else:
             res = res.json()
-            CustomizeMessageBox_Ok(str(res.get('description')), QMessageBox.Warning)
+            CustomizeMessageBox_Ok(str(res.get('description')), "warning")
             return False
 
 
@@ -769,15 +769,15 @@ class Register(QDialog):
                 res = requests.post(register_url, data=myobj)
                 res_json = res.json()
                 if res_json['ok'] == True:
-                    CustomizeMessageBox_Ok("Tebrikler! " + res_json['result'].get('message'), QMessageBox.Information)
+                    CustomizeMessageBox_Ok("Tebrikler! " + res_json['result'].get('message'), "information")
                     self.accept()
                 else:
-                    CustomizeMessageBox_Ok(str(res_json['description']), QMessageBox.Critical)
+                    CustomizeMessageBox_Ok(str(res_json['description']), "critical")
             else:
-                CustomizeMessageBox_Ok("Metin kutuları boş geçilemez.", QMessageBox.Critical)
+                CustomizeMessageBox_Ok("Metin kutuları boş geçilemez.", "critical")
 
         except Exception as e:
-            CustomizeMessageBox_Ok(str(e), QMessageBox.Critical)
+            CustomizeMessageBox_Ok(str(e), "critical")
 
 
     def center(self):
@@ -899,7 +899,7 @@ class LoginWindow(QDialog):
                 self.btn_signIn.setText("Çıkış Yap")
 
                 mess = "Pynar Portal'a başarıyla giriş yaptınız. Sağ üst köşede Adınız ve Soyadınızın baş harflerinin bulunduğu butondan <b>ÇIKIŞ YAP</b> butonuyla çıkış yapmadığınız sürece bundan sonraki başlatmanızda oturum açık olarak başlayacaktır."
-                CustomizeMessageBox_Ok(mess, QMessageBox.Information)
+                CustomizeMessageBox_Ok(mess, "information")
 
     def UserRegisterChangePasswordClick(self):
         if self.loginOk:
@@ -1015,15 +1015,15 @@ class LoginWindow(QDialog):
     def uploadCloud(self, textpad, log):
         if not self.loginOk:
             mess = "Dosyanızı yükleyebilmeniz için sisteme giriş yapmış olmanız gerekmektedir."
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
 
         elif textpad is None:
             mess = "Dosya yükleyebilmeniz için bir dosya açmış olmalısınız"
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
 
         elif len(textpad.text()) == 0:
             mess = "Boş dosya yollayamazsınız"
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
         else:
             fileManager = fileUploadWindow(textpad,token=self.SW.token, log=log, cloud=True)
             if textpad.filename == None:
@@ -1049,24 +1049,24 @@ class LoginWindow(QDialog):
 
             else:
                 mess = "Dosyalarınızı Görebilmeniz için sisteme giriş yapmış olmanız gerekmektedir."
-                CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+                CustomizeMessageBox_Ok(mess, "critical")
 
         except Exception as e:
             self.dialog_critical(str(e))
 
     def dialog_critical(self, text):
-        CustomizeMessageBox_Ok(text, QMessageBox.Critical)
+        CustomizeMessageBox_Ok(text, "critical")
 
     def teacherUpCloud(self, textpad):
         if not self.loginOk:
             mess = "Dosyanızı yükleyebilmeniz için sisteme giriş yapmış olmanız gerekmektedir."
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
         elif textpad is None:
             mess = "Öğretmene gönderecek dosyayı açmış olmalısınız."
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
         elif (len(textpad.text()) == 0):
             mess = "Boş dosya yollayamazsınız."
-            CustomizeMessageBox_Ok(mess, QMessageBox.Critical)
+            CustomizeMessageBox_Ok(mess, "critical")
         else:
             fileManager = fileUploadWindow(textpad,self.SW.token)
             if textpad.filename == None:
