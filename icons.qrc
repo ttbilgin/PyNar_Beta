@@ -104,5 +104,8 @@
     <file>images/close2.png</file>
     <file>images/exam-background.png</file>
     <file>images/debug-icon.png</file>
+    <file>images/critical.png</file>
+    <file>images/information.png</file>
+    <file>images/question.png</file>
   </qresource>
 </RCC>
