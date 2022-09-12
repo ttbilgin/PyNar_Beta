@@ -1140,9 +1140,9 @@ class MainWindow(QMainWindow):
             try:
                 f = FlowchartMaker(source)
                 if f.isExcept:
-                    f.show()
                     CustomizeMessageBox_Ok("Akış Şeması Oluşturulamadı. Lütfen yazdığınız kodda hata olmamasına dikkat ediniz.","critical")
-
+                else:
+                    f.show()
             except Exception as err:
                 print("error flowchart: {0}".format(err))
                 
