@@ -6,7 +6,7 @@ import subprocess
 
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.uic.properties import QtGui
-
+from Components.Flowchart.flower import *
 from Components.LeftMenu.Menus.TreeHelpDialog import TreeHelpDialog
 from Components.StartPage.emptyrecent import UcEmptyRecent
 from Components.TopMenu.uc_sp_recentitem import UcSpRecentItem
@@ -1133,6 +1133,19 @@ class MainWindow(QMainWindow):
         thread = RunThread(command)
         thread.start()
 
+    def flowchart(self):
+        self.save()
+        if self.textPad.filename is not None and self.textPad.filename != '':
+            source = open(self.textPad.filename, 'r', encoding="utf-8").read()
+            try:
+                f = FlowchartMaker(source)
+                if f.isExcept:
+                    f.show()
+                    CustomizeMessageBox_Ok("Akış Şeması Oluşturulamadı. Lütfen yazdığınız kodda hata olmamasına dikkat ediniz.","critical")
+
+            except Exception as err:
+                print("error flowchart: {0}".format(err))
+                
     def debugger(self):
         self.save()
         c = Configuration()

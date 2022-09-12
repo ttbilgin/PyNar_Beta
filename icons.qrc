@@ -107,5 +107,10 @@
     <file>images/critical.png</file>
     <file>images/information.png</file>
     <file>images/question.png</file>
+    <file>images/defhome.png</file>
+    <file>images/grab.png</file>
+    <file>images/startflow.png</file>
+    <file>images/x.png</file>
+    <file>images/y.png</file>
   </qresource>
 </RCC>

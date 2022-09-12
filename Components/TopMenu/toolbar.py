@@ -78,6 +78,7 @@ class ToolBar(QWidget):
         self.findAction = QAction(QIcon(':/icon/images/search.png'), 'Bul & Değiştir', self)
         # self.terminalAction = QAction(QIcon(':/icon/images/command.png'), 'Terminal Başlat', self)
         self.interpreterAction = QAction(QIcon(':/icon/images/pythonstart.png'), 'Python Yorumlayıcıyı Başlat', self)
+        self.flowchartAction = QAction(QIcon(':/icon/images/startflow.png'), 'Akış şeması oluştur', self)
         self.zoomOutAction = QAction(QIcon(':/icon/images/zoom_out.png'), 'Uzaklaştır', self)
         self.zoomInAction = QAction(QIcon(':/icon/images/zoom_in.png'), 'Yakınlaştır', self)
         self.redoAction = QAction(QIcon(':/icon/images/redo_i.png'), 'İleri Al', self)
@@ -124,6 +125,8 @@ class ToolBar(QWidget):
         self.interpreterAction.setShortcut('F10')
         self.interpreterAction.triggered.connect(self.parent.interpreter)
 
+        self.flowchartAction.triggered.connect(self.parent.flowchart)
+
         # self.debugAction.setShortcut('')
         self.debugAction.triggered.connect(self.parent.debugger)
 
@@ -149,6 +152,7 @@ class ToolBar(QWidget):
         self.toolbarFile.addAction(self.zoomOutAction)
         self.toolbarFile.addAction(self.findAction)
         self.toolbarFile.addAction(self.interpreterAction)
+        self.toolbarFile.addAction(self.flowchartAction)
         self.toolbarFile.addAction(self.debugAction)
         # self.toolbarFile.addAction(self.terminalAction)
 
@@ -205,6 +209,7 @@ class ToolBar(QWidget):
         self.zoomInAction.setEnabled(activeState)
         self.zoomOutAction.setEnabled(activeState)
         self.interpreterAction.setEnabled(activeState)
+        self.flowchartAction.setEnabled(activeState)
         self.debugAction.setEnabled(activeState)
         # self.terminalAction.setEnabled(activeState)
         self.findAction.setEnabled(activeState)
