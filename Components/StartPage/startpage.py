@@ -303,9 +303,13 @@ class StartPage(QDialog):
         try:
             self.result_install = None
             self.package_name = 'appJar'
-            spec = importlib.util.find_spec(self.package_name)
+            c = Configuration()
+            system = c.getSystem()
+            python_exe = c.getSelectedPythonExe()
+            spec = subprocess.run([python_exe, '-c', "import appJar"], capture_output=True, text=True, encoding='utf-8', shell = self.c.getShell())
+            #spec = importlib.util.find_spec(self.package_name)
             self.appjarIns = False
-            if spec is None:
+            if spec.stderr:
                 mess = "Kullandığınız Python sürümünde appJar paketi bulunmuyor, PyNar Editörde Görsel programlama yapabilmeniz için appJar paketi gereklidir. Bu paketin otomatik olarak kurulmasını ister misiniz? Eğer \"Hayır\" cevabı verirseniz Pynar Editör Açıldıktan sonra Paket yöneticisini kullanarak appJar paketini kurabilirsiniz."
                 CustomizeMessageBox_Yes_No(message=mess, clickAccept=self.yesAppjarInstall, icon="warning")
 
