@@ -323,8 +323,9 @@ class StartPage(QDialog):
         font.setFamily(self.c.getEditorFont())
         font.setPointSize(self.c.getHistoryMenuFontSize() + 6)
         msgBox.setFont(font)
-        txt = open(self.c.getHomeDir() + "qssfiles/qmessagebox.qss", "r").read()
-        msgBox.setStyleSheet(txt + "QLabel{height: 110px; min-height: 110px; max-height: 110px; width: 155px; min-width: 155px; max-width: 155px;}")
+        csstxt = 'QMessageBox{\n  background-color: #e8f2c6;\n  border-left:1px solid #acd33b;\n  border-right:1px solid #acd33b;\n  border-bottom:1px solid #acd33b;\n  border-top: 8px solid #00ccff;\n}\n\nQLabel{background-color:transparent;height: 110px; min-height: 110px; max-height: 110px; width: 155px; min-width: 155px; max-width: 155px;}'
+        msgBox.setStyleSheet(csstxt)
+
         msgBox.setWindowFlags(msgBox.windowFlags() | Qt.FramelessWindowHint | Qt.WindowSystemMenuHint)
         msgBox.setStandardButtons(QtWidgets.QMessageBox.NoButton)
         msgBox.execute(consuming_work)
@@ -385,14 +386,14 @@ class LoadingMessageBox(QtWidgets.QMessageBox):
         label_text = QtWidgets.QLineEdit(self)
         label_text.setReadOnly(True)
         label_text.setStyleSheet("border:none; background-color:transparent")
-        label_text.setGeometry(QtCore.QRect(18, 110, 185, 25))
+        label_text.setGeometry(QtCore.QRect(0, 105, 203, 25))
         label_text.setAlignment(Qt.AlignCenter)
         label_text.setText("Kurulum yapılıyor")
 
         label_text2 = QtWidgets.QLineEdit(self)
         label_text2.setReadOnly(True)
         label_text2.setStyleSheet("border:none; background-color:transparent")
-        label_text2.setGeometry(QtCore.QRect(18, 135, 185, 25))
+        label_text2.setGeometry(QtCore.QRect(0, 130, 203, 25))
         label_text2.setAlignment(Qt.AlignCenter)
         label_text2.setText("Lütfen bekleyiniz...")
 
