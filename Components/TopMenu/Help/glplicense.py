@@ -33,6 +33,7 @@ class GPLDialog(Dialog):
         self.parent = parent
         self.view = pView
         self.setWindowIcon(QIcon(':/icon/images/license.png'))
+        self.setWindowFlags(Qt.WindowMaximizeButtonHint | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
 
         mainLayout = QVBoxLayout()
 
