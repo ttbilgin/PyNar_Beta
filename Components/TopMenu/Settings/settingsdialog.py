@@ -316,8 +316,12 @@ class SettingsDialog(Dialog):
 
     def restart(self):
         QtCore.QCoreApplication.quit()
-        pynarBasePath = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-        status = QtCore.QProcess.startDetached(pynarBasePath + os.sep + "pynar")
+        #Windows için çözüm
+        c = Configuration()
+        rawpath = subprocess.run(['echo','%Appdata%'], capture_output=True, text=True, encoding='utf-8', shell = self.c.getShell())
+        pynarBasePath = rawpath.stdout.replace('\n', '')
+        print(pynarBasePath + os.sep + "PynarPythonEditor"+ os.sep + "pynar")
+        status = QtCore.QProcess.startDetached(pynarBasePath + os.sep + "PynarPythonEditor"+ os.sep + "pynar")
 
     def deleteAllLogFolder(self):
         try:
