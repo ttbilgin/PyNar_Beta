@@ -172,7 +172,7 @@ class fileUploadWindow(QDialog):
                 CustomizeMessageBox_Ok(mess, "warning")
 
             else:
-                CustomizeMessageBox_Ok(str(res_json['description']), QMessageBox.Critical)
+                CustomizeMessageBox_Ok(str(res_json['description']), "critical")
             return -1
         else:
             data = res_json['result'].get('data')

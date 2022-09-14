@@ -439,9 +439,9 @@ class PMDialog(Dialog):
         self.List_line.setEnabled(True)
 
     def _messages(self, err, text):
-        ms_Btn = QMessageBox.Information
+        ms_Btn = "information"
         if err == 1:
-            ms_Btn = QMessageBox.Critical
+            ms_Btn = "critical"
         CustomizeMessageBox_Ok(text, ms_Btn)
         self.noneBlock()
         return
