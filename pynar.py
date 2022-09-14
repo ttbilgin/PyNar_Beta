@@ -1176,7 +1176,7 @@ class MainWindow(QMainWindow):
                     pdbrc_file_content = """
         m=  "-------------------------------------------------\\n"
         m=m+"|    iLK {0} SATIR CALISTI...                     |\\n"
-        m=m+"|    DEVAM iCiN enter TUSUNA BASINIZ.           |\\n"
+        m=m+"|    DEVAM iCiN c ve enter TUSUNA ...           |\\n"
         m=m+"|    CIKIS iCiN q TUSUNA BASINIZ.               |\\n"
         m=m+"-------------------------------------------------\\n"
         !(lambda: exec(\'import gc, pdb; next(o for o in gc.get_objects() if isinstance(o, pdb.Pdb)).prompt = \">> \"\',##))()
