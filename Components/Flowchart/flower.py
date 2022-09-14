@@ -592,7 +592,7 @@ class FlowchartMaker(QMainWindow):
 class HelpDialog(QWidget):
     def __init__(self):
         super(HelpDialog, self).__init__()
-        self.setWindowTitle("Akış Şeması Önizlemesi")
+        self.setWindowTitle("Akış Şeması Yardımı")
         self.resize(1000, 500)
         self.setMinimumSize(QSize(1000, 500))
         self.setWindowIcon(QIcon(QPixmap(":/icon/images/startflow.png")))
