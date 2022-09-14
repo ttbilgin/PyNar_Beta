@@ -4,14 +4,15 @@ from PyQt5.QtWebEngineWidgets import QWebEngineSettings as Settings
 from PyQt5.QtWebEngineWidgets import QWebEngineView as Web
 from PyQt5.QtCore import Qt, QUrl, QSize, QRect, QTimer
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
-from os.path import dirname, join, abspath, exists
+from os.path import  join, abspath, exists
 from subprocess import check_output
 from os import environ, makedirs
 from platform import system
 import tempfile
 import ast
+import sys
 import inspect
-
+from configuration import Configuration
 from Components.MessageBox.CustomizeMessageBox import CustomizeMessageBox_Ok
 
 CONDITION = "condition"
@@ -31,7 +32,7 @@ class CodeflowVisitor(ast.NodeVisitor):
         self._fnodes = [{"name": START,"type": START,"text": START,"yesno": None}]  
         self._flines = []  
         self._fstack = [{"name": START,"type": START,"text": START,"yesno": None}] 
-        super(ast.NodeVisitor).__init__()
+        super().__init__()
 
     def _add_fnode(self, nodetype, text, stype=None, soption=None):
         global fnode_id
@@ -441,9 +442,6 @@ class FlowchartMaker(QMainWindow):
         self.toolBar.setMinimumHeight(60)
         self.htmlOpener("noGrab")
 
-
-
-
     def onLoadFinished(self, ok):
         if ok:
             self.browser.page().runJavaScript("document.getElementsByTagName('svg')[0]['clientWidth'];", self.ready1)
@@ -473,9 +471,9 @@ class FlowchartMaker(QMainWindow):
                 self.pagelay.setOrientation(QPageLayout.Orientation.Portrait)
             self.pagelay.setPageSize(QPageSize(QSize(self.pagewidth, self.pageheight), "A4"))
         self.browser.page().printToPdf(self.tempfilename, pageLayout=self.pagelay)
-        jschange = open(join(dirname(__file__), "Pdfpreview/viewer.js"), encoding="utf-8").readlines()
+        jschange = open(Configuration().getHomeDir() + Configuration().getHtmlHelpPath("html_help_path") + 'FlowchartFiles/Pdfpreview/viewer.js', encoding="utf-8").readlines()
         use, tmp = "'use strict';\n","var DEFAULT_URL = '" + self.tempfilename.replace("\\", "/") + "';\n"
-        with open(join(dirname(__file__), "Pdfpreview/viewer.js"), "w", encoding="utf-8") as f:
+        with open(Configuration().getHomeDir() + Configuration().getHtmlHelpPath("html_help_path") + 'FlowchartFiles/Pdfpreview/viewer.js', "w", encoding="utf-8") as f:
             for i in range(0, len(jschange)):
                 if i == 0:
                     f.write(use)
@@ -490,6 +488,7 @@ class FlowchartMaker(QMainWindow):
         self.pagewidth = 0
         self.pageheight = 0
         QTimer.singleShot(1000, lambda: self.loading.done(0))
+        sys.argv.append("--disable-web-security")
         self.loading.exec_()
         start, grabcss, grabjs, middle, end = "<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'><style type='text/css'>body{ margin:0px;}.start-element {fill : #d594f4;}.end-element {fill : #00FF55;}.condition-element {fill : #ffa0ea;}.inputoutput-element {fill : #55FFFF;}.operation-element {fill : #FFFF99;}.subroutine-element {fill : #a0e0ff;}.parallel-element {fill : #FFCCFF;}#code{display: none;}::-webkit-scrollbar {display:block;}::-webkit-scrollbar-thumb {border:1px solid #60a0e0;background: #c0e0ff;}::-webkit-scrollbar-thumb:hover {background: #00ffff;}</style>","<style>#canvas { cursor:move; height:100vh;width:100vw;overflow: auto;}::-webkit-scrollbar {width: 0rem;height: 0rem;}#canvas::-webkit-scrollbar { width: 1rem;height: 1rem;}</style>","<script>document.addEventListener('DOMContentLoaded',function () {const ele = document.getElementById('canvas');ele.style.cursor = 'move';let pos = { top: 0,left: 0,x: 0,y: 0};const mouseDownHandler = function (e) {ele.style.cursor = 'move';ele.style.userSelect = 'none';pos = { left: ele.scrollLeft,top: ele.scrollTop,x: e.clientX,y: e.clientY,};document.addEventListener('mousemove',mouseMoveHandler);document.addEventListener('mouseup',mouseUpHandler);};const mouseMoveHandler = function (e) {const dx = e.clientX-pos.x;const dy = e.clientY-pos.y;ele.scrollTop = pos.top-dy;ele.scrollLeft = pos.left-dx;};const mouseUpHandler = function () {ele.style.cursor = 'move';ele.style.removeProperty('user-select');document.removeEventListener('mousemove',mouseMoveHandler);document.removeEventListener('mouseup',mouseUpHandler);};ele.addEventListener('mousedown',mouseDownHandler);});</script>","<script>window.onload = function () {var chart;if (chart) {chart.clean();}chart = flowchart.parse(document.getElementById('code').value);chart.drawSVG('canvas',{'x': 20,'y': 20,'roundness': 5,'arrow-end': 'diamond','line-width': 1,'maxWidth': 80,'line-length': 40,'text-margin': 15,'font-size': 11,'font': 'normal','font-family': 'Arial','font-weight': 'normal','font-color': 'black','line-color': 'black','element-color': 'black','fill': 'white','yes-text': 'Doğru','no-text': 'Yanlış','scale': 1,'symbols': {'start': {'font-color': 'black','element-color': 'green','class': 'start-element'},'end':{'class': 'end-element'},'condition': {'class': 'condition-element'},'inputoutput': {'class': 'inputoutput-element'},'operation': {'class': 'operation-element'},'subroutine': {'class': 'subroutine-element'},'parallel': {'class': 'parallel-element'} },'flowstate' : {'past' : {'fill' : '#CCCCCC','font-size' : 12},'current' : {'fill' : 'yellow','font-color' : 'red','font-weight' : 'bold'},'future' : {'fill' : '#FFFF99'},'request' : {'fill' : 'blue'},'invalid': {'fill' : '#444444'},'approved' : {'fill' : '#58C4A3','font-size' : 12,'yes-text' : 'APPROVED','no-text' : 'n/a'},'rejected' : {'fill' : '#C45879','font-size' : 12,'yes-text' : 'n/a','no-text' : 'REJECTED'} } });};</script></head><body><div><textarea id='code' style='width: 100%;' rows='11'>","</textarea></div><div style='margin-left:20px;' id='canvas'></div></body></html>"
         if self.tabWidget.currentIndex() >= 0:
@@ -502,7 +501,7 @@ class FlowchartMaker(QMainWindow):
 
         self.isExcept = False
 
-        jsfile = "<script>\n"+ open(join(dirname(__file__), "./flowchart.js"), encoding="utf-8").read()+ "</script>\n"
+        jsfile = "<script>\n"+ open(Configuration().getHomeDir() + Configuration().getHtmlHelpPath("html_help_path") + 'FlowchartFiles/flowchart.js', encoding="utf-8").read()+ "</script>\n"
         try:
             fc = get_flowchart(self.source).replace(": start", ": Başla").replace(": end", ": Son").replace(": pass", ": Geç")
         except:
@@ -512,7 +511,7 @@ class FlowchartMaker(QMainWindow):
         if situation == "grab":
             self.browser = Web()
             try:
-                self.browser.setHtml(start + grabcss + grabjs + jsfile + middle + fc + end,baseUrl=QUrl("file://"),)
+                self.browser.setHtml(start + grabcss + grabjs + jsfile + middle + fc + end)
                 self.chartStatus.showMessage("Akış Şeması Düzenlendi.", 3000)
             except:
                 self.chartStatus.showMessage("Akış Şeması Oluşturulamadı!", 3000)
@@ -520,7 +519,7 @@ class FlowchartMaker(QMainWindow):
         if situation == "noGrab":
             self.browser = Web()
             try:
-                self.browser.setHtml(start + jsfile + middle + fc + end, baseUrl=QUrl("file://"))
+                self.browser.setHtml(start + jsfile + middle + fc + end)
                 self.chartStatus.showMessage("Akış Şeması Düzenlendi.", 3000)
             except:
                 self.isExcept = True
@@ -604,8 +603,7 @@ class HelpDialog(QWidget):
         self.webView = Web()
         self.horlay2.addWidget(self.webView)
         self.webView.setContextMenuPolicy(Qt.NoContextMenu)
-        self.webView.setUrl(QUrl.fromLocalFile(join(dirname(__file__), "Help/Yardim.html")))
-
+        self.webView.setUrl(QUrl.fromLocalFile(Configuration().getHomeDir() + Configuration().getHtmlHelpPath("html_help_path") + 'FlowchartFiles/Help/Yardim.html'))
 
 class PdfPreview(QWidget):
     def __init__(self):
@@ -623,4 +621,4 @@ class PdfPreview(QWidget):
         self.webView.settings().setAttribute(Settings.PdfViewerEnabled, True)
         self.horlay2.addWidget(self.webView)
         self.webView.setContextMenuPolicy(Qt.NoContextMenu)
-        self.webView.setUrl(QUrl.fromLocalFile(join(dirname(__file__), "./Pdfpreview/viewer.html")))
+        self.webView.setUrl(QUrl.fromLocalFile(Configuration().getHomeDir() + Configuration().getHtmlHelpPath("html_help_path") + 'FlowchartFiles/Pdfpreview/viewer.html'))
