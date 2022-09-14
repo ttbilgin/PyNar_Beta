@@ -1,5 +1,5 @@
 import logging
-import sys, stat
+import sys, stat, platform
 import os
 from PyQt5 import Qt
 from PyQt5 import QtCore
@@ -316,12 +316,15 @@ class SettingsDialog(Dialog):
 
     def restart(self):
         QtCore.QCoreApplication.quit()
-        #Windows için çözüm
-        c = Configuration()
-        rawpath = subprocess.run(['echo','%Appdata%'], capture_output=True, text=True, encoding='utf-8', shell = self.c.getShell())
-        pynarBasePath = rawpath.stdout.replace('\n', '')
-        print(pynarBasePath + os.sep + "PynarPythonEditor"+ os.sep + "pynar")
-        status = QtCore.QProcess.startDetached(pynarBasePath + os.sep + "PynarPythonEditor"+ os.sep + "pynar")
+        plt=platform.system()
+        if plt == "Windows":
+            #Windows için çözüm
+            c = Configuration()
+            rawpath = subprocess.run(['echo','%Appdata%'], capture_output=True, text=True, encoding='utf-8', shell = self.c.getShell())
+            pynarBasePath = rawpath.stdout.replace('\n', '')
+            status = QtCore.QProcess.startDetached(pynarBasePath + os.sep + "PynarPythonEditor"+ os.sep + "pynar")
+        elif plt == "Linux":
+            status = QtCore.QProcess.startDetached("pynar")
 
     def deleteAllLogFolder(self):
         try:
