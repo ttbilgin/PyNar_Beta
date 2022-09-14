@@ -292,7 +292,7 @@ def replaceToEmoji(text):
     for (key, value) in emoji_list:
         if key is not None and key in text:
             if key == 'en' or key == 'es' or key == 'pt' or key == 'it' or key == 'de' or key == 'fr':
-                print('')
+                pass
             else:
                 text = text.replace(key, value[0])
     return text
@@ -313,7 +313,7 @@ def areAllEmojis(text):
     for (key, value) in emoji_list:
         if key is not None and key in text:
             if key == 'en' or key == 'es' or key == 'pt' or key == 'it' or key == 'de' or key == 'fr':
-                print('')
+                pass
             else:
                 text = text.replace(key, '')
 
