@@ -543,7 +543,16 @@ class UcChatBotView(QWidget):
         if buttonText.lower() == self.fixedBtnTxt.lower():
             codeText = copy.copy(self.text)
             temp = codeText[self.line].lstrip()
-            codeText[self.line] = codeText[self.line].replace(temp, self.trueData)
+            if self.message == 'Girintisizlik beklenmiyor':
+                codeText[self.line] = codeText[self.line][4:]
+            elif self.message == 'Girintili kod bloğu bekleniyor':
+                codeText[self.line] = "    "+codeText[self.line]
+            else:
+                if self.lineControl == True:
+                    temp = codeText[self.line-1].lstrip()
+                    codeText[self.line-1] = codeText[self.line-1].replace(temp, self.trueData)
+                else:
+                    codeText[self.line] = codeText[self.line].replace(temp, self.trueData)
             self.parent.textPad.SendScintilla(self.parent.textPad.SCI_SETTEXT, bytes('\n'.join(codeText), 'utf-8'))
             message = replaceToEmoji('Hatalı satır düzeltildi kodları tekrar çalıştırmayı deneyebilirsin 😊')
         if len(self.runErrors) > 0 and (buttonText.lower() == 'Evet'.lower()):
@@ -586,6 +595,20 @@ class UcChatBotView(QWidget):
             self.runErrors = runErrors.copy()
             self.text = text
             self.line = runErrors[0]['range']['start']['line']
+                       
+            try:
+                self.rule = runErrors[len(runErrors)-1]["rule"]
+            except:
+                self.rule = "None"       
+            try:
+                self.message = runErrors[len(runErrors)-1]["message"]
+            except:
+                self.message = "None"
+                
+            if len(runErrors) < 5:  
+                for i in range(len(runErrors)): 
+                    if (runErrors[i]["message"] == "Girintisizlik beklenmiyor") or (runErrors[i]["message"] == "Girintili kod bloğu bekleniyor") :  
+                        self.message =runErrors[i]["message"]    
             self.errorNo=1
             message = 'Yazdığınız kodlarda hata bulunmuştur. Hatanızı öğrenmek ve yardım almak ister misiniz?'.format(len(runErrors))
 
@@ -646,24 +669,55 @@ class UcChatBotView(QWidget):
         self.lineEdit_sendMessage.setFocus()
 
     def showRunErrorMessage(self):
+        
+        def SeeAddUserHelpButton(message):
+            self.textEdit_message.append(self.robotBalloonMessage(message=message))
+            if controlData:
+                self.AddUserHelpButton([self.fixedBtnTxt, self.noFixedBtnTxt], True)  
+
+        if self.text[self.line][-1] == ':' and self.text[self.line][-2] == ' ':
+            tmp = self.text[self.line].split(' ')
+            tmp = [x for x in tmp if x]
+            tmp2 = ' '.join(tmp[0:-1]) + tmp[-1]
+            self.text[self.line] = tmp2
+
         check = checkError()
-        checkData = check.run(self.text, self.line)
-        self.trueData = checkData[1]
-        knnList = checkData[0]
+        checkData = check.run(self.text, self.line , self.rule, self.message, self.runErrors)
+
+        self.lineControl = False
+        if checkData[0] == '#':
+            check.returnData = []
+            checkData = None
+            self.lineControl = True
+            checkData = check.run(self.text, self.line-1, self.rule, self.message, self.runErrors)
+
+        self.trueData = checkData[0]
         descErrorMessage = self.runErrors[0]['message']
         controlData = self.control(self.trueData)
         self.runErrors.pop(0)
 
+        tmp = descErrorMessage.split('\n')
+        descErrorMessage = [x for x in tmp if x]
+        descErrorMessage = descErrorMessage[-1]
 
-        message = '{0}. Hata <br /><br />{1}.<br/><p style="color:green">Bu hatayı düzeltmek için önerimiz şöyle:</p>&#9989;&nbsp; {2} <br/>'.format(
+        if self.trueData[0] == "#":
+            message = '{0}. Hata <br /><br />{1}.<br/><p style="color:red"> Bu hataya çözüm bulamadım :( Dilerseniz bu satırın başına yorum işareti koyarak hata oluşmasını engelleyebilirim.:</p>&#9989;&nbsp; {2} <br/><br/> Bu şekilde değiştirmek ister misiniz?'.format(
             self.errorNo, descErrorMessage, controlData)
-        message += '<p style="color:red">Önerimiz yardımcı olmadıysa doğru yazılmış şu örnekleri inceleyebilirsiniz</p>'
-        for i in knnList:
-            message += ('&#9989;&nbsp;' + self.control(i) + '<br/>')
-        message += '<br/> Bu hatayı düzeltmek istermisiniz?'
-        self.textEdit_message.append(self.robotBalloonMessage(message=message))
-        if controlData:
-            self.AddUserHelpButton([self.fixedBtnTxt, self.noFixedBtnTxt], True)
+            SeeAddUserHelpButton(message)       
+        elif self.trueData[-2:] == "..":
+            message = '{0}. Hata <br /><br />{1}.<br/><p style="color:green">Bu hatayı düzeltmek için önerimiz şöyle:</p>&#9989;&nbsp; {2} <br/><br/> Bu hatayı düzeltmek istermisiniz?'.format(
+                self.errorNo, descErrorMessage, controlData)
+            self.textEdit_message.append(self.robotBalloonMessage(message=message)) 
+        elif self.trueData[0:13]  == "girintihatasi":
+
+            message = '{0}. Hata <br /><br />{1}.<br/><p style="color:green">Girinti Hatası Tespit Edildi. Düzeltmek İçin Tıklayabilirsiniz...</p>  <br/><br/> Bu hatayı düzeltmek istermisiniz?'.format(
+                self.errorNo, descErrorMessage)
+            SeeAddUserHelpButton(message)  
+               
+        else:    
+            message = '{0}. Hata <br /><br />{1}.<br/><p style="color:green">Bu hatayı düzeltmek için önerimiz şöyle:</p>&#9989;&nbsp; {2} <br/><br/> Bu hatayı düzeltmek istermisiniz?'.format(
+                self.errorNo, descErrorMessage, controlData)
+            SeeAddUserHelpButton(message) 
 
         log_mesaj_ekle("", self.robot_message)
         self.errorNo += 1

@@ -347,7 +347,12 @@ class writeLog():
 
             #Başlangıç satır numarasını bul(Sadece ilki için)
             x = message.splitlines()[1]
-            line = re.search(r"line (\d+)", x).group(1)
+
+
+            try:
+                line = re.search(r"line (\d+)", x).group(1)
+            except AttributeError:
+                pass
 
             #Bütün hata mesajından sadece gerekli kısmı çıkart
             temp_message = message.splitlines()[-1]
@@ -441,7 +446,7 @@ class writeLog():
             self.dataBase.writeCmdError(textPad.filename,hashErrorMessage,int(line) - 1,messageParse[3].split(":")[0],errorValue)
             return hashErrorMessageShow
 
-        except :
+        except Exception as e:
             self.parseData = json.loads(cmdError)
             self.errDict[textPad] = self.parseData['diagnostics']
             self.errDict[textPad][0]['severity'] = "runtime error"

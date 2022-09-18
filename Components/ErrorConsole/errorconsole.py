@@ -1,4 +1,6 @@
 import os, sys
+import tempfile
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QFont
 from PyQt5.Qsci import QsciScintilla
@@ -6,6 +8,8 @@ from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon
 from pathlib import Path
+
+from Components.SyntaxChecker.SyntaxCheck import writeLog
 from configuration import Configuration
 from soundlib import playsound # ses için
 from threading import Thread
@@ -129,9 +133,24 @@ class ErrorConsole(QWidget):
                 icon.setIcon(QIcon(parentdir + r'/images/close-hover.png'))
             fileName = str(Path(str(message[i]['file']))).replace('\\','/')
             self.tableWidget.setItem(i, 0, icon)
-            self.tableWidget.setItem(i, 1, QTableWidgetItem(str(message[i]['message'])))
             self.tableWidget.setItem(i, 2, QTableWidgetItem(fileName[fileName.rfind('/') + 1:]))
             self.tableWidget.setItem(i, 3, QTableWidgetItem(str(message[i]['range']['start']['line'] + 1)))
+
+            if message[i]['message'] == '"(" ifadesi kapatılmadı':
+                with open(tempfile.gettempdir() + "/hata.txt", "r", encoding='utf-8') as f:
+                    engMsg = f.read()
+
+                parent = self.parent().parent().parent()
+                logAndInd = writeLog(self, os.path.dirname(os.path.realpath(__file__)), parent.errorConsole,
+                                     parent.splitterV)
+
+                tmp = logAndInd.showCmdMessage(engMsg, parent.textPad).split('\n')
+                tmp = [x for x in tmp if x]
+                message[i]['message'] = tmp[-1]
+
+
+            self.tableWidget.setItem(i, 1, QTableWidgetItem(str(message[i]['message'])))
+
         self.tableWidget.resizeRowsToContents()
         if sound:
             a = Thread(target=playsound, args=[parentdir + '/Data/Sounds/error.mp3'], daemon=True)
