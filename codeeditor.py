@@ -273,8 +273,8 @@ class CodeEditor(QsciScintilla):
                     fname += '*'
                     notebook.setTabText(index, fname)
 
-            #Indicator fonksiyonunu çalıştır
-            self.indicatorFill()
+        #Indicator fonksiyonunu çalıştır
+        self.indicatorFill()
 
     def setText(self, text):
         super().setText(text)
