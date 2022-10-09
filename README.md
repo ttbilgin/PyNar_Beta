@@ -64,7 +64,7 @@ Not: Windows kurulumu için yönetici yetkisi (Administrator) gerekli değildir,
 
 PyNar editörün tüm özellikleri ve kullanım kılavuzu aşağıdaki linkte yayınlanmaktadır.
 
-[https://www.pynar.org/help](https://www.pynar.org/help)
+    https://www.pynar.org/help
 
 
 # Programın ekran görüntüsü:
