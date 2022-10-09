@@ -70,8 +70,9 @@ Paket indirildikten sonra windows için çift tıklayarak kurulum başlatılabil
 
     Not: Windows işletim sistenine bazı sürümlerde "SmartScreen" aktif ise "Windows bilgisayarınızı korudu" şeklinde bir mavi bildirim ekranı gelebilir. Bu durumda "Yine de Çalıştır" diyerek kuruluma devam edebilirsiniz. Pynar Editör kurulum programında bilgisayarınıza zarar vrecek hiçbirşey yoktur, Windows için maliyeti yüksek olduğundan sertifika almadığımız için bu uyarı gelmektedir.
 
-Linux işletim sisteminde (Deb paket yöneticisi kullanan linuxlarda) kurulum için pynar.deb paketini indirdiğiniz klasörde aşağıdaki komut yazılmalıdır.
+Linux işletim sisteminde (Deb paket yöneticisi kullanan linuxlarda) kurulum için pynar.deb paketini indirdiğiniz klasörde aşağıdaki komut yazılmalıdır. Pynar.deb paketi sadece fonts-noto-color-emoji paketine bağımlıdır. Kurulum öncesi bu paket de yüklenmelidir.
 
+    sudo apt-get install fonts-noto-color-emoji
     sudo dpkg -i pynar.deb
 
 Not: Windows kurulumu için yönetici yetkisi (Administrator) gerekli değildir, fakat Linux paketlerinin kurulumu için yönetici yetkisi (root) gereklidir.
