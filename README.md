@@ -75,6 +75,8 @@ Linux işletim sisteminde (Deb paket yöneticisi kullanan linuxlarda) kurulum i�
     sudo apt-get install fonts-noto-color-emoji
     sudo dpkg -i pynar.deb
 
+Kurulum tamamlandıktan sonra "Pardus" menüsünden "Eğitim" bölümünde Pynar görülebilir. Tıklandığında masaüstüne link oluşur. bu link tıklanarak pynar başlatılır.
+
 Not: Windows kurulumu için yönetici yetkisi (Administrator) gerekli değildir, fakat Linux paketlerinin kurulumu için yönetici yetkisi (root) gereklidir.
 
 
