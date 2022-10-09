@@ -52,7 +52,10 @@ Windows 10 ve 11 için Setup programı ve Linux için DEB paketleri şu linkten 
 
     https://www.pynar.org/releases/setup/
 
-Paket indirildikten sonra windows için çift tıklayarak kurulum başlatılabilir. Kurulum programı bilgisayarınızda python yok ise otomatik kuracaktır. 
+Paket indirildikten sonra windows için çift tıklayarak kurulum başlatılabilir. Kurulum programı bilgisayarınızda python yok ise otomatik kuracaktır.
+
+    > Not: Windows işletim sistenine bazı sürümlerde "SmartScreen" aktif ise "Windows bilgisayarınızı korudu" şeklinde bir mavi bildirim ekranı gelebilir. Bu durumda "Yine de Çalıştır" diyerek kuruluma devam edebilirsiniz. Pynar Editör kurulum programında bilgisayarınıza zarar vrecek hiçbirşey yoktur, Windows için maliyeti yüksek olduğundan sertifika almadığımız için bu uyarı gelmektedir.
+
 Linux işletim sisteminde (Deb paket yöneticisi kullanan linuxlarda) kurulum için pynar.deb paketini indirdiğiniz klasörde aşağıdaki komut yazılmalıdır.
 
     sudo dpkg -i pynar.deb
@@ -67,5 +70,5 @@ PyNar editörün tüm özellikleri ve kullanım kılavuzu aşağıdaki linkte ya
     https://www.pynar.org/help
 
 
-# Programın ekran görüntüsü:
+## PyNar Editör Ekran Görüntüsü:
 ![image](https://user-images.githubusercontent.com/30179132/112771996-18e20a00-9037-11eb-8832-7a828d10b3db.png)
