@@ -77,7 +77,7 @@ PyNar editörün tüm özellikleri ve kullanım kılavuzu aşağıdaki linkte ya
 
 ## Hata Raporlama
 
-Programda bulduğunuz olası tüm hataları [issues](issues) bölümüne raporlayabilirsiniz. Hata bildirimi için lütfen olabildiğince detay veriniz.
+Programda bulduğunuz olası tüm hataları @issues bölümüne raporlayabilirsiniz. Hata bildirimi için lütfen olabildiğince detay veriniz.
 
 ## Hakkında
 
