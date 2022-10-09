@@ -46,7 +46,7 @@ Programı indirdiğiniz klasöre girerek
 
 komutu ile çalıştırınız. Editör açıldıktan sonra ayarlar bölümünden Komutlar seçenek bölümünde "Pardus" seçiniz.
 
-### Windows veya Linux için Derlenmiş Sürümler
+## Windows veya Linux için Derlenmiş Sürümler
 
 Windows 10 ve 11 için Setup programı ve Linux için DEB paketleri şu linkten indirilebilir.
 
