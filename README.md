@@ -37,7 +37,7 @@ PyNar editör kod hatalarını kodu çalıştırmadan tespit edebilmek için aç
 Aşağıdaki Adımlar Pardus 21 sürümü için verilmiştir, fakat Debian tabanlı bütün Linux'larda kullanılabilir. Aşağıdaki paketleri kurunuz:
 
     sudo apt-get update
-    sudo apt-get install -y python3-venv python3-pip
+    sudo apt-get install -y python3-pip
     
 Bulunduğunuz kullanıcının ana dizinine giriniz.
 
