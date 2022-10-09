@@ -6,8 +6,8 @@ Bu proje kapsamında Python dili için açık kaynaklı tamamen Türkçe ara yü
 
 Kodlama editörü tüm işletim sistemlerinde çalışabilir şekilde platform bağımsız masaüstü uygulama olarak geliştirilmiştir. Projenin tüm kodları, projenin tamamlanmasından sonra genel kullanıma açık bir kod deposuna yüklenmiş ve ülkemizdeki geliştiricilerin katkı verebilmesi için gerekli tüm teknik ve kullanıcı dokümantasyonları da oluşturulmuştur.  
 
-# Kurulum
-# 1.Windows 10
+## Kurulum
+### 1.Windows 10 ve 11
 
 Öncelikle bilgisayarınızda Python kurulu olmalıdır. Şu linkten indirebilirsiniz:
 
@@ -19,7 +19,7 @@ Ek olarak program için gerekli paketlerin kurulumu:
     
 ![req](https://user-images.githubusercontent.com/30179132/99789976-7c61a580-2b34-11eb-9cae-7a85278219bd.PNG)
 
-# 2.TÜBİTAK PARDUS
+### 2.Linux (Ubuntu, Pardus gibi Debian türevleri)
 
 Pardus 21 sürümünü indirip kurunuz. Aşağıdaki paketleri kurunuz
 
