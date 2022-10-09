@@ -6,7 +6,7 @@ Bu proje kapsamında Python dili için açık kaynaklı tamamen Türkçe ara yü
 
 Kodlama editörü tüm işletim sistemlerinde çalışabilir şekilde platform bağımsız masaüstü uygulama olarak geliştirilmiştir. Projenin tüm kodları, projenin tamamlanmasından sonra genel kullanıma açık bir kod deposuna yüklenmiş ve ülkemizdeki geliştiricilerin katkı verebilmesi için gerekli tüm teknik ve kullanıcı dokümantasyonları da oluşturulmuştur.  
 
-## Kurulum
+## Kurulum ve Çalıştırma
 ### a) Windows 10 ve 11
 
 Öncelikle bilgisayarınızda Python 3.8 veya yukarısı kurulu olmalıdır. Şu linkten indirebilirsiniz:
@@ -20,6 +20,9 @@ Gerekli paketlerin kurulumu:
     pip install -r requirements.txt
     
 ![req](https://user-images.githubusercontent.com/30179132/99789976-7c61a580-2b34-11eb-9cae-7a85278219bd.PNG)
+
+![image](https://user-images.githubusercontent.com/854154/194746108-6d753b8b-2e2f-4626-a4ea-5d4e3844cd7b.png)
+
 
 ### b) Linux (Ubuntu, Pardus gibi Debian türevleri)
 
