@@ -54,7 +54,7 @@ Windows 10 ve 11 için Setup programı ve Linux için DEB paketleri şu linkten 
 
 Paket indirildikten sonra windows için çift tıklayarak kurulum başlatılabilir. Kurulum programı bilgisayarınızda python yok ise otomatik kuracaktır.
 
-    > Not: Windows işletim sistenine bazı sürümlerde "SmartScreen" aktif ise "Windows bilgisayarınızı korudu" şeklinde bir\ mavi bildirim ekranı gelebilir. Bu durumda "Yine de Çalıştır" diyerek\ kuruluma devam edebilirsiniz. Pynar Editör kurulum programında bilgisayarınıza zarar vrecek hiçbirşey\ yoktur, Windows için maliyeti yüksek olduğundan\ sertifika almadığımız için bu uyarı gelmektedir.
+    Not: Windows işletim sistenine bazı sürümlerde "SmartScreen" aktif ise "Windows bilgisayarınızı korudu" şeklinde bir mavi bildirim ekranı gelebilir. Bu durumda "Yine de Çalıştır" diyerek kuruluma devam edebilirsiniz. Pynar Editör kurulum programında bilgisayarınıza zarar vrecek hiçbirşey yoktur, Windows için maliyeti yüksek olduğundan sertifika almadığımız için bu uyarı gelmektedir.
 
 Linux işletim sisteminde (Deb paket yöneticisi kullanan linuxlarda) kurulum için pynar.deb paketini indirdiğiniz klasörde aşağıdaki komut yazılmalıdır.
 
