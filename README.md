@@ -46,14 +46,14 @@ Programı indirdiğiniz klasöre girerek
 
 komutu ile çalıştırınız. Editör açıldıktan sonra ayarlar bölümünden Komutlar seçenek bölümünde "Pardus" seçiniz.
 
-# Programı Çalıştırma
-Programı çalıştırabilmek için indirdiğiniz dosyada ana dizin içerisinde komut satırını (CMD) başlatıp aşağıdaki işlemleri yapabilirsiniz. Projeyi D:\PyQt5_Projects\PyNar_Backend  klasörüne indirdiğinizi düşünürsek şu komutlarla çalıştırabilirsiniz.
-    
-    1) (Windows Tuşu + R ) basıp çalıştır penceresine cmd yazın. 
-    2) cd D:\PyQt5_Projects\PyNar_Backend
-    3) D:\PyQt5_Projects\PyNar_Backend> python main.py
-    
-![Ekran Alıntısı](https://user-images.githubusercontent.com/30179132/103465502-28f69000-4d4d-11eb-998f-ee9d7be8d41d.PNG)
+### Windows veya Linux için Derlenmiş Sürümler
+
+Windows 10 ve 11 için Setup programı ve Linux için DEB paketleri şu linkten indirilebilir.
+
+    https://www.pynar.org/releases/setup/
+
+Not: Windows kurulumu için yönetici yetkisi (Administrator) gerekli değildir, fakat Linux paketlerinin kurulumu için yönetici yetkisi (root) gereklidir.
+
 
 # Özellikler
  * syntax highlighting
