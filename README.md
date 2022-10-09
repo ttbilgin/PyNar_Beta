@@ -23,7 +23,7 @@ Gerekli paketlerin kurulumu:
 
 ![image](https://user-images.githubusercontent.com/854154/194746108-6d753b8b-2e2f-4626-a4ea-5d4e3844cd7b.png)
 
-PyNar editör kod hatalarını kodu çalıştırmadan tespit edebilmek için açık kaynak kodlu [pyright](https://github.com/microsoft/pyright) adlı statik kod kontrol kütüphanesini kullanır. Pyright programının windows için derlenmiş sürümünü [şu linkten](https://www.pynar.org/releases/pyright/1.1.266/) indirip win.zip dosyasını herhangi bir yere açınız. Açtığınız yerdeki **pyright-win.exe** dosyasını ve **typeshed-fallback** klasörünü  **PyNar_Beta-main** içindeki **Bin** klasörü içine kopyalayınız.
+PyNar editör kod hatalarını kodu çalıştırmadan tespit edebilmek için açık kaynak kodlu [pyright](https://github.com/microsoft/pyright) adlı statik kod kontrol kütüphanesini kullanır. Pyright programının windows için derlenmiş sürümünü [şu linkten](https://www.pynar.org/releases/pyright/1.1.266/) indirip win.zip dosyasını herhangi bir yere açınız. Açtığınız yerdeki **pyright-win.exe** dosyasını ve ve dist klasörü içindeki **typeshed-fallback** klasörünü  **PyNar_Beta-main** içindeki **Bin** klasörü içine kopyalayınız.
 
 Çalıştırmak için yine aynı klasördeyken aşağıdaki komut ile main.py dosyasını çalıştırınız.
 
@@ -37,16 +37,11 @@ PyNar editör kod hatalarını kodu çalıştırmadan tespit edebilmek için aç
 Aşağıdaki Adımlar Pardus 21 sürümü için verilmiştir, fakat Debian tabanlı bütün Linux'larda kullanılabilir. Aşağıdaki paketleri kurunuz:
 
     sudo apt-get update
-    sudo apt-get install -y python3-venv
+    sudo apt-get install -y python3-venv python3-pip
     
 Bulunduğunuz kullanıcının ana dizinine giriniz.
 
     cd $HOME
-
-burada pynarbeta adıyla bir sanal python ortamı oluşturunuz. Linux işletim sisteminde Python hazır kurulu olarak gelmektedir. Fakat izin kısıtlamalarından dolayı kullanıcın kendi ev dizininde sanal bir python ortamı oluşturularak pip ile paketler bu sanal ortama kurulacaktır. Bunun için aşağıdaki komutları yazınız.
-
-    python3 -m venv $HOME/pynarbeta
-    source $HOME/pynarbeta/bin/activate
     
 Buradan sonrası için PyNar_Beta-main.zip dosyasını indirip açtığınız klasöre giriniz.
 
@@ -56,7 +51,7 @@ Gerekli paketlerin kurulumu:
 
     pip3 install -r requirements.txt
 
-PyNar editör kod hatalarını kodu çalıştırmadan tespit edebilmek için açık kaynak kodlu [pyright](https://github.com/microsoft/pyright) adlı statik kod kontrol kütüphanesini kullanır. Pyright programının Linux için derlenmiş sürümünü [şu linkten](https://www.pynar.org/releases/pyright/1.1.266/) indirip linux.zip dosyasını herhangi bir yere açınız. Açtığınız yerdeki **pyright** dosyasını ve **typeshed-fallback** klasörünü  **PyNar_Beta-main** içindeki **Bin** klasörü içine kopyalayınız.
+PyNar editör kod hatalarını kodu çalıştırmadan tespit edebilmek için açık kaynak kodlu [pyright](https://github.com/microsoft/pyright) adlı statik kod kontrol kütüphanesini kullanır. Pyright programının Linux için derlenmiş sürümünü [şu linkten](https://www.pynar.org/releases/pyright/1.1.266/) indirip linux.zip dosyasını herhangi bir yere açınız. Açtığınız yerdeki **pyright-linux** dosyasını ve dist klasörü içindeki **typeshed-fallback** klasörünü  **PyNar_Beta-main** içindeki **Bin** klasörü içine kopyalayınız.
 
 Çalıştırmak için yine aynı klasördeyken aşağıdaki komut ile main.py dosyasını çalıştırınız.
 
