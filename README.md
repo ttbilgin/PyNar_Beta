@@ -52,6 +52,11 @@ Windows 10 ve 11 için Setup programı ve Linux için DEB paketleri şu linkten 
 
     https://www.pynar.org/releases/setup/
 
+Paket indirildikten sonra windows için çift tıklayarak kurulum başlatılabilir. Kurulum programı bilgisayarınızda python yok ise otomatik kuracaktır. 
+Linux işletim sisteminde (Deb paket yöneticisi kullanan linuxlarda) kurulum için pynar.deb paketini indirdiğiniz klasörde aşağıdaki komut yazılmalıdır.
+
+    sudo dpkg -i pynar.deb
+
 Not: Windows kurulumu için yönetici yetkisi (Administrator) gerekli değildir, fakat Linux paketlerinin kurulumu için yönetici yetkisi (root) gereklidir.
 
 
