@@ -72,3 +72,6 @@ PyNar editörün tüm özellikleri ve kullanım kılavuzu aşağıdaki linkte ya
 
 ## PyNar Editör Ekran Görüntüsü:
 ![image](https://user-images.githubusercontent.com/30179132/112771996-18e20a00-9037-11eb-8832-7a828d10b3db.png)
+
+![image](https://user-images.githubusercontent.com/854154/194748948-71439f12-d8cc-4c48-84d8-45d07198d16e.png)
+
