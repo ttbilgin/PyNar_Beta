@@ -71,7 +71,18 @@ PyNar editörün tüm özellikleri ve kullanım kılavuzu aşağıdaki linkte ya
 
 
 ## PyNar Editör Ekran Görüntüsü:
-![image](https://user-images.githubusercontent.com/30179132/112771996-18e20a00-9037-11eb-8832-7a828d10b3db.png)
 
 ![image](https://user-images.githubusercontent.com/854154/194748948-71439f12-d8cc-4c48-84d8-45d07198d16e.png)
 
+
+## Hata Raporlama
+
+Programda bulduğunuz olası tüm hataları [issues](issues) bölümüne raporlayabilirsiniz. Hata bildirimi için lütfen olabildiğince detay veriniz.
+
+## Hakkında
+
+Bu proje, TÜBİTAK tarafından Öncelikli Alanlar 1003-BIT-AKAY-2018-1 “Türkçe Arayüz ve Destek Sistemleri” kapsamında EEEAG 118E882 nolu “Kullanıcıların Hatalarını Analiz Ederek Diyalog Tabanlı Zeki Etmenler ile Etkileşimli Yönlendirme Yapabilen Türkçe Python Kod Editörü” (Developing a Turkish Python code editor with intelligent agents based interactive help system that can analyse syntax errors of users) ismi ile desteklenmiştir.
+
+## Katkı Sağlamak için
+
+Bu projeye katkı vermek isterseniz Proje yürütücüsü ile LinkedIn üzerinden irtibata geçebilirsiniz. [https://www.linkedin.com/in/ttbilgin/](https://www.linkedin.com/in/ttbilgin/)
