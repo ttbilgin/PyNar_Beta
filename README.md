@@ -34,15 +34,23 @@ PyNar editör kod hatalarını kodu çalıştırmadan tespit edebilmek için aç
 
 ### b) Linux (Ubuntu, Pardus gibi Debian türevleri)
 
-Pardus 21 sürümünü indirip kurunuz. Aşağıdaki paketleri kurunuz
+Aşağıdaki Adımlar Pardus 21 sürümü için verilmiştir, fakat Debian tabanlı bütün Linux'larda kullanılabilir. Aşağıdaki paketleri kurunuz:
 
     sudo apt-get update
-    sudo apt-get install -y python3-pyqt5 python3-pip python3-unidecode python3-pyqt5.qtwebengine python3-pyqt5.qtsql python3-textdistance python3-pyqt5.qsci vulture python3-pycodestyle python3-natsort
-    pip3 install emoji TurkishStemmer
+    sudo apt-get install -y python3-venv
+    
+Bulunduğunuz kullanıcının ana dizinine giriniz.
 
-Programı indirdiğiniz klasöre girerek
+    cd $HOME
 
-    python3 main.py
+burada pynarbeta adıyla bir sanal python ortamı oluşturunuz. Linux işletim sisteminde Python hazır kurulu olarak gelmektedir. Fakat izin kısıtlamalarından dolayı kullanıcın kendi ev dizininde sanal bir python ortamı oluşturularak pip ile paketler bu sanal ortama kurulacaktır. Bunun için aşağıdaki komutları yazınız.
+
+    python3 -m venv $HOME/pynarbeta
+    source $HOME/pynarbeta/bin/activate
+    
+Buradan sonrası için PyNar_Beta-main.zip dosyasını indirip açtığınız klasöre giriniz.
+
+    cd İndirilenler/PyNar_Beta-main/
 
 komutu ile çalıştırınız. Editör açıldıktan sonra ayarlar bölümünden Komutlar seçenek bölümünde "Pardus" seçiniz.
 
