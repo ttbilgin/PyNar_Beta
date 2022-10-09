@@ -21,6 +21,7 @@ Gerekli paketlerin kurulumu:
 
 ![image](https://user-images.githubusercontent.com/854154/194746108-6d753b8b-2e2f-4626-a4ea-5d4e3844cd7b.png)
 
+PyNar editör kod hatalarını kodu çalıştırmadan tespit edebilmek için [pyright](https://github.com/microsoft/pyright) adlı statik kod kontrol kütüphanesini kullanır. Pyright programının windows için derlenmiş sürümünü şu linkten indirip win.zip dosyasını herhangi bir yere açınız. Açtığınız yerdeki pyright-win.exe dosyasını ve **typeshed-fallback** klasörünü  **PyNar_Beta-main** içindeki **Bin** klasörü içine kopyalayınız.
 
 ### b) Linux (Ubuntu, Pardus gibi Debian türevleri)
 
