@@ -7,19 +7,21 @@ Bu proje kapsamında Python dili için açık kaynaklı tamamen Türkçe ara yü
 Kodlama editörü tüm işletim sistemlerinde çalışabilir şekilde platform bağımsız masaüstü uygulama olarak geliştirilmiştir. Projenin tüm kodları, projenin tamamlanmasından sonra genel kullanıma açık bir kod deposuna yüklenmiş ve ülkemizdeki geliştiricilerin katkı verebilmesi için gerekli tüm teknik ve kullanıcı dokümantasyonları da oluşturulmuştur.  
 
 ## Kurulum
-### 1.Windows 10 ve 11
+### a) Windows 10 ve 11
 
-Öncelikle bilgisayarınızda Python kurulu olmalıdır. Şu linkten indirebilirsiniz:
+Öncelikle bilgisayarınızda Python 3.8 veya yukarısı kurulu olmalıdır. Şu linkten indirebilirsiniz:
 
     https://www.python.org/downloads/
 
-Ek olarak program için gerekli paketlerin kurulumu:
+Eğer bilgisayarınızda git programı kurulu ise bu reponun yerel klonunu oluşturunuz. Git kullanmıyorsanız bu repoyu zip olarak indirip zip'i açınız. Bir komut satırı açınız ve Pynar_Beta-main klasörü içine giriniz.
+
+Gerekli paketlerin kurulumu:
 
     pip install -r requirements.txt
     
 ![req](https://user-images.githubusercontent.com/30179132/99789976-7c61a580-2b34-11eb-9cae-7a85278219bd.PNG)
 
-### 2.Linux (Ubuntu, Pardus gibi Debian türevleri)
+### b) Linux (Ubuntu, Pardus gibi Debian türevleri)
 
 Pardus 21 sürümünü indirip kurunuz. Aşağıdaki paketleri kurunuz
 
