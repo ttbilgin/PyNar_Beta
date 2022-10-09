@@ -52,7 +52,16 @@ Buradan sonrası için PyNar_Beta-main.zip dosyasını indirip açtığınız kl
 
     cd İndirilenler/PyNar_Beta-main/
 
-komutu ile çalıştırınız. Editör açıldıktan sonra ayarlar bölümünden Komutlar seçenek bölümünde "Pardus" seçiniz.
+Gerekli paketlerin kurulumu:
+
+    pip3 install -r requirements.txt
+
+PyNar editör kod hatalarını kodu çalıştırmadan tespit edebilmek için açık kaynak kodlu [pyright](https://github.com/microsoft/pyright) adlı statik kod kontrol kütüphanesini kullanır. Pyright programının Linux için derlenmiş sürümünü [şu linkten](https://www.pynar.org/releases/pyright/1.1.266/) indirip linux.zip dosyasını herhangi bir yere açınız. Açtığınız yerdeki **pyright** dosyasını ve **typeshed-fallback** klasörünü  **PyNar_Beta-main** içindeki **Bin** klasörü içine kopyalayınız.
+
+Çalıştırmak için yine aynı klasördeyken aşağıdaki komut ile main.py dosyasını çalıştırınız.
+
+    python3 main.py
+
 
 ## Windows veya Linux için Derlenmiş Sürümler
 
