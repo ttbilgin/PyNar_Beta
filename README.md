@@ -1,6 +1,6 @@
 # Türkçe Python Kod Editörü: PyNar
 
-![headerLogo1](https://user-images.githubusercontent.com/854154/194778910-647b04e5-00dc-4da4-a99d-3199835dc4ec.png=x250)
+![headerLogo1](https://user-images.githubusercontent.com/854154/194778910-647b04e5-00dc-4da4-a99d-3199835dc4ec.png)
 
 Bu proje kapsamında Python dili için açık kaynaklı tamamen Türkçe ara yüze sahip bir kodlama ortamı geliştirilmiştir. Bu sistem 3 katmanlı olarak tasarlanmıştır. Bu katmanlar; Kullanıcı ara yüzü Katmanı, Orta Katman ve Python yorumlayıcısı katmanlarıdır. Kullanıcı ara yüzü Katmanındaki bileşenler Python Kod Editörü ve Sohbet robotunun kullanıcı ara yüz birimleridir. Orta katmanda “Kod yapısal kontrol”, “Kod hata yöneticisi” ve “Zeki Etmen Alt Sistemi” bulunmaktadır.  “Kod yapısal kontrol modülü” kullanıcının kodundaki sözdizimsel (syntax) hatalarının tespitini yapmaktadır. Bu işlem kod çalıştırılmadan statik kod kontrol (static code checker) kütüphaneleriyle gerçekleştirilmektedir. “Kod hata yöneticisi”, kullanıcının yazdığı python kodunun python yorumlayıcı tarafından çalıştırılması sonucunda elde edilen hata bildirimlerini analiz etmektedir. Sohbet robotu (Chatbot Agent) ise bu çıkarımları kullanarak öğrencinin hatasının sebebini tespit etmekte ve buna bir çözüm önerecek makine öğrenmesi alt sistemi içermektedir. Kullanıcının hatasını çözebilecek olası en iyi çözüm tespit edilerek sohbet robotu aracılığıyla kullanıcıya aktarılmakta ve kullanıcı onay verirse kod içindeki hata düzeltilmektedir.
 
