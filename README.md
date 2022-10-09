@@ -18,8 +18,6 @@ Eğer bilgisayarınızda git programı kurulu ise bu reponun yerel klonunu oluş
 Gerekli paketlerin kurulumu:
 
     pip install -r requirements.txt
-    
-![req](https://user-images.githubusercontent.com/30179132/99789976-7c61a580-2b34-11eb-9cae-7a85278219bd.PNG)
 
 ![image](https://user-images.githubusercontent.com/854154/194746108-6d753b8b-2e2f-4626-a4ea-5d4e3844cd7b.png)
 
