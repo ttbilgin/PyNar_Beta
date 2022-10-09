@@ -60,13 +60,12 @@ Linux işletim sisteminde (Deb paket yöneticisi kullanan linuxlarda) kurulum i�
 Not: Windows kurulumu için yönetici yetkisi (Administrator) gerekli değildir, fakat Linux paketlerinin kurulumu için yönetici yetkisi (root) gereklidir.
 
 
-# Özellikler
- * syntax highlighting
- * python yorumlayıcı başlatma 
- * terminal penceresi başlatma
- * kaynak kod analizi
- * dosya kaydetme / dosya açma 
- * dosya yazdırma
+## Özellikler ve Kullanım Kılavuzu
+
+PyNar editörün tüm özellikleri ve kullanım kılavuzu aşağıdaki linkte yayınlanmaktadır.
+
+    https://www.pynar.org/help
+
 
 # Programın ekran görüntüsü:
 ![image](https://user-images.githubusercontent.com/30179132/112771996-18e20a00-9037-11eb-8832-7a828d10b3db.png)
